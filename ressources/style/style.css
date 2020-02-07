@@ -1,0 +1,69 @@
+@font-face {
+  font-family: roboto;
+  src: url(../font/RobotoCondensed-Regular.ttf);
+}
+
+
+* {
+	box-sizing: border-box;
+	font-family: roboto;
+}
+body {
+	padding: 0;
+	margin: 0;
+}
+header{
+  background-color: #00bcd4;
+}
+a{
+  color : black;
+}
+.title-nav{
+  margin-top: 10px;
+}
+.title-nav:hover{
+  transition: 0.5s;
+  background-color: blue;
+  color: white;
+}
+
+#video{
+  padding-bottom: 862px;
+  background-color: #00bcd4;
+  text-align: center;
+  color: white;
+}
+img{
+height: auto;
+width: 937px;
+margin: 0px;
+padding-left: 0%;
+}
+.quiSommeNous{
+  background-color: white;
+  padding: 0px;
+}
+#sommeNous{
+  display: flex;
+}
+#h3qui{
+  text-transform: uppercase;
+  font-size: 50px;
+  text-align: left;
+  padding-top: 100px;
+  padding-left: 75px
+}
+#quiSommeNousTexte{
+  padding-top: 20px;
+  padding-left: 75px;
+  font-size: 28px;
+}
+#h3Abo{
+	text-align: center;
+	margin-top: 50px;
+	font-size: 50px;
+}
+
+#abon{
+  display: flex;
+}
