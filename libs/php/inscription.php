@@ -8,8 +8,10 @@ if (isset($_POST['forminscription'])) {
   $passwd = htmlspecialchars($_POST['passwd']);
   $passwd2 = htmlspecialchars($_POST['passwd2']);
   $adress = htmlspecialchars($_POST['adress']);
+  $num = htmlspecialchars($_POST['num']);
+  $ville = htmlspecialchars($_POST['ville']);
 
-  if (!empty($_POST['nom']) AND !empty($_POST['prenom']) AND !empty($_POST['mail']) AND !empty($_POST['passwd']) AND !empty($_POST['passwd2']) AND !empty($_POST['adress'])) {
+  if (!empty($_POST['nom']) AND !empty($_POST['prenom'])AND !empty($_POST['ville']) AND !empty($_POST['mail']) AND !empty($_POST['num']) AND !empty($_POST['passwd']) AND !empty($_POST['passwd2']) AND !empty($_POST['adress'])) {
 
 	$nomlenght = strlen($nom);
 	$prenomlength = strlen($prenom);
@@ -25,7 +27,7 @@ if (isset($_POST['forminscription'])) {
 			  if ($passwd == $passwd2) {
 				include('db/db_connect.php');
 
-        $loginQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
+        $loginQuery = $conn->prepare("SELECT * FROM customer WHERE email = ?");
 
         $res = $loginQuery->execute([$mail]);
 
@@ -36,12 +38,11 @@ if (isset($_POST['forminscription'])) {
           header('Location: ../../signup.php?error=email_exist');
           exit;
         }
-				$insertmbr = $conn->prepare("INSERT INTO user(lastname, firstname, email, password, address, Role_name) VALUES(?, ?, ?, ?, ?, 'Client')");
+				$insertmbr = $conn->prepare("INSERT INTO customer(lastname, firstname, email, password, address, phone_number, city) VALUES( ?, ?, ?, ?, ?, ?, ?)");
 
 				$password = hash('sha256', $passwd);
 
-
-				$insertmbr->execute(array($nom, $prenom, $mail, $password, $adress));
+				$insertmbr->execute(array($nom, $prenom, $mail, $password, $adress, $num, $ville));
 
 				$lastId = $conn->lastInsertId();
 

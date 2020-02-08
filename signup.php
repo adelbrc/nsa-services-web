@@ -35,7 +35,7 @@
                 }
                 ?>
               </div>
-      <form class="formSignup" action="libs/php/Inscription.php" method="post">
+      <form class="formSignup" action="libs/php/inscription.php" method="post">
         <div class="form-group">
           <label for="exampleInputEmail1">Nom</label>
           <input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" placeholder="Saisir votre nom" name="nom" value="<?php if(isset($nom)) { echo $nom; } ?>">
@@ -47,6 +47,14 @@
         <div class="form-group">
           <label for="exampleInputEmail1">Adresse Postal</label>
           <input type="text" class="form-control" id="exampleInputadress" aria-describedby="adressHelp" placeholder="Saisir votre adresse" name="adress" value="<?php if(isset($adress)) { echo $adress; } ?>">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Ville</label>
+          <input type="text" class="form-control" id="exampleInputville" aria-describedby="villeHelp" placeholder="Saisir votre ville" name="ville" value="<?php if(isset($ville)) { echo $ville; } ?>">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Numero de telephone</label>
+          <input type="text" class="form-control" id="exampleInputNum" aria-describedby="NumHelp" placeholder="Saisir votre numero de telephone" name="num" value="<?php if(isset($num)) { echo $num; } ?>">
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Adresse Email</label>
