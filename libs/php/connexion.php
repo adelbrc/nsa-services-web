@@ -20,6 +20,9 @@ if (isset($_POST['formconnexion'])) {
       if ($_SESSION['user']['rank'] == 0) {
         header('Location: ../../dashboard.php?connectedAs=user');
         exit;
+      }else if($_SESSION['user']['rank'] == 3) {
+        header('Location: ../../admin/dashboard.php?connectedAs=admin');
+        exit;
       }
   }
     $loginQuery = $conn->prepare("SELECT * FROM partner WHERE email = ? AND password = ?");
