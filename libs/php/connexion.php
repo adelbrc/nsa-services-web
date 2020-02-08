@@ -19,10 +19,22 @@ if (isset($_POST['formconnexion'])) {
   		$_SESSION['user'] = $user;
       if ($_SESSION['user']['rank'] == 0) {
         header('Location: ../../dashboard.php?connectedAs=user');
-      }else {
-        header('Location: ../../login.php?error=wrongpass');
+        exit;
       }
+  }
+    $loginQuery = $conn->prepare("SELECT * FROM partner WHERE email = ? AND password = ?");
+
+    $res = $loginQuery->execute([$email, $password]);
+
+    $rows = $loginQuery->rowCount();
+    if($rows){
+      $user = $loginQuery->fetch();
+      session_start();
+      $_SESSION['user'] = $user;
+        header('Location: ../../collaborateur/dashboard.php?connectedAs=dzefrgthytgfds');
+        exit;
     }
+    header('Location: ../../login.php?error=wrongpass');
   }
 }
 
