@@ -16,7 +16,7 @@
   <?php }
   if (isConnected()) { ?>
     <li class="nav-item">
-      <a class="nav-link active" href="/NSA-Services/Web/libs/php/Deconnexion.php">Deconnexion</a>
+      <a class="nav-link active" href="libs/php/deconnexion.php">Deconnexion</a>
     </li>
   <?php } ?>
 

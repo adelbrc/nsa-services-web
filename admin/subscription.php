@@ -1,8 +1,6 @@
-<?php include ('../libs/php/isConnected.php');
+<?php
 include ('../libs/php/db/db_connect.php');
-if (!isConnected()) {
-  header('location: index.php?error=accessUnauthorized');
-}
+
 
 if(isset($_GET['id']) AND !empty($_GET['id'])) {
     $supprimer = (int) $_GET['id'];

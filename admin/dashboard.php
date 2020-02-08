@@ -1,7 +1,5 @@
 <?php include ('../libs/php/isConnected.php');
-if (!isConnected()) {
-  header('location: index.php?error=accessUnauthorized');
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">

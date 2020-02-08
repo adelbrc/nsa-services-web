@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="ressources/style/login.css">
     <title>Connexion</title>
   </head>
-  <body>
+  <body> 
     <?php include('libs/php/mainHeader.php'); ?>
 
     <div class=" border jumbotron col-md-8 mx-auto" id="jumboLogin" style="margin-top: 75px;">
