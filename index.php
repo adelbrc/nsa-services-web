@@ -24,7 +24,7 @@ include('libs/php/db/db_connect.php');?>
 				</div>
 				<div id="sommeNous">
 					<div class="col-md-6 quiSommeNous">
-						<img src="ressources/img/premium-individuel-800x513" alt="">
+						<img src="ressources/img/premium-individuel-800x513.jpg" alt="">
 					</div>
 					<div class="col-md-6 quiSommeNous">
 						<h3 id="h3qui">qui sommes nous ?</h3>
