@@ -1,5 +1,7 @@
 <?php include ('../libs/php/isConnected.php');
-
+if ($_SESSION['user']['rank'] !=3) {
+  header('location: ../index.php?error=accessUnauthorized');
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
