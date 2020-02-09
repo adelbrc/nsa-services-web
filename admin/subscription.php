@@ -43,14 +43,40 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
               echo '<div class="alert alert-success col-md-12" role="alert" style="margin-top: 20px; text-align: center;">' . 'Vous venez d\'ajouter une nouvelle fonction' . '</div>';
             } ?>
             <br>
-            <?php
-              $q = $conn->query('SELECT * FROM membership');
-              while($result = $q->fetch()){
-                echo '<table  border=4 cellspacing=4 cellpadding=4><tr><td><b>Nom : </b>'.$result['name'] .'</td><td><b>Prix TTC/an : </b>'.$result['price'].'€'. '</td><td><b>Nb de jours ouvert : </b>'.$result['openDays'] .
-                '</td><td><b>heure d\'ouverture : </b>'.$result['openHours'] . '</td><td><b>heure de fermeture : </b>'.$result['closeHours']. '</td><td><a type="button" id="deleteSub" class="close" aria-label="Close" href="subscription.php?id='.
-                $result['idAbonnement'].'"><span aria-hidden="true">&times;</span></a>' .'</td></tr></table>';
-              }
-            ?>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">nom</th>
+                  <th scope="col">Prix</th>
+                  <th scope="col">Nb d'heure compris</th>
+                  <th scope="col">Nb de jours ouverts</th>
+                  <th scope="col">Heure open/close</th>
+                  <th scope="col">Durée</th>
+                  <th scope="col"></th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                  $q = $conn->query('SELECT * FROM membership');
+                  while($result = $q->fetch()){
+                ?>
+                <tr>
+                  <th scope="row"><?php echo $result['id']; ?></th>
+                  <td><?php echo $result['name']; ?></td>
+                  <td><?php echo $result['price'] . '€ TTC/an'; ?></td>
+                  <td><?php echo $result['timeQuota']. ' €'; ?></td>
+                  <td><?php echo $result['openDays']. 'j/7'; ?></td>
+                  <td><?php echo $result['openHours']. 'h - '. $result['closeHours'] . 'h'; ?></td>
+                  <td><?php echo $result['duration'] . 'mois'; ?></td>
+                  <td><a type="button" id="deleteSub" class="close" aria-label="Close" href="#"><span aria-hidden="true">&times;</span></a></td>
+                </tr>
+                            <?php } ?>
+              </tbody>
+            </table>
+
           </div>
         </main>
       </div>

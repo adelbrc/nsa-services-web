@@ -12,7 +12,7 @@ if(isset($_POST['formNewSub'])){
     $duration = htmlspecialchars($_POST['duration']);
 
     include('../libs/php/db/db_connect.php');
-    $insertRole = $conn->prepare("INSERT INTO membership(name, price, openDays, openHours, closeHours, timeQuota, closeDays, description, duration) VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0)");
+    $insertRole = $conn->prepare("INSERT INTO membership(name, price, openDays, openHours, closeHours, timeQuota, closeDays, description, duration) VALUES(?, ?, ?, ?, ?, ?,0, ?, ?)");
 		$insertRole->execute(array($nom, $tarif, $NbJrs, $OpenHour, $CloseHour, $timeQuotas, $Description, $duration));
     header('location:subscription.php?status=ajoutNewSub');
   }else{
