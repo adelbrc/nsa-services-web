@@ -14,6 +14,12 @@
           Abonnement
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="displayUsers.php">
+          <i class="fa fa-users"></i>
+          Utilisateurs
+        </a>
+      </li>
     </ul>
   </div>
 </nav>
