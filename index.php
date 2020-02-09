@@ -34,12 +34,12 @@ include('libs/php/db/db_connect.php');?>
 				<h1 style="text-align:center;">Abonnement individuels</h2>
 					<hr class="my-4">
 
-				<div id="abon">
+				<div id="abon"class="scrollmenu">
 					<?php
 					$q = $conn->query('SELECT * FROM membership');
 					while($result = $q->fetch()){
 					 ?>
-					<div class="col-md-2 mx-auto">
+					<div class="col-md-4 mx-auto">
 						<div class="jumbotron">
 						  <h1 class="display-3" style="text-align: center;"><?php echo $result['name']?></h1>
 							<hr class="my-4">
@@ -52,7 +52,7 @@ include('libs/php/db/db_connect.php');?>
 							<div>
 								<p style="font-size: 22px; text-align:center;">Ouvert <?php echo $result['openDays']; ?>j/7 de <?php echo $result['openHours']?>H a <?php echo $result['closeHours']; ?>H</p>
 							</div>
-							<div id="btnInteresser">
+							<div id="btnInteresser" class="mx-auto">
 								<a style="margin-left: 25%;" type="button" class="btn btn-info" href="#">Je suis Interesse</a>
 							</div>
 						</div>
