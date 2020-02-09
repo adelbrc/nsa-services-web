@@ -24,6 +24,10 @@
             <input type="number" class="form-control" id="exampleInputtarif" aria-describedby="tarifHelp" placeholder="Saisir le prix" name="tarif" value="<?php if(isset($tarif)) { echo $tarif; } ?>">
           </div>
           <div class="form-group">
+            <label for="exampleInputEmail1">nombre de service compris (en heure)</label>
+            <input type="number" class="form-control" id="exampleInputtimeQuotas" aria-describedby="ClosetimeQuotas" placeholder="Saisir le prix" name="timeQuotas" value="<?php if(isset($timeQuotas)) { echo $timeQuotas; } ?>">
+          </div>
+          <div class="form-group">
             <label for="exampleInputEmail1">nombre de jours ouvert (/7j)</label>
             <input type="number" class="form-control" id="exampleInputNbJrs" aria-describedby="NbJrsHelp" placeholder="Saisir le nombre de jours ouvert" name="NbJrs" value="<?php if(isset($NbJrs)) { echo $NbJrs; } ?>">
           </div>
@@ -34,6 +38,14 @@
           <div class="form-group">
             <label for="exampleInputEmail1">Heure fermeture</label>
             <input type="number" class="form-control" id="exampleInputCloseHour" aria-describedby="CloseHourHelp" placeholder="Saisir l'heure de fermeture" name="CloseHour" value="<?php if(isset($CloseHour)) { echo $CloseHour; } ?>">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Durée de l'abonnement (en mois)</label>
+            <input type="number" class="form-control" id="exampleInputduration" aria-describedby="Closeduration" placeholder="Saisir" name="duration" value="<?php if(isset($duration)) { echo $duration; } ?>">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Description</label>
+            <input type="text" class="form-control" id="exampleInputDescription" aria-describedby="CloseDescription" placeholder="Saisir une description" name="Description" value="<?php if(isset($Description)) { echo $Description; } ?>">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

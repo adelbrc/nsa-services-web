@@ -30,10 +30,13 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
         <?php
         if (isset($_GET['status']) && $_GET['status'] == 'ajoutNewSub') {
           echo '<div class="alert alert-success col-md-12" role="alert" style="margin-top: 20px; text-align: center;">' . 'Vous venez d\'ajouter un nouvelle abonnement' . '</div>';
+        }
+        if (isset($_GET['error']) && $_GET['error'] == 'fieldblanks') {
+          echo '<div class="alert alert-danger col-md-12" role="alert" style="margin-top: 20px; text-align: center;">' . 'Vous devez remplir tout les champs !' . '</div>';
         } ?>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <?php include('createSubscriptionBtn.php');?>
-          <div class=" border jumbotron col-md-5" id="jumboRole" style="margin-top: 75px;">
+          <div class=" border jumbotron col-md-12" id="jumboRole" style="margin-top: 75px;">
             <h1 class="display-5" style="text-align: center;">Abonnements</h1>
             <?php
             if (isset($_GET['status']) && $_GET['status'] == "ajoutNewRole") {
