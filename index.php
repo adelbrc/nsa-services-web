@@ -59,5 +59,6 @@ include('libs/php/db/db_connect.php');?>
 					</div>
 				<?php } ?>
 				</div>
+				<?php include('libs/php/footer.php'); ?>
 	</body>
 </html>
