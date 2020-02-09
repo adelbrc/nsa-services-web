@@ -1,4 +1,6 @@
 <?php
+include ('../libs/php/isConnected.php');
+
 include ('../libs/php/db/db_connect.php');
 
 

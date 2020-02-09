@@ -27,7 +27,7 @@ if (isset($_POST['forminscription'])) {
 			  if ($passwd == $passwd2) {
 				include('db/db_connect.php');
 
-        $loginQuery = $conn->prepare("SELECT * FROM customer WHERE email = ?");
+        $loginQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
 
         $res = $loginQuery->execute([$mail]);
 
@@ -38,7 +38,7 @@ if (isset($_POST['forminscription'])) {
           header('Location: ../../signup.php?error=email_exist');
           exit;
         }
-				$insertmbr = $conn->prepare("INSERT INTO customer(lastname, firstname, email, password, address, phone_number, city) VALUES( ?, ?, ?, ?, ?, ?, ?)");
+				$insertmbr = $conn->prepare("INSERT INTO user(lastname, firstname, email, password, address, phone_number, city) VALUES( ?, ?, ?, ?, ?, ?, ?)");
 
 				$password = hash('sha256', $passwd);
 

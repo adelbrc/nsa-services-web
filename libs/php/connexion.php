@@ -7,7 +7,7 @@ if (isset($_POST['formconnexion'])) {
     $password = htmlspecialchars($_POST['passwd']);
     $password = hash('sha256', $password);
 
-  	$loginQuery = $conn->prepare("SELECT * FROM customer WHERE email = ? AND password = ?");
+  	$loginQuery = $conn->prepare("SELECT * FROM user WHERE email = ? AND password = ?");
 
   	$res = $loginQuery->execute([$email, $password]);
 
