@@ -13,7 +13,7 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 ?>
 
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,12 +26,11 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
   <body>
     <header>
       <?php include("libs/php/includes/userHeader.php"); ?>
-
     </header>
     <main>
       <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2" id='user'><?php echo $user->getFirstname() . " " . $user->getLastname(); ?></h1>
+          <h1 class="h2" id='user'>Profile</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <ul class="nav justify-content-center" role="tablist">
@@ -50,7 +49,7 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
             <?php include("libs/php/views/userProfileCard.php"); ?>
           </div>
           <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings">
-            Settings
+            <?php include("libs/php/views/userSettingsForm.php"); ?>
           </div>
         </div>
       </div>

@@ -13,17 +13,19 @@ class User {
   private $lastname;
   private $email;
   private $password;
+  private $profile_pic;
   private $phone;
   private $address;
   private $city;
   private $rank;
 
-  public function __construct($id, $firstname, $lastname, $email, $password, $phone, $address, $city){
+  public function __construct($id, $firstname, $lastname, $email, $password, $profile_pic, $phone, $address, $city){
     $this->id = $id;
     $this->firstname = $firstname;
     $this->lastname = $lastname;
     $this->email = $email;
     $this->password = $password;
+    $this->profile_pic = $profile_pic;
     $this->phone = $phone;
     $this->address = $address;
     $this->city = $city;
@@ -49,6 +51,10 @@ class User {
 
   public function getPassword() {
     return $this->password;
+  }
+
+  public function getProfilePic() {
+    return $this->profile_pic;
   }
 
   public function getPhoneNumber() {
@@ -85,6 +91,10 @@ class User {
     $this->password = $pass;
   }
 
+  public function setProfilePic(string $path) : void {
+    $this->profile_pic = $path;
+  }
+
   public function setPhoneNumber(string $phone) : void {
     $this->phone = $phone;
   }
@@ -105,19 +115,19 @@ class User {
   // Methods
 
   // Adding a user to the database
-  public function signup(User $user) {
+  public function signup() {
 
     $sql = "INSERT INTO user(firstname, lastname, email, password, phone_number, address, city)
     VALUES(:fname, :lname, :email, :pass, :phone, :addr, :city)";
     $req = $GLOBALS['conn']->prepare($sql);
     $req->execute(array(
-      "fname" => $user->getFirstname(),
-      "lname" => $user->getLastname(),
-      "email" => $user->getEmail(),
-      "pass" => $user->getPassword(),
-      "phone" => $user->getPhoneNumber(),
-      "addr" => $user->getAddress(),
-      "city" => $user->getCity(),
+      "fname" => $this->getFirstname(),
+      "lname" => $this->getLastname(),
+      "email" => $this->getEmail(),
+      "pass" => $this->getPassword(),
+      "phone" => $this->getPhoneNumber(),
+      "addr" => $this->getAddress(),
+      "city" => $this->getCity(),
     ));
   }
 
@@ -129,10 +139,33 @@ class User {
     $req->execute([$email]);
 
     if ($row = $req->fetch()) {
-      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_pic"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
     }else {
       return NULL;
     }
+  }
+
+  // User updating infos
+  public function updateUserInfos($email, $pass, $profile_pic, $phone, $address, $city){
+
+    $this->email = $email;
+    $this->password = $pass;
+    $this->profile_pic = $profile_pic;
+    $this->phone = $phone;
+    $this->address = $address;
+    $this->city = $city;
+
+    $sql = "UPDATE user SET email = :mail, password = :pwd, profile_picture = :profilepic, phone_number = :phonenumb, address = :addr, city = :city WHERE id = :uid";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute(array(
+      "mail" => $email,
+      "pwd" => $pass,
+      "profilepic" => $profile_pic,
+      "phonenumb" => $phone,
+      "addr" => $address,
+      "city" => $city,
+      "uid" => $this->id,
+    ));
   }
 
   // Get user by ID
@@ -143,10 +176,26 @@ class User {
     $req->execute([$id]);
 
     if ($row = $req->fetch()) {
-      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_pic"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
     }else {
       return NULL;
     }
+  }
+
+  // Get all users
+  public function getAllUsers(){
+
+    $sql = "SELECT * FROM user";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute();
+
+    $result = array();
+
+    while ($row = $req->fetch()) {
+      $result[] = new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_pic"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+    }
+
+    return $result;
   }
 
   // Delete user from database
