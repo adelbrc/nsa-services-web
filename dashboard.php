@@ -4,7 +4,6 @@ if (!isConnected()) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -16,7 +15,7 @@ if (!isConnected()) {
 
   </head>
   <body>
-    <?php include('libs/php/mainHeader.php');
+    <?php include('libs/php/includes/userHeader.php');
     include('libs/php/db/db_connect.php');
     if($_SESSION['user']['rank'] == 2){
       include('libs/php/createRoleBtn.php');
