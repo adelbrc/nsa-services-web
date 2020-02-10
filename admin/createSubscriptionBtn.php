@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
-  new abonnement
+  Creer abonnement
 </button>
 
 <!-- Modal -->
