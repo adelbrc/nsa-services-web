@@ -13,3 +13,26 @@ div.scrollmenu a {
   padding: 14px;
   text-decoration: none;
 }
+
+
+/* -------------------- */
+/* Profile Page */
+.profileCard {
+  max-width: 80%;
+  padding: 40px;
+  display: block;
+  margin: auto;
+  border: 1px solid rgb(23, 133, 223);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.profilePicture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
