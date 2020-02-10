@@ -12,7 +12,7 @@
         <a class="nav-link" href="../index.php">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../dashboard.php">Planning</a>
+        <a class="nav-link" href="../dashboard.php">Dashboard</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -25,6 +25,11 @@
           <a class="dropdown-item" href="#">Interventions</a>
         </div>
       </li>
+      <?php if ($_SESSION["user"]["rank"] == "3"): ?>
+        <li class="nav-item">
+          <a class="nav-link" href="admin/dashboard.php">Admin Panel</a>
+        </li>
+      <?php endif; ?>
       <li class="nav-item">
         <a class="nav-link" href="libs/php/deconnexion.php">Logout</a>
       </li>
