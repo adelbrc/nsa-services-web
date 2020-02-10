@@ -20,13 +20,8 @@ div.scrollmenu a {
 .profileCard {
   max-width: 80%;
   padding: 40px;
-<<<<<<< HEAD
   margin: auto;
   margin-top: 60px;
-=======
-  display: block;
-  margin: auto;
->>>>>>> 4d373cab2d96276be57c4d84b81a53a7e75dcf59
   border: 1px solid rgb(23, 133, 223);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
