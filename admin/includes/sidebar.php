@@ -8,18 +8,6 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file"></span>
-          Orders
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="shopping-cart"></span>
-          Services
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="displayUsers.php">
           <span data-feather="users"></span>
           Customers
