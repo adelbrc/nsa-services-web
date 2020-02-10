@@ -17,18 +17,20 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
   <head>
     <meta charset="utf-8">
     <title>Gestion des abonnements</title>
-    <link rel="stylesheet" type="text/css" href="../ressources/style/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../ressources/style/dashHeader.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../ressources/style/admin.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../ressources/style/admin.css">
-
 
   </head>
   <body>
-    <?php include('../libs/php/mainHeader.php'); ?>
+    <header>
+    <?php include('includes/headerNavigation.php'); ?>
+    </header>
     <div class="container-fluid">
       <div class="row">
-        <?php include('dashHeader.php');?>
+        <?php include('includes/sidebar.php'); ?>
         <?php
         if (isset($_GET['status']) && $_GET['status'] == 'ajoutNewSub') {
           echo '<div class="alert alert-success col-md-12" role="alert" style="margin-top: 20px; text-align: center;">' . 'Vous venez d\'ajouter un nouvelle abonnement' . '</div>';
