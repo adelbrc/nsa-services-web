@@ -14,7 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="formSub" action="newsubscription.php" method="post">
+        <form class="formResa" action="../newReservation.php" method="post">
           <div class="form-group">
             <label for="exampleInputEmail1">Nombre d'heure</label>
             <input type="number" class="form-control" id="exampleInputnbHours" aria-describedby="nbHoursHelp" placeholder="Nombre d'heure" name="nbHours" value="<?php if(isset($nbHours)) { echo $nbHours; } ?>">
