@@ -6,21 +6,21 @@ $conn = DBManager::getConn();
 
 // User Class
 
-
 class User {
 
-  private int $id;
-  private string $firtsname;
-  private string $lastname;
-  private string $email;
-  private string $password;
-  private string $phone;
-  private string $address;
-  private string $city;
-  private int $rank;
+  private $id;
+  private $firstname;
+  private $lastname;
+  private $email;
+  private $password;
+  private $phone;
+  private $address;
+  private $city;
+  private $rank;
 
-  public function __construct($firtsname, $lastname, $email, $password, $phone, $address, $city){
-    $this->firtsname = $firtsname;
+  public function __construct($id, $firstname, $lastname, $email, $password, $phone, $address, $city){
+    $this->id = $id;
+    $this->firstname = $firstname;
     $this->lastname = $lastname;
     $this->email = $email;
     $this->password = $password;
@@ -31,39 +31,39 @@ class User {
 
   // -----------------
   // Getters
-  public function getUID() : int {
+  public function getUID() {
     return $this->id;
   }
 
-  public function getFirstname() : string{
+  public function getFirstname() {
     return $this->firstname;
   }
 
-  public function getLastname() : string{
+  public function getLastname() {
     return $this->lastname;
   }
 
-  public function getEmail() : string{
+  public function getEmail() {
     return $this->email;
   }
 
-  public function getPassword() : string{
+  public function getPassword() {
     return $this->password;
   }
 
-  public function getPhoneNumber() : string{
+  public function getPhoneNumber() {
     return $this->phone;
   }
 
-  public function getAddress() : string{
+  public function getAddress() {
     return $this->address;
   }
 
-  public function getCity() : string{
+  public function getCity() {
     return $this->city;
   }
 
-  public function getRank() : int{
+  public function getRank(){
     return $this->firstname;
   }
 
@@ -105,7 +105,7 @@ class User {
   // Methods
 
   // Adding a user to the database
-  public function addUser(User $user) {
+  public function signup(User $user) {
 
     $sql = "INSERT INTO user(firstname, lastname, email, password, phone_number, address, city)
     VALUES(:fname, :lname, :email, :pass, :phone, :addr, :city)";
@@ -122,17 +122,49 @@ class User {
   }
 
   // Loading user infos
-  public function loadUser(string $email) {
+  public function loadUser(string $email) : User{
 
     $sql = "SELECT * FROM user WHERE email = ?";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute([$email]);
 
     if ($row = $req->fetch()) {
-      return new User($row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
     }else {
       return NULL;
     }
+  }
+
+  // Get user by ID
+  public function getUserByID(int $id): User{
+
+    $sql = "SELECT * FROM user WHERE id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$id]);
+
+    if ($row = $req->fetch()) {
+      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+    }else {
+      return NULL;
+    }
+  }
+
+  // Delete user from database
+  public function deleteUser(int $id) : void{
+
+    $sql = "DELETE FROM user WHERE id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$id]);
+
+  }
+
+  // Set user to admin
+  public function setAdmin(User $user) : void{
+
+    $sql = "UPDATE user SET user.rank = 3 WHERE user.id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$user->getId()]);
+
   }
 
 }
