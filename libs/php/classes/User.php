@@ -19,7 +19,7 @@ class User {
   private $city;
   private $rank;
 
-  public function __construct($id, $firstname, $lastname, $email, $password, $profile_pic, $phone, $address, $city){
+  public function __construct($id, $firstname, $lastname, $email, $password, $profile_pic, $phone, $address, $city, $rank){
     $this->id = $id;
     $this->firstname = $firstname;
     $this->lastname = $lastname;
@@ -29,6 +29,7 @@ class User {
     $this->phone = $phone;
     $this->address = $address;
     $this->city = $city;
+    $this->rank = $rank;
   }
 
   // -----------------
@@ -70,7 +71,7 @@ class User {
   }
 
   public function getRank(){
-    return $this->firstname;
+    return $this->rank;
   }
 
   // ----------------------------
@@ -139,7 +140,7 @@ class User {
     $req->execute([$email]);
 
     if ($row = $req->fetch()) {
-      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_pic"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_picture"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
     }else {
       return NULL;
     }
@@ -176,7 +177,7 @@ class User {
     $req->execute([$id]);
 
     if ($row = $req->fetch()) {
-      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_pic"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+      return new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_picture"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
     }else {
       return NULL;
     }
@@ -192,7 +193,7 @@ class User {
     $result = array();
 
     while ($row = $req->fetch()) {
-      $result[] = new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_pic"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
+      $result[] = new User($row["id"], $row["firstname"], $row["lastname"], $row["email"], $row["password"], $row["profile_picture"], $row["phone_number"], $row["address"], $row["city"], $row["rank"]);
     }
 
     return $result;

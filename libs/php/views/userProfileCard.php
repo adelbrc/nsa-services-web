@@ -1,4 +1,4 @@
-<div class="profileCard">
+<div class="dataContainer">
   <div class="row">
     <img class="profilePicture" src="" alt="">
   </div>

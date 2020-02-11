@@ -20,9 +20,9 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="partners_management.php">
           <span data-feather="layers"></span>
-          Integrations
+          Partners
         </a>
       </li>
     </ul>

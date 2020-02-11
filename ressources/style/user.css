@@ -15,18 +15,8 @@ div.scrollmenu a {
 }
 
 
-/* -------------------- */
-/* Profile Page */
-.profileCard {
-  max-width: 80%;
-  padding: 40px;
-  margin: auto;
-  margin-top: 60px;
-  margin-bottom: 40px;
-  border: 1px solid rgb(23, 133, 223);
-  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
-}
-
+/* --------------------- */
+/* Page Profile */
 .profilePicture {
   width: 150px;
   height: 150px;
@@ -37,3 +27,21 @@ div.scrollmenu a {
   margin-top: 50px;
   margin-bottom: 50px;
 }
+
+
+/* ----------------------- */
+
+
+/* -------------------- */
+/* Containers */
+.dataContainer {
+  max-width: 80%;
+  padding: 40px;
+  margin: auto;
+  margin-top: 60px;
+  margin-bottom: 40px;
+  border: 1px solid rgb(23, 133, 223);
+  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* ---------------------- */

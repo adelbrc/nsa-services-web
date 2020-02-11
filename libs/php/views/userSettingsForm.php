@@ -1,4 +1,4 @@
-<div class="profileCard">
+<div class="dataContainer">
   <h1 class="text-center">Informations</h1>
   <form action="libs/php/controllers/updateUserInfos.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrf-token" value="">
