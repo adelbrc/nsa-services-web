@@ -16,7 +16,7 @@ if ($_SESSION['user']['rank'] !=3) {
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta charsdashboardet="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="../ressources/style/admin.css">
     <link rel="stylesheet" href="../ressources/style/sidebar.css">

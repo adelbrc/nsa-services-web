@@ -26,8 +26,15 @@ include ('../libs/php/db/db_connect.php');
         <?php include('includes/sidebar.php'); ?>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class=" border jumbotron col-md-12" id="jumboRole" style="margin-top: 75px;">
+            <?php
+            if (isset($_GET['status']) && $_GET['status'] == 'ajoutNewRole') { ?>
+              <div class="alert text-center alert-success" role="alert">
+                Vous venez de créer une nouvelle foncion !
+              </div>
+            <?php } ?>
             <h1 class="display-5" style="text-align: center;">Role</h1>
             <br>
+            <?php include('createRoleBtn.php'); ?>
           </div>
         </main>
       </div>
