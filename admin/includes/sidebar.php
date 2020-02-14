@@ -2,32 +2,32 @@
   <div class="sidebar-sticky">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link active" href="dashboard.php">
-          <span data-feather="home"></span>
+        <a class="nav-link" href="dashboard.php">
+          <i class="fa fa-dashboard"></i>
           Dashboard <span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="displayUsers.php">
-          <span data-feather="users"></span>
+          <i class="fa fa-address-book"></i>
           Customers
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="subscription.php">
-          <span data-feather="bar-chart-2"></span>
+          <i class="fa fa-address-card"></i>
           Subscription
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="partners_management.php">
-          <span data-feather="layers"></span>
+          <i class="fa fa-briefcase"></i>
           Partners
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="services_management.php">
-          <span data-feather="users"></span>
+          <i class="fa fa-folder"></i>
           Services
         </a>
       </li>

@@ -1,5 +1,6 @@
 <?php
 require_once("../libs/php/classes/User.php");
+require_once("../libs/php/classes/Partner.php");
 include("../libs/php/isConnected.php");
 
 if (!isConnected()) {
@@ -47,7 +48,7 @@ if ($user->getRank() != "3") {
                     <a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">List</button></a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Partner</button></a>
+                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
                   </li>
                 </ul>
               </div>
@@ -57,7 +58,7 @@ if ($user->getRank() != "3") {
             <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
               <?php include("../libs/php/views/partnersList.php"); ?>
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile">
+            <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats">
               <?php include("../libs/php/views/partnerProfile.php"); ?>
             </div>
           </div>

@@ -141,7 +141,7 @@ if (isset($phone) && !empty($phone)) {
   }
 
   // Longueur du numéro
-  if (strlen($phone) > 10) {
+  if (strlen($phone) != 10) {
     header("Location: ../../../profile.php?error=phone_number_length");
     exit;
   }
@@ -188,7 +188,7 @@ if (isset($city) && !empty($city)) {
 // Update user infos
 $user->updateUserInfos($email, $pwd, $profile_pic, $phone, $address, $city);
 
-// A rajouter : mettre à jour la variable globale $_SESSION avec les nouvelles infos de l'user 
+// A rajouter : mettre à jour la variable globale $_SESSION avec les nouvelles infos de l'user
 
 header("Location: ../../../profile.php?submit=success");
 exit;
