@@ -147,6 +147,19 @@ class Partner {
     }
   }
 
+  // ------------------
+  // Check if PID exists
+  public function checkPID($pid){
+
+    $sql = "SELECT partner_id FROM partner WHERE partner_id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$pid]);
+
+    $res[] = $req->fetch();
+
+    echo count($res);
+  }
+
   // Get a partner's role with role ID
   public function getRoleById($id){
     $sql = "SELECT name FROM role WHERE id = ?";
@@ -175,8 +188,8 @@ class Partner {
     return $result;
   }
 
+  // ------------------------
   // Update a partner's infos
-  // User updating infos
   public function updatePartnerInfos($pid, $corp_name, $corp_id, $role_id, $address, $city, $email, $phone, $pricing, $dispo_begin, $dispo_end){
 
     $this->corporation_name = $corp_name;
@@ -205,6 +218,14 @@ class Partner {
       "dispo_end" => $dispo_end,
       "pid" => $pid,
     ));
+  }
+
+  // -----------------------
+  // Delete Partner
+  public function delete(){
+    $sql = "DELETE FROM partner WHERE partner_id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$this->partner_id]);
   }
 
 }
