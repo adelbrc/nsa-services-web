@@ -100,6 +100,16 @@ class Order {
     return $result;
   }
 
+
+  // Cancel an order
+  public function cancel(){
+
+    $this->order_status = 2;
+
+    $sql = "UPDATE nsaservices_db.order SET order_status = ? WHERE order_id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([2, $this->order_id]);
+  }
 }
 
 

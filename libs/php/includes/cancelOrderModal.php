@@ -16,7 +16,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <a type="button" href="../libs/php/controllers/deletePartner.php?pid=<?php echo $order->getOrderId(); ?>" class="btn btn-danger">Delete</a>
+        <a type="button" href="../libs/php/controllers/cancelOrder.php?oid=<?php echo $order->getOrderId(); ?>" class="btn btn-danger">Cancel</a>
       </div>
     </div>
   </div>
