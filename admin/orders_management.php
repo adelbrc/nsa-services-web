@@ -1,6 +1,7 @@
 <?php
 require_once("../libs/php/classes/User.php");
 require_once("../libs/php/classes/Partner.php");
+require_once("../libs/php/classes/Order.php");
 include("../libs/php/isConnected.php");
 
 if (!isConnected()) {
@@ -26,7 +27,7 @@ if ($user->getRank() != "3") {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Home Services | Partners Management</title>
+    <title>Home Services | Orders Management</title>
   </head>
   <body>
     <header>
@@ -37,7 +38,7 @@ if ($user->getRank() != "3") {
         <?php include('includes/sidebar.php'); ?>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2" id='user'>Partners Management</h1>
+            <h1 class="h2" id='user'>Orders Management</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
                 <ul class="nav justify-content-center" role="tablist">
@@ -53,10 +54,10 @@ if ($user->getRank() != "3") {
           </div>
           <div class="tab-content" id="partnersTab">
             <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
-              <?php include("../libs/php/views/partnersList.php"); ?>
+              <?php include("../libs/php/views/ordersList.php"); ?>
             </div>
             <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats">
-              <?php include("../libs/php/views/partnerProfile.php"); ?>
+              test
             </div>
           </div>
         </main>
