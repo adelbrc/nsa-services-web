@@ -30,18 +30,3 @@ div.scrollmenu a {
 
 
 /* ----------------------- */
-
-
-/* -------------------- */
-/* Containers */
-.dataContainer {
-  max-width: 80%;
-  padding: 40px;
-  margin: auto;
-  margin-top: 60px;
-  margin-bottom: 40px;
-  border: 1px solid rgb(23, 133, 223);
-  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
-}
-
-/* ---------------------- */

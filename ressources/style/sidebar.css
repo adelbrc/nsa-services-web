@@ -33,19 +33,15 @@
   color: #ffffff;
 }
 
-.sidebar .nav-link .feather {
+/* .sidebar .nav-link .feather {
   margin-right: 4px;
   color: #999;
-}
+} */
 
 .sidebar .nav-link.active {
   color: rgb(6, 11, 51);
 }
 
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
-  color: inherit;
-}
 
 .sidebar-heading {
   font-size: .75rem;
