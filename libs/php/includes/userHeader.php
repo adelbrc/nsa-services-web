@@ -23,7 +23,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="profile.php">Profile</a>
-          <a class="dropdown-item" href="#">Orders</a>
+          <a class="dropdown-item" href="orders.php">Orders</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Interventions</a>
         </div>

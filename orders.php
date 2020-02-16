@@ -1,6 +1,7 @@
 <?php
 
 require_once('libs/php/classes/User.php');
+require_once('libs/php/classes/Order.php');
 include('libs/php/isConnected.php');
 
 if (!isConnected()) {
@@ -11,7 +12,6 @@ if (!isConnected()) {
 $user = User::getUserByID($_SESSION["user"]["id"]);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -21,7 +21,7 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Profile | Settings</title>
+    <title>Dashboard | My Orders</title>
   </head>
   <body>
     <header>
@@ -30,15 +30,15 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
     <main>
       <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2" id='user'>Profile</h1>
+          <h1 class="h2" id='user'>My Orders</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <ul class="nav justify-content-center" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link active" id="infos-tab" data-toggle="tab" href="#infos" role="tab" aria-controls="infos" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">Informations</button></a>
+                  <a class="nav-link active" id="infos-tab" data-toggle="tab" href="#infos" role="tab" aria-controls="infos" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">Orders</button></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Settings</button></a>
+                  <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Test</button></a>
                 </li>
               </ul>
             </div>
@@ -46,10 +46,10 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
         </div>
         <div class="tab-content" id="myProfileContent">
           <div class="tab-pane fade show active" id="infos" role="tabpanel" aria-labelledby="infos">
-            <?php include("libs/php/views/userProfileCard.php"); ?>
+            <?php include("libs/php/views/userOrdersList.php"); ?>
           </div>
           <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings">
-            <?php include("libs/php/views/userSettingsForm.php"); ?>
+            Test
           </div>
         </div>
       </div>

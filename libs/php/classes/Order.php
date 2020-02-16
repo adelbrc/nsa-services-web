@@ -81,6 +81,23 @@ class Order {
     }
   }
 
+  // Get user's orders
+  public function getUserOrders($uid) {
+
+    $sql = "SELECT * FROM nsaservices_db.order WHERE customer_id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$uid]);
+
+    $result = array();
+
+    while ($row = $req->fetch()) {
+      $result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"],
+      $row["nbHours"], $row["service_id"], $row["payment_status"], $row["reservation_date"],
+      $row["order_status"]);
+    }
+
+    return $result;
+  }
 
   // List all orders
   public function getAllOrders(){
