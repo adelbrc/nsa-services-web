@@ -133,7 +133,7 @@ class User {
   }
 
   // Loading user infos
-  public function loadUser(string $email): User{
+  public function loadUser(string $email){
 
     $sql = "SELECT * FROM user WHERE email = ?";
     $req = $GLOBALS["conn"]->prepare($sql);

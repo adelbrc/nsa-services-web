@@ -13,65 +13,56 @@ if (isset($_POST['forminscription'])) {
 
   if (!empty($_POST['nom']) AND !empty($_POST['prenom'])AND !empty($_POST['ville']) AND !empty($_POST['mail']) AND !empty($_POST['num']) AND !empty($_POST['passwd']) AND !empty($_POST['passwd2']) AND !empty($_POST['adress'])) {
 
-	$nomlenght = strlen($nom);
-	$prenomlength = strlen($prenom);
-	$adresslength = strlen($adress);
+  	$nomlenght = strlen($nom);
+  	$prenomlength = strlen($prenom);
+  	$adresslength = strlen($adress);
 
-	if ($nomlenght <= 45) {
-	  if ($adresslength <=45) {
-		    if ($prenomlength <= 45) {
+  	if ($nomlenght <= 45) {
+  	  if ($adresslength <=45) {
+  		    if ($prenomlength <= 45) {
 
 
 
-			if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-			  if ($passwd == $passwd2) {
-				include('db/db_connect.php');
+  			if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+  			  if ($passwd == $passwd2) {
+    				include('classes/User.php');
 
-        $loginQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
+            $user = User::loadUser($mail);
 
-        $res = $loginQuery->execute([$mail]);
+            if ($user != NULL) {
+              header('Location: ../../signup.php?error=email_exist');
+              exit;
+            }
+				    $password = hash('sha256', $passwd);
+            User::signup($prenom, $nom, $mail, $password, $num, $adress, $ville);
 
-        $rows = $loginQuery->rowCount();
 
-        if ($rows) {
-          $user = $loginQuery->fetch();
-          header('Location: ../../signup.php?error=email_exist');
+  				header('Location: ../../login.php?inscription=success');
+  			  }
+  			  else {
+          header('Location:../../signup.php?signup=passerror');
           exit;
-        }
-				$insertmbr = $conn->prepare("INSERT INTO user(lastname, firstname, email, password, address, phone_number, city) VALUES( ?, ?, ?, ?, ?, ?, ?)");
-
-				$password = hash('sha256', $passwd);
-
-				$insertmbr->execute(array($nom, $prenom, $mail, $password, $adress, $num, $ville));
-
-				$lastId = $conn->lastInsertId();
-
-				header('Location: ../../login.php?inscription=success');
-			  }
-			  else {
-        header('Location:../../signup.php?signup=passerror');
+  			  }
+  			}
+  			else {
+          header('Location:../../signup.php?signup=invalid_email');
+          exit;
+  			}
+  		}
+  		else {
+        header('Location:../../signup.php?signup=name_length');
         exit;
-			  }
-			}
-			else {
-        header('Location:../../signup.php?signup=invalid_email');
-        exit;
-			}
-		}
-		else {
-      header('Location:../../signup.php?signup=name_length');
+  		}
+  	  }
+  	  else {
+      header('Location:../../signup.php?signup=adresslength');
       exit;
-		}
-	  }
-	  else {
-    header('Location:../../signup.php?signup=adresslength');
-    exit;
-    }
-	}
-	else {
-    header('Location:../../signup.php?signup=lastname_length');
-    exit;
-	}
+      }
+  	}
+  	else {
+      header('Location:../../signup.php?signup=lastname_length');
+      exit;
+  	}
   }
   else {
   header('Location:../../signup.php?signup=field_blank');
