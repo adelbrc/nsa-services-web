@@ -37,8 +37,12 @@ if (is_null($order)) {
   exit;
 }
 
-$order->cancel();
-header("Location: ../../../admin/orders_management.php?c=success");
-exit;
+if ($order->cancel()) {
+  header("Location: ../../../admin/orders_management.php?c=success");
+  exit;
+}else {
+  header("Location: ../../../admin/orders_management.php?c=already_canceled");
+  exit;
+}
 
 ?>

@@ -30,7 +30,17 @@ $list = Order::getAllOrders();
               <td><?php echo $order->getServiceId(); ?></td>
               <td><?php echo $order->getPaymentStatus(); ?></td>
               <td><?php echo $order->getReservationDate(); ?></td>
-              <td><?php echo $order->getOrderStatus(); ?></td>
+              <td>
+                <?php if ($order->getOrderStatus() == 0): ?>
+                  <?php echo "En attente"; ?>
+                <?php endif; ?>
+                <?php if ($order->getOrderStatus() == 1): ?>
+                  <?php echo "Confirmée"; ?>
+                <?php endif; ?>
+                <?php if ($order->getOrderStatus() == 2): ?>
+                  <?php echo "Annulée"; ?>
+                <?php endif; ?>
+              </td>
               <td>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalCancel<?php echo $order->getOrderId(); ?>">
                   <i class="fa fa-close"></i>
