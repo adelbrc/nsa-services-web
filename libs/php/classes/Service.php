@@ -101,7 +101,7 @@ class Service {
 
   // Get an array of services objects
   public function getAllServices(){
-    $sql = "SELECT * FROM service";
+    $sql = "SELECT * FROM service LIMIT 5";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute();
 
@@ -111,6 +111,16 @@ class Service {
     }
 
     return $result;
+  }
+
+  // Get Serice Category Name
+  public function getServiceCategory() {
+
+    $sql = "SELECT category.name FROM category WHERE category.id = ?";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute([$this->id]);
+
+    return $req->fetch()[0];
   }
 
 

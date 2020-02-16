@@ -18,6 +18,18 @@
 
 /* ---------------------- */
 
+/* ---------------------- */
+/* Custom Sections */
+.sizedSection {
+  max-width: 100%;
+  padding: 40px;
+  min-height: 400px;
+}
+
+.coloredSection {
+  background-color: #00bcd4;
+}
+
 
 * {
 	box-sizing: border-box;
@@ -99,3 +111,70 @@ div.scrollmenu a {
 .aFooter{
   font-size: 45px;
 }
+
+
+/* ------------------- */
+/* Custom Input */
+.customInput {
+  padding: 5px 10px;
+  width: 30%;
+  border: 1px solid rgb(23, 133, 223);
+  border-radius: 20px;
+}
+
+@media screen and (max-width: 992px) {
+  .customInput {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+}
+
+/* ------------------ */
+/* Page Services */
+.searchServicesForm {
+  margin-top: 30px;
+}
+
+.searchServicesBtn {
+  padding: 5px 10px;
+  margin-left: 10px;
+  background-color: rgb(27, 145, 195);
+  color: white;
+  border-radius: 20px;
+  border: none;
+}
+
+.serviceCard {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: 1px solid rgb(23, 133, 223);
+  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
+}
+
+.serviceCard:hover {
+  background-color: rgb(223, 222, 240);
+}
+
+.serviceCard .card-link {
+  color: rgb(23, 133, 223);
+}
+
+
+/* --------------------- */
+/* Page Profile */
+.profilePicture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+
+/* ----------------------- */

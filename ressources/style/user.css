@@ -13,20 +13,3 @@ div.scrollmenu a {
   padding: 14px;
   text-decoration: none;
 }
-
-
-/* --------------------- */
-/* Page Profile */
-.profilePicture {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-  margin: auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
-
-/* ----------------------- */

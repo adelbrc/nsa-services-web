@@ -1,6 +1,6 @@
 <div class="dataContainer">
   <div class="row">
-    <img class="profilePicture" src="" alt="">
+    <img class="profilePicture" src="<?php echo $user->getProfilePic(); ?>">
   </div>
   <div class="row">
     <div class="col-6">

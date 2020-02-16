@@ -29,7 +29,7 @@ if (isset($_FILES["profile_pic"]) && !empty($_FILES["profile_pic"]) && $_FILES["
   $file_name = $_FILES["profile_pic"]["name"];
   $arr = explode(".", $file_name);
   $file_ext = strtolower(end($arr));
-  $file_destination = "../../../ressources/img/profile_pics" . $user->getUsername() . "-" . date("Y-m-d-H-i-s") . "-" . $uploadHash . "." . $file_ext;
+  $file_destination = "../../../ressources/img/profile_pics/" . $user->getUID() . "-" . date("Y-m-d-H-i-s") . "-" . $uploadHash . "." . $file_ext;
 
   // Check si c'est bien une image
   if (getimagesize($_FILES["profile_pic"]["tmp_name"]) !== false) {
