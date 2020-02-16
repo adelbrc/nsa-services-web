@@ -29,7 +29,7 @@ if (!preg_match("#[1-9]#", $oid)) {
   exit;
 }
 
-// Check if partner exists
+// Check if order exists
 $order = Order::getOrderByID($oid);
 
 if (is_null($order)) {

@@ -116,19 +116,19 @@ class User {
   // Methods
 
   // Adding a user to the database
-  public function signup() {
+  public function signup($fname, $lname, $email, $pass, $phone, $addr, $city) {
 
     $sql = "INSERT INTO user(firstname, lastname, email, password, phone_number, address, city)
     VALUES(:fname, :lname, :email, :pass, :phone, :addr, :city)";
     $req = $GLOBALS['conn']->prepare($sql);
     $req->execute(array(
-      "fname" => $this->getFirstname(),
-      "lname" => $this->getLastname(),
-      "email" => $this->getEmail(),
-      "pass" => $this->getPassword(),
-      "phone" => $this->getPhoneNumber(),
-      "addr" => $this->getAddress(),
-      "city" => $this->getCity(),
+      "fname" => $fname,
+      "lname" => $lname,
+      "email" => $email,
+      "pass" => $pass,
+      "phone" => $phone,
+      "addr" => $addr,
+      "city" => $city,
     ));
   }
 
