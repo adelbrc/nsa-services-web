@@ -12,8 +12,8 @@
         <li class="list-group-item"><?php echo "Categorie: " . $service->getServiceCategory(); ?></li>
       </ul>
       <div class="card-body">
-        <a href="#" class="card-link">Commander</a>
-        <a href="#" class="card-link">Réserver</a>
+        <a href="#" class="btn btn-success">Commander</a>
+        <a href="#" class="btn btn-primary">Réserver</a>
       </div>
     </div>
   </div>
