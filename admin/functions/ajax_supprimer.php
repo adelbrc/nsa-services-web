@@ -7,6 +7,13 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id']) ) {
   ));
   exit;
 }
+if (isset($_GET['service_id']) && !empty($_GET['service_id']) ) {
+  $requeteSupprime =$conn->prepare('DELETE FROM service WHERE id = ?');
+  $requeteSupprime ->execute(array(
+    $_GET['service_id'],
+  ));
+  exit;
+}
 if (isset($_GET['abonnement_id']) && !empty($_GET['abonnement_id']) ) {
   $requeteSupprime =$conn->prepare('DELETE FROM membership WHERE id = ?');
   $requeteSupprime ->execute(array(
