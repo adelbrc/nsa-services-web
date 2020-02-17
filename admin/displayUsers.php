@@ -17,8 +17,8 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../ressources/style/admin.css">
     <link rel="stylesheet" href="../ressources/style/sidebar.css">
+    <link rel="stylesheet" href="../ressources/style/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -32,41 +32,69 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
       <div class="row">
         <?php include('includes/sidebar.php'); ?>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <div class=" border jumbotron col-md-12" id="jumboRole" style="margin-top: 75px;">
-            <h1 class="display-5" style="text-align: center;">Utilisateurs</h1>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Prenom</th>
-                  <th scope="col">Nom de famille</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Telephone</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                  $q = $conn->query('SELECT * FROM user');
-                  while($result = $q->fetch()){
-                ?>
-                <tr>
-                  <th scope="row"><?php echo $result['id']; ?></th>
-                  <td><?php echo $result['firstname']; ?></td>
-                  <td><?php echo $result['lastname']; ?></td>
-                  <td><?php echo $result['email']; ?></td>
-                  <td><?php echo $result['phone_number']; ?></td>
-                  <td><button type="button" id="deleteSub" onclick="supprimer(<?php echo $result['id']; ?>)"  class="close" aria-label="Close" href="#"><span aria-hidden="true">&times;</span></button></td>
-                  <td>
-                    <a class="nav-link" href="#">
-                      <i class="fa fa-search-plus"></i>
-                    </a>
-                </tr>
-              <?php } ?>
-              </tbody>
-            </table>
-            <br>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2" id='user'>Partners Management</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <ul class="nav justify-content-center" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">List</button></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" id="userTab">
+            <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
+              <div class="dataContainer">
+                <h3 class="text-center">Users List</h3>
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Firstname</th>
+                          <th scope="col">Lastname</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Phone</th>
+                          <th scope="col">Edit</th>
+                          <th scope="col">Delete</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php $q = $conn->query('SELECT * FROM user');
+                              while($result = $q->fetch()){ ?>
+                          <tr>
+                            <th scope="row"><?php echo $result['id']; ?></th>
+                            <td><?php echo $result['firstname']; ?></td>
+                            <td><?php echo $result['lastname']; ?></td>
+                            <td><?php echo $result['email']; ?></td>
+                            <td><?php echo $result['phone_number']; ?></td>
+                            <td>
+                              <!-- Button trigger modal -->
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalUpdate<?php echo $result['id']; ?>">
+                                <i class="fa fa-cog"></i>
+                              </button>
+                            </td>
+                            <td>
+                              <button type="button" id="deleteSub" onclick="supprimer(<?php echo $result['id']; ?>)"  class="close" aria-label="Close" href="#"><span aria-hidden="true">&times;</span></button>
+                            </td>
+                          </tr>
+
+                          <?php include("../libs/php/includes/updateUserModal.php"); ?>
+
+
+                        <?php } ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>
