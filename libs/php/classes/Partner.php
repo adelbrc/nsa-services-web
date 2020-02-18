@@ -228,6 +228,22 @@ class Partner {
     $req->execute([$this->partner_id]);
   }
 
+
+  // ------------------------
+  // Get all roles
+  public function getAllRoles() {
+    $sql = "SELECT * FROM role";
+    $req = $GLOBALS["conn"]->prepare($sql);
+    $req->execute();
+
+    $result = array();
+
+    while ($row = $req->fetch()) {
+      $result[] = $row;
+    }
+
+    return $result;
+  }
 }
 
 
