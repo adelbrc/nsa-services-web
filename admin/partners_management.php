@@ -53,6 +53,7 @@ if ($user->getRank() != "3") {
           </div>
           <div class="tab-content" id="partnersTab">
             <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
+              <?php include("../libs/php/alerts/updatePartnerAlerts.php"); ?>
               <?php include("../libs/php/views/partnersList.php"); ?>
             </div>
             <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats">

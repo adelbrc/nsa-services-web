@@ -41,7 +41,7 @@ if ($order->cancel()) {
   header("Location: ../../../admin/orders_management.php?c=success");
   exit;
 }else {
-  header("Location: ../../../admin/orders_management.php?c=already_canceled");
+  header("Location: ../../../admin/orders_management.php?error=already_canceled");
   exit;
 }
 

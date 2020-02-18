@@ -55,6 +55,7 @@ if ($user->getRank() != "3") {
           </div>
           <div class="tab-content" id="partnersTab">
             <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
+              <?php include("../libs/php/alerts/cancelOrderAlerts.php"); ?>
               <?php include("../libs/php/views/ordersList.php"); ?>
             </div>
             <div class="tab-pane fade" id="interventions" role="tabpanel" aria-labelledby="interventions">
