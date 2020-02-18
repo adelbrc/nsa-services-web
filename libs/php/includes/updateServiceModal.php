@@ -28,8 +28,10 @@
             <div class="form-group col-md-6">
               <label for="rolesList">Job :</label>
               <select class="form-control" name="category" id="categoryList">
-                <?php $q = $conn->query('SELECT * FROM category');
-                      while($category = $q->fetch()){ ?>
+                <?php
+                  $dq = $conn->query('SELECT * FROM category');
+                  while($category = $dq->fetch()){
+                ?>
                 <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
               <?php } ?>
               </select>
@@ -42,6 +44,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
+        </div>
+      </div>
     </div>
-  </div>
 </div>

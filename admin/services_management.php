@@ -45,6 +45,7 @@ include ('../libs/php/db/db_connect.php');
               <div class="dataContainer">
                 <h3 class="text-center">Services List</h3>
                 <div class="row">
+                  <?php include('includes/newServicesModal.php'); ?>
                   <div class="table-responsive">
                     <table class="table">
                       <thead>
