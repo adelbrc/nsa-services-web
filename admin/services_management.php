@@ -80,7 +80,9 @@ include ('../libs/php/db/db_connect.php');
                               </button>
                             </td>
                             <td>
-                              <button type="button" id="deleteSub" onclick="supprimer(<?php echo $result['id']; ?>)"  class="close" aria-label="Close" href="#"><span aria-hidden="true">&times;</span></button>
+                              <button type="button" onclick="supprimer(<?php echo $result['id']; ?>)"  id="deleteSub" class="btn btn-danger">
+                                <i class="fa fa-close"></i>
+                              </button>
                             </td>
                           </tr>
                           <?php include("../libs/php/includes/updateServiceModal.php"); ?>
@@ -92,6 +94,8 @@ include ('../libs/php/db/db_connect.php');
               </div>
             </div>
           </div>
+          <!-- Affichage de toutes les categories -->
+          <?php include('includes/categoriesList.php'); ?>
         </main>
       </div>
     </div>
@@ -109,6 +113,18 @@ include ('../libs/php/db/db_connect.php');
      xhttp.open('GET', 'functions/ajax_supprimer.php?service_id=' + service_id);
      xhttp.send();
    }
+   function supprimerCategorie(category_id) {
+     let xhttp = new XMLHttpRequest();
+
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log(xhttp.responseText);
+              alert('Utilisateur bien supprimé !');
+            }
+      }
+      xhttp.open('GET', 'functions/ajax_supprimer.php?category_id=' + category_id);
+      xhttp.send();
+    }
   </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

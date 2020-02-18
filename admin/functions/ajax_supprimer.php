@@ -21,6 +21,12 @@ if (isset($_GET['abonnement_id']) && !empty($_GET['abonnement_id']) ) {
   ));
   exit;
 }
-
+if (isset($_GET['category_id']) && !empty($_GET['category_id']) ) {
+  $requeteSupprime =$conn->prepare('DELETE FROM category WHERE id = ?');
+  $requeteSupprime ->execute(array(
+    $_GET['category_id'],
+  ));
+  exit;
+}
 
  ?>
