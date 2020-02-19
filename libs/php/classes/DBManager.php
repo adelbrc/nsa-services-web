@@ -9,7 +9,7 @@ class DBManager {
 
   public function __construct() {
     try {
-      $this->conn = new PDO('mysql:host=db;dbname=nsaservices_db', 'admin', 'test123');
+      $this->conn = new PDO('mysql:host=localhost;dbname=nsaservices_db', 'admin', 'test123');
 
     } catch (Exception $e) {
       die('Erreur : ' . $e->getMessage());
@@ -17,7 +17,7 @@ class DBManager {
   }
 
   public static function getConn(){
-    return new PDO('mysql:host=db;dbname=nsaservices_db', 'admin', 'test123');
+    return new PDO('mysql:host=localhost;dbname=nsaservices_db', 'admin', 'test123');
   }
 
 }

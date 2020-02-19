@@ -100,7 +100,7 @@ class Order {
   }
 
   // List all orders
-  public function getAllOrders(){
+  public static function getAllOrders(){
 
     $sql = "SELECT * FROM nsaservices_db.order ORDER BY order_date DESC";
     $req = $GLOBALS["conn"]->prepare($sql);

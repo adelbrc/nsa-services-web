@@ -22,7 +22,7 @@
       <a class="nav-link" href="dashboard.php">Dashboard</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/libs/php/deconnexion.php">Deconnexion</a>
+      <a class="nav-link" href="libs/php/deconnexion.php">Deconnexion</a>
     </li>
   <?php } ?>
 

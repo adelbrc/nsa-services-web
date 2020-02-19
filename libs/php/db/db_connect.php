@@ -1,5 +1,5 @@
 <?php
-$host = "db";
+$host = "localhost";
 $username = "admin";
 $password = "test123";
 $database = "nsaservices_db";

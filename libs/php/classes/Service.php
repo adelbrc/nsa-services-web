@@ -100,7 +100,7 @@ class Service {
   }
 
   // Get an array of services objects
-  public function getAllServices(){
+  public static function getAllServices(){
     $sql = "SELECT * FROM service LIMIT 5";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute();

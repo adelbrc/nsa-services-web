@@ -171,7 +171,7 @@ class Partner {
   }
 
   // List all partners
-  public function getAllPartners(){
+  public static function getAllPartners(){
     $sql = "SELECT * FROM partner";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute();

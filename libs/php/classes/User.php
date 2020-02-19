@@ -170,7 +170,7 @@ class User {
   }
 
   // Get user by ID
-  public function getUserByID(int $id): User{
+  public static function getUserByID(int $id): User{
 
     $sql = "SELECT * FROM user WHERE id = ?";
     $req = $GLOBALS["conn"]->prepare($sql);
