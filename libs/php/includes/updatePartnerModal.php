@@ -68,7 +68,10 @@
             <div class="form-group">
               <label for="rolesList">Job :</label>
               <select class="form-control" name="role" id="rolesList">
-                <option value="<?php echo $partner->getRoleId(); ?>"><?php echo $partner->getRoleById($partner->getRoleId()); ?></option>
+                <option value="<?php echo $partner->getRoleId(); ?>" selected><?php echo $partner->getRoleById($partner->getRoleId()); ?></option>
+                <?php foreach ($roles as $key => $role): ?>
+                  <option value="<?php echo $role["id"]; ?>"><?php echo $role["name"]; ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
           </div>

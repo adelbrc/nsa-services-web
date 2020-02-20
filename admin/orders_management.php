@@ -2,6 +2,7 @@
 require_once("../libs/php/classes/User.php");
 require_once("../libs/php/classes/Partner.php");
 require_once("../libs/php/classes/Order.php");
+require_once("../libs/php/classes/Intervention.php");
 include("../libs/php/isConnected.php");
 
 if (!isConnected()) {
@@ -46,7 +47,7 @@ if ($user->getRank() != "3") {
                     <a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">List</button></a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
+                    <a class="nav-link" id="interventions-tab" data-toggle="tab" href="#interventions" role="tab" aria-controls="interventions" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Interventions</button></a>
                   </li>
                 </ul>
               </div>
@@ -54,10 +55,11 @@ if ($user->getRank() != "3") {
           </div>
           <div class="tab-content" id="partnersTab">
             <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
+              <?php include("../libs/php/alerts/cancelOrderAlerts.php"); ?>
               <?php include("../libs/php/views/ordersList.php"); ?>
             </div>
-            <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats">
-              test
+            <div class="tab-pane fade" id="interventions" role="tabpanel" aria-labelledby="interventions">
+              <?php include("../libs/php/views/interventionsList.php"); ?>
             </div>
           </div>
         </main>

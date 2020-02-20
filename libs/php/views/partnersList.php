@@ -1,5 +1,6 @@
 <?php
 $list = Partner::getAllPartners();
+$roles = Partner::getAllRoles();
 ?>
 
 <div class="dataContainer">
