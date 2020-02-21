@@ -34,7 +34,7 @@ if (isset($_POST['formconnexion'])) {
       $user = $loginQuery->fetch();
       session_start();
       $_SESSION['user'] = $user;
-        header('Location: ../../collaborateur/dashboard.php?connectedAs=dzefrgthytgfds');
+        header('Location: ../../collaborateur/dashboard.php?connectedAs=partner');
         exit;
     }
     header('Location: ../../login.php?error=wrongpass');

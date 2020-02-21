@@ -1,7 +1,7 @@
 <div class="tab-content" id="userTab">
   <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
     <div class="dataContainer">
-      <h3 class="text-center">Categories List</h3>
+      <h3 class="text-center">Categories/Roles List</h3>
       <div class="row">
         <?php include('includes/newCategoriesModal.php'); ?>
         <div class="table-responsive">

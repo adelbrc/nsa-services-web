@@ -8,7 +8,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">New Service</h5>
+        <h5 class="modal-title" id="modalTitle">New Category</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -20,6 +20,10 @@
             <div class="form-group col-md-6 mx-auto">
               <label for="inputName">Nom</label>
               <input type="text" class="form-control" id="inputName" name="category_name" >
+            </div>
+            <div class="form-group col-md-6 mx-auto">
+              <label for="inputReduc">Nb avant réduction</label>
+              <input type="number" class="form-control" id="inputReduc" name="inputReduc" >
             </div>
           </div>
           <div class="form-group">

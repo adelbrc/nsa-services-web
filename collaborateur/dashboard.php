@@ -10,10 +10,14 @@ if (!isConnected()) {
   <head>
     <meta charset="utf-8">
     <title>Collaborateur</title>
-    <link rel="stylesheet" type="text/css" href="../ressources/style/bootstrap.min.css">
-
+    <!-- My styles -->
+  	<link rel="stylesheet" type="text/css" href="../ressources/style/bootstrap.min.css">
+  	<link rel="stylesheet" type="text/css" href="./ressources/style/user.css">
+  	<!-- Fin My styles -->
   </head>
   <body>
-<?php include('../libs/php/mainHeader.php'); ?>
+<?php include('../libs/php/includes/partnerHeader.php');
+include('../libs/php/db/db_connect.php');
+?>
   </body>
 </html>
