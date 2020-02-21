@@ -1,4 +1,5 @@
 <?php
+
 if(isset($_POST['formNewSub'])){
   if(!empty($_POST['nom']) AND !empty($_POST['Description']) AND !empty($_POST['duration'])  AND !empty($_POST['tarif'])  AND !empty($_POST['NbJrs'])  AND !empty($_POST['OpenHour']) AND !empty($_POST['CloseHour']) ){
 
@@ -19,7 +20,7 @@ if(isset($_POST['formNewSub'])){
 	$lastInsertId = $conn->lastInsertId();
 
 	/* * * * * * *
-	* Stripe API 
+	* Stripe API
 	* On ajoute cet abonnement comme Produit dans l'API Stripe
 	* * * * * * */
 	require_once('../libs/stripe-php-master/init.php');
@@ -45,7 +46,6 @@ if(isset($_POST['formNewSub'])){
 	/* * * * * * * * *
 	* FIN Stripe API *
 	* * * * * * * * */
-
 
 	header('location:subscription.php?status=ajoutNewSub');
   }else{

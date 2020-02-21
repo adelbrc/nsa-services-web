@@ -77,7 +77,7 @@ if (!isConnected()) {
 			        </button>
 			      </div>
 			      <div class="modal-body">
-						
+
 						<!-- Stripe Form -->
 						<form id="payment-form">
 						  <div id="card-element">
@@ -89,7 +89,7 @@ if (!isConnected()) {
 
 						  <button id="submit">Pay</button>
 						</form>
-		
+
 						<?php
 
 							$id_plan;
@@ -102,7 +102,7 @@ if (!isConnected()) {
 								}
 							}
 
-						
+
 							// $session = \Stripe\Checkout\Session::create([
 							// 	'payment_method_types' => ['card'],
 							// 	'subscription_data' => [
@@ -113,7 +113,7 @@ if (!isConnected()) {
 							// 	'success_url' => 'http://localhost/ESGI/PA2020/nsa-services-web/dashboard.php?redirect=success&session_id={CHECKOUT_SESSION_ID}',
 							// 	'cancel_url' => 'http://localhost/ESGI/PA2020/nsa-services-web/index.php?redirect=cancel_payment',
 							// ]);
-						
+
 						?>
 			      </div>
 			      <div class="modal-footer">
@@ -129,21 +129,21 @@ if (!isConnected()) {
 		<?php endforeach; ?>
 
 
-		
+
 
 	</div>
-	
+
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 	<script>
-		
+
 
 		var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
-		
-		var DOMAIN = prompt("Votre chemin absolu vers nsa-services-web (exemple : http://localhost/un_dossier_bidon/nsa-services-web ) sans / a la fin");
-		
+
+		var DOMAIN = http://nsaservices.local;
+
 		// "http://localhost/ESGI/PA2020/nsa-services-web";
 
 		var stripe = Stripe(PUBLISHABLE_KEY);

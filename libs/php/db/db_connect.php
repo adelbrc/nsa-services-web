@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$username = "admin";
+$username = "samy";
 $password = "test123";
 $database = "nsaservices_db";
 
