@@ -41,6 +41,9 @@ if (!isConnected()) {
 		require_once('libs/stripe-php-master/init.php');
 		\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
+		$plans = \Stripe\Product::all();
+
+
 		// on recupere et affiche tous les abonnements
 		$queryMemberships = $conn->query("SELECT * FROM membership");
 		$queryMemberships->execute();
@@ -92,11 +95,13 @@ if (!isConnected()) {
 		
 						<?php
 
-							$id_plan;
+							global $id_plan;
 
-							$plans = \Stripe\Plan::all(['limit' => 3]);
+							$plans = \Stripe\Product::all();
+
 							foreach ($plans as $plan) {
-								// var_dump($plan);
+								var_dump($plan);
+								// echo $plan["product"] . ' = ' . $plan["name"] . ' = ' . $plan["id"] . "<br>";
 								if ($plan["product"] == $membership['id']) {
 									$id_plan = $plan["id"];
 								}
@@ -142,9 +147,10 @@ if (!isConnected()) {
 
 		var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
 		
-		var DOMAIN = prompt("Votre chemin absolu vers nsa-services-web (exemple : http://localhost/un_dossier_bidon/nsa-services-web ) sans / a la fin");
+		// var DOMAIN = prompt("Votre chemin absolu vers nsa-services-web (exemple : http://localhost/un_dossier_bidon/nsa-services-web ) sans / a la fin");
 		
 		// "http://localhost/ESGI/PA2020/nsa-services-web";
+		var DOMAIN = "http://localhost/ESGI/PA2020/nsa-services-web";
 
 		var stripe = Stripe(PUBLISHABLE_KEY);
 
@@ -164,7 +170,7 @@ if (!isConnected()) {
 					successUrl:
 						// "https://" +
 						DOMAIN +
-						"/pages_stripe/success.html?session_id={CHECKOUT_SESSION_ID}",
+						"/pages_stripe/success.php?session_id={CHECKOUT_SESSION_ID}",
 					// cancelUrl: "https://" + DOMAIN + "/canceled.html"
 					cancelUrl: DOMAIN + "/pages_stripe/canceled.html"
 				})

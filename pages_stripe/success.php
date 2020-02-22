@@ -48,7 +48,7 @@
     </div>
     <script>
       // Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
-      var PUBLISHABLE_KEY = "pk_1234";
+      var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
       
       if (PUBLISHABLE_KEY === "pk_1234") {
         console.log(

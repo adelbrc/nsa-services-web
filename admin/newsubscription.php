@@ -38,7 +38,7 @@ if(isset($_POST['formNewSub'])){
 			'openHours' => $openHours,
 			'closeHours' => $closeHours,
 			'hoursQuota' => $hoursQuota,
-			'duration' => '12'
+			'duration' => $monthsDuration
 			]]
 	]);
 
