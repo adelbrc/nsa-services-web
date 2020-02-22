@@ -2,6 +2,11 @@
   <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
     <div class="dataContainer">
       <h3 class="text-center">Categories/Roles List</h3>
+      <?php if (isset($_GET['statusCat']) && $_GET['statusCat'] == 'field_blank') { ?>
+        <div class="alert text-center alert-danger" role="alert">
+          Tous les champs doivent être complétés !
+        </div>
+      <?php } ?>
       <div class="row">
         <?php include('includes/newCategoriesModal.php'); ?>
         <div class="table-responsive">

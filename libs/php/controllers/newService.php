@@ -13,6 +13,8 @@
 				$insertRole->execute(array($name, $price, $discountPrice, $category, $description));
 
         header('location: ../../../admin/services_management.php?status=ajoutNewRole');
+  }else{
+    header('location: ../../../admin/services_management.php?status=field_blank');
   }
 
 ?>

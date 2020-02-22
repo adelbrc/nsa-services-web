@@ -14,6 +14,9 @@
     $insertRole->execute(array($name, $reduc));
 
         header('location: ../../../admin/services_management.php?status=ajoutNewCategory');
+  }else {
+    header('location: ../../../admin/services_management.php?statusCat=field_blank');
+
   }
 
 ?>
