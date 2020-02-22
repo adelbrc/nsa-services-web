@@ -28,10 +28,18 @@ include("libs/php/isConnected.php");
       <section class="sizedSection">
         <div class="dataContainer">
           <h2 class="text-center">Rechercher des services</h2>
-          <form class="text-center searchServicesForm" action="" method="post">
-            <input class="customInput" type="text" name="search" placeholder="Garde d'enfants, plomberie, réparation informatique...">
-            <input class="customInput" type="text" name="search_location" placeholder="Paris, Marseille...">
-            <button class="searchServicesBtn" type="submit" name="button">Rechercher</button>
+          <form class="text-center searchServicesForm">
+            <div class="form-row">
+              <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <input class="customInput" autocomplete="off" type="search" placeholder="Garde d'enfants, plomberie, réparation informatique..." onkeyup="showResult(this.value)">
+                <div id="serviceSearch">
+
+                </div>
+              </div>
+              <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <input class="customInput" type="search" name="search_location" placeholder="Paris, Marseille...">
+              </div>
+            </div>
           </form>
         </div>
       </section>
@@ -42,39 +50,10 @@ include("libs/php/isConnected.php");
         </div>
       </section>
     </main>
+
+    <!-- JS -->
+    <script src="libs/ajax/searchServices.js" charset="utf-8"></script>
     <script src="https://js.stripe.com/v3/"></script>
-    <script>
-
-
-      var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
-
-      var DOMAIN = http://nsaservices.local;
-
-      var stripe = Stripe(PUBLISHABLE_KEY);
-
-      // Handle any errors from Checkout
-      var handleResult = function(result) {
-        if (result.error) {
-          var displayError = document.getElementById("error-message");
-          displayError.textContent = result.error.message;
-        }
-      };
-
-      // cette fonction permet de rediriger vers le site de stripe avec l'id du plan
-      var redirectToCheckout = function(id_product) {
-        stripe
-          .redirectToCheckout({
-            items: [{ product: id_product, quantity: 1 }],
-            successUrl:
-              // "https://" +
-              DOMAIN +
-              "/pages_stripe/success.html?session_id={CHECKOUT_SESSION_ID}",
-            // cancelUrl: "https://" + DOMAIN + "/canceled.html"
-            cancelUrl: DOMAIN + "/pages_stripe/canceled.html"
-          })
-          .then(handleResult);
-      };
-
-    </script>
+    <script src="libs/js/checkout.js" charset="utf-8"></script>
   </body>
 </html>

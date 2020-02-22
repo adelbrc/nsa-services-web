@@ -117,7 +117,7 @@ div.scrollmenu a {
 /* Custom Input */
 .customInput {
   padding: 5px 10px;
-  width: 30%;
+  width: 100%;
   border: 1px solid rgb(23, 133, 223);
   border-radius: 20px;
 }
