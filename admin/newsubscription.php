@@ -12,40 +12,59 @@ if(isset($_POST['formNewSub'])){
 	$description = htmlspecialchars($_POST['Description']);
 	$monthsDuration = htmlspecialchars($_POST['duration']);
 
-	include('../libs/php/db/db_connect.php');
-	$insertRole = $conn->prepare("INSERT INTO membership(name, price, openDays, openHours, closeHours, timeQuota, closeDays, description, duration) VALUES(?, ?, ?, ?, ?, ?,0, ?, ?)");
-	$insertRole->execute(array($name, $price, $openDays, $openHours, $closeHours, $hoursQuota, $description, $monthsDuration));
 
-	// on recupere le last Id pour pouvoir le supprimer et update plus tard
-	$lastInsertId = $conn->lastInsertId();
 
-	/* * * * * * *
-	* Stripe API
-	* On ajoute cet abonnement comme Produit dans l'API Stripe
-	* * * * * * */
+	// on va l'inserer (1) dans stripe puis (2) en bdd
+	// comme ca on peut recuperer le id_plan genere par stripe pour le mettre en bdd
+
+	// (1) Insert dans stripe
 	require_once('../libs/stripe-php-master/init.php');
 	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
-	\Stripe\Plan::create([
-	'amount' => $price * 100,
+	// on stock cette requete parce qu'elle renvoie les infos du plan créé (comme l'id qu'on va stocker en bdd)
+	$newPlan = \Stripe\Plan::create([
 	'currency' => 'eur',
+	'amount' => $price * 100,
 	'interval' => 'month',
-	'product' => [
-		'name' => $name,
-		'id' => $lastInsertId,
-		'metadata' => [
-			'description' => $description,
-			'openDays' => $openDays,
-			'openHours' => $openHours,
-			'closeHours' => $closeHours,
-			'hoursQuota' => $hoursQuota,
-			'duration' => $monthsDuration
-			]]
+	'product' => 'prod_GmIrmkZZUKLyI1', // l'id du produit qui contient les differents plans tarifaires
+	'nickname' => $name,
+	'metadata' => [
+		'openDays' => $openDays,
+		'openHours' => $openHours,
+		'closeHours' => $closeHours,
+		'hoursQuota' => $hoursQuota,
+		'duration' => $monthsDuration,
+		'description' => $description,
+		]
 	]);
 
-	/* * * * * * * * *
-	* FIN Stripe API *
-	* * * * * * * * */
+
+	echo "Nouveau plan ajouté dans stripe<br>";
+	
+
+	// (2)
+	include('../libs/php/db/db_connect.php');
+	$insertMembership = $conn->prepare("INSERT INTO membership(id_plan, name, price, openDays, openHours, closeHours, timeQuota, description, duration) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$insertMembership->execute(
+		array(
+			$newPlan["id"],
+			$name, 
+			$price, 
+			$openDays, 
+			$openHours, 
+			$closeHours, 
+			$hoursQuota, 
+			$description, 
+			$monthsDuration
+		)
+	);
+
+	echo "Nouveau plan ajouté en base de donnees<br>";
+
+
+	// var_dump($_POST);
+	// exit;
+
 
 	header('location:subscription.php?status=ajoutNewSub');
   }else{

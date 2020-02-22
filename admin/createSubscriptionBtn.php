@@ -25,7 +25,7 @@
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">nombre de service compris (en heure)</label>
-            <input type="number" class="form-control" id="exampleInputtimeQuotas" aria-describedby="ClosetimeQuotas" placeholder="Saisir le prix" name="timeQuotas" value="<?php if(isset($timeQuotas)) { echo $timeQuotas; } ?>">
+            <input type="number" class="form-control" id="exampleInputtimeQuotas" aria-describedby="ClosetimeQuotas" placeholder="Saisir le nombre d'heures" name="timeQuotas" value="<?php if(isset($timeQuotas)) { echo $timeQuotas; } ?>">
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">nombre de jours ouvert (/7j)</label>
