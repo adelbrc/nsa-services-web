@@ -92,38 +92,10 @@ if (!isConnected()) {
 
 						  <button id="submit">Pay</button>
 						</form>
-
-						<?php
-
-							global $id_plan;
-
-							$plans = \Stripe\Product::all();
-
-							foreach ($plans as $plan) {
-								var_dump($plan);
-								// echo $plan["product"] . ' = ' . $plan["name"] . ' = ' . $plan["id"] . "<br>";
-								if ($plan["product"] == $membership['id']) {
-									$id_plan = $plan["id"];
-								}
-							}
-
-
-							// $session = \Stripe\Checkout\Session::create([
-							// 	'payment_method_types' => ['card'],
-							// 	'subscription_data' => [
-							// 		'items' => [
-							// 			['plan' => $id_plan]
-							// 		],
-							// 	],
-							// 	'success_url' => 'http://localhost/ESGI/PA2020/nsa-services-web/dashboard.php?redirect=success&session_id={CHECKOUT_SESSION_ID}',
-							// 	'cancel_url' => 'http://localhost/ESGI/PA2020/nsa-services-web/index.php?redirect=cancel_payment',
-							// ]);
-
-						?>
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $id_plan ?>')">Payer l'abonnement</button>
+			        <button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Payer l'abonnement</button>
 			      </div>
 			    </div>
 			  </div>
@@ -148,7 +120,7 @@ if (!isConnected()) {
 		var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
 
 
-		var DOMAIN = http://nsaservices.local;
+		var DOMAIN = "http://nsaservices.local";
 
 
 		// "http://localhost/ESGI/PA2020/nsa-services-web";
