@@ -124,6 +124,25 @@ class Service {
   }
 
 
+  // Search Service
+  public function searchService($input) {
+
+    $sql = "SELECT * FROM service WHERE name LIKE :str";
+    $query = $GLOBALS['conn']->prepare($sql);
+    $query->execute(array(
+      'str' => $input . "%",
+    ));
+
+    $results = [];
+
+    while ($row = $query->fetch()) {
+      $results[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"]);
+    }
+
+    return $results;
+  }
+
+
 
 }
 
