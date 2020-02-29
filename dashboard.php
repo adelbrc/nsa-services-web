@@ -13,7 +13,7 @@ if (!isConnected()) {
 	<!-- Stripe -->
 	<!-- <link rel="stylesheet" type="text/css" href="./ressources/css/global.css"> -->
 	<!-- <link rel="stylesheet" type="text/css" href="./ressources/css/normalize.css"> -->
-    <script src="https://js.stripe.com/v3/"></script>
+	<script src="https://js.stripe.com/v3/"></script>
 	<!-- Fin Stripe -->
 
 	<!-- My styles -->
@@ -41,9 +41,6 @@ if (!isConnected()) {
 		require_once('libs/stripe-php-master/init.php');
 		\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
-		$plans = \Stripe\Product::all();
-
-
 		// on recupere et affiche tous les abonnements
 		$queryMemberships = $conn->query("SELECT * FROM membership");
 		$queryMemberships->execute();
@@ -52,53 +49,74 @@ if (!isConnected()) {
 	?>
 
 			<div class="card text-center" style="width: 18rem;">
-			  <img class="card-img-top" src="https://via.placeholder.com/300x250.png" alt="Card image cap">
-			  <div class="card-body">
-			    <h5 class="card-title"><?= $membership["name"] ?></h5>
-			    <p class="card-text"><?= $membership["description"] ?></p>
-			  </div>
-			  <ul class="list-group list-group-flush">
-			    <li class="list-group-item"><?= $membership["price"] ?> €</li>
-			    <li class="list-group-item"><?= $membership["timeQuota"] ?> heures de services par mois</li>
-			    <li class="list-group-item">Disponibilité <?= $membership["openDays"] ?>j / 7j</li>
-			    <li class="list-group-item">De <?= $membership["openHours"] ?> h à <?= $membership["closeHours"] ?> h</li>
-			    <li class="list-group-item">(Sans)/Engagement <?= $membership["duration"] ?> mois</li>
-			  </ul>
-			  <div class="card-body">
-			    <a href="./#" class="btn btn-primary" id="<?= $membership['id'] ?>" data-toggle="modal" data-target="#paymentModal<?= $membership['id'] ?>">Je choisis <?= $membership["name"]; ?></a>
-			  </div>
+				<img class="card-img-top" src="https://via.placeholder.com/300x250.png" alt="Card image cap">
+				<div class="card-body">
+				<h5 class="card-title"><?= $membership["name"] ?></h5>
+				<p class="card-text"><?= $membership["description"] ?></p>
+				</div>
+				<ul class="list-group list-group-flush">
+				<li class="list-group-item"><?= $membership["price"] ?> €</li>
+				<li class="list-group-item"><?= $membership["timeQuota"] ?> heures de services par mois</li>
+				<li class="list-group-item">Disponibilité <?= $membership["openDays"] ?>j / 7j</li>
+				<li class="list-group-item">De <?= $membership["openHours"] ?> h à <?= $membership["closeHours"] ?> h</li>
+				<li class="list-group-item">(Sans)/Engagement <?= $membership["duration"] ?> mois</li>
+				</ul>
+				
+				<div class="card-body">
+					
+					<?php
+						// On va verifier ici que l'utilisateur n'est pas deja abonné a un abonnement
+						// s'il est abonné, on bloque le bouton de suscription
+						// on fait ca en php parce que c'est non modifiable si le mec tente de faire un "Inspecter lelement"
+
+						// on selectionne user_id mais on pourrait selectionner n'importe quelle colonne,
+						// c'est juste pour voir si on a une ligne de retournée
+						$queryUserHasSubscription = $conn->prepare("SELECT membership_id FROM memberships_history WHERE user_id = ?");
+						$queryUserHasSubscription->execute([$_SESSION["user"]["id"]]);
+						$result = $queryUserHasSubscription->fetch();
+
+						if ($queryUserHasSubscription->rowCount())
+							if ($result["membership_id"] == $membership["id"])
+								echo "<button class=\"btn btn-success\"><i class='fas fa-check'></i></span>Mon abonnement actuel";
+							else
+								echo "<button class=\"btn btn-secondary\">Un abonnement a déjà été choisi";
+						else
+							echo "<a href=\"./#\" class=\"btn btn-primary\" id=\"" . $membership['id'] . "\" data-toggle=\"modal\" data-target=\"#paymentModal" . $membership['id'] ."\">Je choisis " . $membership['name'] . "</a>";						
+					?>	
+				
+				</div>
+			
 			</div>
 
 			<!-- Modal -->
 			<div class="modal fade" id="paymentModal<?= $membership['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h5 class="modal-title" id="paymentModalLabel">Modal title<?= $membership['id'] ?></h5>
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			      </div>
-			      <div class="modal-body">
+				<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="paymentModalLabel">Modal title<?= $membership['id'] ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body">
 
 						<!-- Stripe Form -->
 						<form id="payment-form">
-						  <div id="card-element">
-						    <!-- Elements will create input elements here -->
-						  </div>
+							<div id="card-element">
+							<!-- Elements will create input elements here -->
+							</div>
 
-						  <!-- We'll put the error messages in this element -->
-						  <div id="card-errors" role="alert"></div>
+							<!-- We'll put the error messages in this element -->
+							<div id="card-errors" role="alert"></div>
 
-						  <button id="submit">Pay</button>
 						</form>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Payer l'abonnement</button>
-			      </div>
-			    </div>
-			  </div>
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Payer l'abonnement</button>
+					</div>
+				</div>
+				</div>
 			</div>
 
 
