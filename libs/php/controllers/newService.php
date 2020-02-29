@@ -31,9 +31,9 @@
 
 
     include('../db/db_connect.php');
-    $insertRole = $conn->prepare("INSERT INTO service(name, price, discountPrice, category_id, description ) VALUES(?, ?, ?, ?, ?)");
+    $insertRole = $conn->prepare("INSERT INTO service(name, price, discountPrice, category_id, description, id_service ) VALUES(?, ?, ?, ?, ?, ?)");
 
-				$insertRole->execute(array($name, $price, $discountPrice, $category, $description));
+				$insertRole->execute(array($name, $price, $discountPrice, $category, $description, $newPlan['id']));
 
         header('location: ../../../admin/services_management.php?status=ajoutNewRole');
   }else{
