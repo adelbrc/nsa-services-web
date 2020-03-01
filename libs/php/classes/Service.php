@@ -14,15 +14,17 @@ class Service {
   private $discount_price;
   private $description;
   private $category_id;
+  private $stripe_id;
 
 
-  function __construct($id, $name, $price, $discount_price, $description, $category_id) {
+  function __construct($id, $name, $price, $discount_price, $description, $category_id, $stripe_id) {
     $this->id = $id;
     $this->name = $name;
     $this->price = $price;
     $this->discount_price = $discount_price;
     $this->description = $description;
     $this->$category_id = $category_id;
+    $this->stripe_id = $stripe_id;
   }
 
   // ----------------
@@ -51,6 +53,10 @@ class Service {
     return $this->$category_id;
   }
 
+  public function getStripeID() {
+      return $this->stripe_id;
+  }
+
   // -----------------
   // Setters
   public function setName($name){
@@ -75,7 +81,7 @@ class Service {
 
   // Insert a service in database
   public function addService(Service $service){
-    $sql = "INSERT INTO service(name, price, discountPrice, description, category_id) VALUES(:n, :p, :dp, :d, :c)";
+    $sql = "INSERT INTO service(name, price, discountPrice, description, category_id, id_service) VALUES(:n, :p, :dp, :d, :c, :sid)";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute(array(
       "n" => $service->getName(),
@@ -83,6 +89,7 @@ class Service {
       "dp" => $service->getDiscountPrice(),
       "d" => $service->getDescription(),
       "c" => $service->getCategoryId(),
+      "sid" => $service->getStripeID(),
     ));
   }
 
@@ -93,7 +100,7 @@ class Service {
     $req->execute([$id]);
 
     if ($row = $req->fetch()) {
-      return new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"]);
+      return new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"], $row["id_service"]);
     }else {
       return NULL;
     }
@@ -107,7 +114,7 @@ class Service {
 
     $result = array();
     while ($row = $req->fetch()) {
-      $result[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"]);
+      $result[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"], $row["id_service"]);
     }
 
     return $result;
@@ -116,7 +123,7 @@ class Service {
   // Get Serice Category Name
   public function getServiceCategory() {
 
-    $sql = "SELECT category.name FROM category WHERE category.id = ?";
+    $sql = "SELECT category.name FROM service INNER JOIN category ON service.category_id = category.id WHERE service.id = ?";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute([$this->id]);
 
@@ -136,7 +143,7 @@ class Service {
     $results = [];
 
     while ($row = $query->fetch()) {
-      $results[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"]);
+      $results[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"], $row["id_service"]);
     }
 
     return $results;
