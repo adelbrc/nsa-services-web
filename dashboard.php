@@ -68,7 +68,7 @@ if (!isConnected()) {
 				<li class="list-group-item"><?= $membership["timeQuota"] ?> heures de services par mois</li>
 				<li class="list-group-item">Disponibilité <?= $membership["openDays"] ?>j / 7j</li>
 				<li class="list-group-item">De <?= $membership["openHours"] ?> h à <?= $membership["closeHours"] ?> h</li>
-				<li class="list-group-item">(Sans)/Engagement <?= $membership["duration"] ?> mois</li>
+				<li class="list-group-item">(Sans)/(Avec) Engagement <?= $membership["duration"] ?> mois</li>
 				</ul>
 				
 				<div class="card-body">
@@ -106,27 +106,18 @@ if (!isConnected()) {
 				<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-					<h5 class="modal-title" id="paymentModalLabel">Modal title<?= $membership['id'] ?></h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+						<h5 class="modal-title" id="paymentModalLabel">S'abonner à : <?= $membership['name'] ?> ?</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 					<div class="modal-body">
-
-						<!-- Stripe Form -->
-						<form id="payment-form">
-							<div id="card-element">
-							<!-- Elements will create input elements here -->
-							</div>
-
-							<!-- We'll put the error messages in this element -->
-							<div id="card-errors" role="alert"></div>
-
-						</form>
+						<p>N'attendez plus pour profiter de tous nos services !</p>
+						<p>Vous serez redirigé vers la page de paiement.</p>
 					</div>
 					<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Payer l'abonnement</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Payer l'abonnement</button>
 					</div>
 				</div>
 				</div>
@@ -159,7 +150,7 @@ if (!isConnected()) {
 				}
 			};
 
-			xhttp.open("GET", url + "?obj=" + obj, true);
+			xhttp.open("POST", url + "?obj=" + obj, true);
 			xhttp.send();
 		}
 
@@ -197,9 +188,9 @@ if (!isConnected()) {
 					successUrl:
 						// "https://" +
 						DOMAIN +
-						"/pages_stripe/success.php?session_id={CHECKOUT_SESSION_ID}",
+						"success.php?session_id={CHECKOUT_SESSION_ID}",
 					// cancelUrl: "https://" + DOMAIN + "/canceled.html"
-					cancelUrl: DOMAIN + "/pages_stripe/canceled.html"
+					cancelUrl: DOMAIN + "/canceled.html"
 				})
 				.then(handleResult);
 		};

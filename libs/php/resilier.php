@@ -1,13 +1,8 @@
 <?php
 
+if (isset($_POST["obj"]) && !empty($_POST["obj"])) {
 
-// if (isset($_GET["user_id"]) && !empty($_GET["user_id"]) &&
-// 	isset($_GET["membership_id"]) && !empty($_GET["membership_id"])
-// 	) {
-
-if (isset($_GET["obj"]) && !empty($_GET["obj"])) {
-
-	$obj = json_decode($_GET["obj"]);
+	$obj = json_decode($_POST["obj"]);
 
 	require_once "db/db_connect.php";
 	require_once('../stripe-php-master/init.php');

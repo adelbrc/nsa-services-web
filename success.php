@@ -1,8 +1,14 @@
 <?php
 
+include ('libs/php/isConnected.php');
+if (!isConnected()) {
+	header('Location: index.php?error=accessUnauthorized');
+}
+
+
 if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
-	require_once('../libs/stripe-php-master/init.php');
-	include('../libs/php/db/db_connect.php');
+	require_once('libs/stripe-php-master/init.php');
+	include('libs/php/db/db_connect.php');
 
 	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
@@ -97,50 +103,42 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		<meta name="description" content="A demo of Stripe Payment Intents" />
 
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
-		<link rel="stylesheet" type="text/css" href="../ressources/style/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="ressources/style/bootstrap.min.css">
 		<link rel="stylesheet" href="css/normalize.css" />
 		<link rel="stylesheet" href="css/global.css" />
 		<script src="https://js.stripe.com/v3/"></script>
 	</head>
 
 	<body>
-		<div class="sr-root">
-			<div class="sr-main">
-			<header class="sr-header">
-				<div class="sr-header__logo"></div>
-				<a href="../dashboard.php">
-					<button class="btn btn-primary">Dashboard</button>
-				</a>
-			</header>
-			<div class="sr-payment-summary completed-view">
-				<h1>Your test subscription has started</h1>
-				<h4>Checkout Session ID: <span id="session"></span></h4>
-			</div>
-			<div class="sr-content">
-			<div class="pasha-image-stack">
-				<img
-					src="https://picsum.photos/280/320?random=1"
-					width="140"
-					height="160"
-				/>
-				<img
-					src="https://picsum.photos/280/320?random=2"
-					width="140"
-					height="160"
-				/>
-				<img
-					src="https://picsum.photos/280/320?random=3"
-					width="140"
-					height="160"
-				/>
-				<img
-					src="https://picsum.photos/280/320?random=4"
-					width="140"
-					height="160"
-				/>
-			</div>
-			</div>
+
+		<?php include('libs/php/includes/userHeader.php');
+		include('libs/php/db/db_connect.php');
+		?>
+		<div>
+			<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Abonnement réalisé avec succès</h2>
 		</div>
+
+		<hr class="my-4">
+
+		<div class="alert alert-success bg-success w-50 mx-auto" role="alert">
+			<h4 class="alert-heading text-light">Félicitations !</h4>
+			<p class="text-light">Votre abonnement vient de commencer, découvrez dès maintenant tous les services que nous proposons. </p>
+			<hr>
+			<p class="mb-0 text-light">N'hésitez pas à nous solliciter pour n'importe quel service dont vous auriez besoin !</p>
+			<hr>
+			<!-- <div class="modal-footer w-25 mx-auto"> -->
+			<a href="services.php">
+				<button type="button" class="btn btn-primary">Consulter les services</button>
+			</a>
+				
+			<!-- </div> -->
+		</div>
+
+
+
+		<!-- <h4>Checkout Session ID: <span id="session"></span></h4> -->
+	
+
 		<script>
 			// Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
 			var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
