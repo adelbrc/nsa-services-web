@@ -87,9 +87,6 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	} else {
 		echo "error";
 	}
-
-
-
 }
 
 ?>
@@ -130,27 +127,6 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 			<a href="services.php">
 				<button type="button" class="btn btn-primary">Consulter les services</button>
 			</a>
-				
-			<!-- </div> -->
 		</div>
-
-
-
-		<!-- <h4>Checkout Session ID: <span id="session"></span></h4> -->
-	
-
-		<script>
-			// Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
-			var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
-			
-			var stripe = Stripe(PUBLISHABLE_KEY);
-			var urlParams = new URLSearchParams(window.location.search);
-
-			if (urlParams.has("session_id")) {
-				document.getElementById("session").textContent = urlParams.get("session_id");
-
-				// ajax request to save customer
-			}
-		</script>
 	</body>
 </html>
