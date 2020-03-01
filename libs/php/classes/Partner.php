@@ -1,5 +1,10 @@
 <?php
 
+require_once("DBManager.php");
+
+$conn = DBManager::getConn();
+
+
 class Partner {
 
   private $partner_id;
