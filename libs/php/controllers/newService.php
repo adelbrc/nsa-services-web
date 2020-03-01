@@ -15,28 +15,25 @@
     require_once('../../stripe-php-master/init.php');
     \Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
-    $newService = \Stripe\Product::create([
-      'type' => 'good',
-      'name' => $name
-    ]);
+    // on stock cette requete parce qu'elle renvoie les infos du plan créé (comme l'id qu'on va stocker en bdd)
+  	$newPlan = \Stripe\Plan::create([
+  	'currency' => 'eur',
+  	'amount' => $price * 100,
+  	'interval' => 'month',
+  	'product' => 'prod_GpCXWFLVjr3PXh', // l'id du produit qui contient les differents plans tarifaires
+  	'nickname' => $name,
+  	'metadata' => [
+  		'description' => $description,
+  		]
+  	]);
+  	echo "Nouveau plan ajouté dans stripe<br>";
 
 
-    $sku1 = \Stripe\SKU::create([
-    'currency' => 'usd',
-    'inventory' => [
-        'type' => 'finite',
-        'quantity' => 500,
-    ],
-    'price' => $price,
-    'product' => $newService["id"]
-    ]);
-    echo $newService['id'];
-    echo $price;
 
     include('../db/db_connect.php');
-    $insertRole = $conn->prepare("INSERT INTO service(name, price, discountPrice, category_id, description ) VALUES(?, ?, ?, ?, ?)");
+    $insertRole = $conn->prepare("INSERT INTO service(name, price, discountPrice, category_id, description, id_service ) VALUES(?, ?, ?, ?, ?, ?)");
 
-				$insertRole->execute(array($name, $price, $discountPrice, $category, $description));
+				$insertRole->execute(array($name, $price, $discountPrice, $category, $description, $newPlan['id']));
 
         header('location: ../../../admin/services_management.php?status=ajoutNewRole');
   }else{
