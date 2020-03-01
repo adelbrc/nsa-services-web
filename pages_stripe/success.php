@@ -97,6 +97,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		<meta name="description" content="A demo of Stripe Payment Intents" />
 
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="../ressources/style/bootstrap.min.css">
 		<link rel="stylesheet" href="css/normalize.css" />
 		<link rel="stylesheet" href="css/global.css" />
 		<script src="https://js.stripe.com/v3/"></script>
@@ -107,6 +108,9 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 			<div class="sr-main">
 			<header class="sr-header">
 				<div class="sr-header__logo"></div>
+				<a href="../dashboard.php">
+					<button class="btn btn-primary">Dashboard</button>
+				</a>
 			</header>
 			<div class="sr-payment-summary completed-view">
 				<h1>Your test subscription has started</h1>

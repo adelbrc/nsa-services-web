@@ -29,7 +29,16 @@ if (!isConnected()) {
 	<div>
 		<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Découvrez nos services</h2>
 	</div>
+
 	<hr class="my-4">
+
+	<div class="alert alert-success alert-dismissible fade show w-50 mx-auto" style="display: none; position: fixed; top: 20px; right:25%; z-index: 10" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<strong>Succès !</strong> Résiliation effectuée avec succès.
+	</div>
+
 
 
 
@@ -75,13 +84,17 @@ if (!isConnected()) {
 						$queryUserHasSubscription->execute([$_SESSION["user"]["id"]]);
 						$result = $queryUserHasSubscription->fetch();
 
-						if ($queryUserHasSubscription->rowCount())
-							if ($result["membership_id"] == $membership["id"])
-								echo "<button class=\"btn btn-success\"><i class='fas fa-check'></i></span>Mon abonnement actuel";
-							else
-								echo "<button class=\"btn btn-secondary\">Un abonnement a déjà été choisi";
-						else
-							echo "<a href=\"./#\" class=\"btn btn-primary\" id=\"" . $membership['id'] . "\" data-toggle=\"modal\" data-target=\"#paymentModal" . $membership['id'] ."\">Je choisis " . $membership['name'] . "</a>";						
+						if ($queryUserHasSubscription->rowCount()) {
+
+							if ($result["membership_id"] == $membership["id"]) {
+								echo "<button class=\"btn btn-success\">Mon abonnement actuel</button>";
+								echo "<button class=\"btn btn-danger\" data-user-id=\"" . $_SESSION['user']['id'] . "\" data-membership-id=\"" . $membership['id'] . "\" id=\"resilier_sub\">Résilier</button>";
+							} else {
+								echo "<button class=\"btn btn-secondary\">Un abonnement a déjà été choisi</button>";
+							}
+						} else {
+							echo "<a href=\"./#\" class=\"btn btn-primary\" id=\"" . $membership['id'] . "\" data-toggle=\"modal\" data-target=\"#paymentModal" . $membership['id'] ."\">Je choisis " . $membership['name'] . "</a>";
+						}
 					?>	
 				
 				</div>
@@ -123,10 +136,8 @@ if (!isConnected()) {
 
 		<?php endforeach; ?>
 
-
-
-
 	</div>
+
 
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -134,6 +145,32 @@ if (!isConnected()) {
 
 	<script>
 
+
+		function doAjax(url, obj) {
+			let xhttp = new XMLHttpRequest();
+
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					if (this.response == 1)
+						$(".alert").show();
+						$(".alert").on('closed.bs.alert', function () {
+							location.reload();
+						});
+				}
+			};
+
+			xhttp.open("GET", url + "?obj=" + obj, true);
+			xhttp.send();
+		}
+
+
+		if (document.getElementById("resilier_sub") != null) {
+			document.getElementById("resilier_sub").addEventListener("click", function() {
+				var user_id = document.getElementById("resilier_sub").getAttribute("data-user-id");
+				var membership_id = document.getElementById("resilier_sub").getAttribute("data-membership-id");
+				doAjax("libs/php/resilier.php", JSON.stringify({"user_id": user_id, "membership_id": membership_id}));
+			});
+		}
 
 		var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
 
@@ -166,6 +203,7 @@ if (!isConnected()) {
 				})
 				.then(handleResult);
 		};
+
 
 	</script>
 
