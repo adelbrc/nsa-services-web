@@ -23,8 +23,9 @@ if (!isConnected()) {
 
 </head>
 <body>
-	<?php include('libs/php/includes/userHeader.php');
-	include('libs/php/db/db_connect.php');
+	<?php
+		include('libs/php/db/db_connect.php');
+		include('libs/php/includes/userHeader.php');
 	?>
 	<div>
 		<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Découvrez nos services</h2>
