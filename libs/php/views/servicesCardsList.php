@@ -23,7 +23,7 @@ $list = Service::getAllServices();
           <li class="list-group-item"><?php echo "Id Plan: " . $service->getStripeID(); ?></li>
         </ul>
         <div class="card-body">
-          <button class="btn btn-success" onclick="redirectToCheckout('<?php echo $service->getStripeID(); ?>')">Commander</button>
+          <button class="btn btn-success" onclick="redirectToCheckout('<?php echo $service->getStripeID(); ?>', '<?php echo $service->getId(); ?>')">Commander</button>
         </div>
       </div>
     </div>

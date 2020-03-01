@@ -65,6 +65,25 @@ class Order {
   // ----------------------
   // Methods
 
+  // Add new order
+  public function addOrder(Order $order) {
+
+      $sql = "INSERT INTO nsaservices_db.order(customer_id, order_date, nbHours, service_id,
+          payment_status, reservation_date, order_status) VALUES(:cid, :odate, :nbh, :sid,
+          :paystatus, :reservdate, :orderstatus)";
+
+      $req = $GLOBALS["conn"]->prepare($sql);
+      $req->execute(array(
+          "cid" => $order->customer_id,
+          "odate" => $order->order_date,
+          "nbh" => $order->nbHours,
+          "sid" => $order->service_id,
+          "paystatus" => $order->payment_status,
+          "reservdate" => $order->reservation_date,
+          "orderstatus" => $order->order_status,
+      ));
+  }
+
   // Get an order by ID
   public function getOrderByID($id){
 

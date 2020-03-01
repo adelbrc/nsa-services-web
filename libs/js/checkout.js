@@ -13,13 +13,13 @@ var handleResult = function(result) {
 };
 
 // cette fonction permet de rediriger vers le site de stripe avec l'id du plan
-var redirectToCheckout = function(plan_id) {
+var redirectToCheckout = function(plan_id, service_id) {
   stripe.redirectToCheckout({
       items: [{ plan: plan_id, quantity: 1 }],
       successUrl:
         // "https://" +
         DOMAIN +
-        "success.php?session_id={CHECKOUT_SESSION_ID}",
+        "/success.php?session_id={CHECKOUT_SESSION_ID}&type=service&sid=" + service_id,
       // cancelUrl: "https://" + DOMAIN + "/canceled.html"
       cancelUrl: DOMAIN + "/canceled.html"
     })
