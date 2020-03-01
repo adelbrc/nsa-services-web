@@ -32,7 +32,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		print_r($session);
 		$service_id = $_GET["sid"];
 		$service = Service::getServiceById($service_id);
-		$order = new Order(NULL, $_SESSION["user"]["id"], date("Y-m-d-h-i-s"), 1, checkInput($service_id), 1, date("Y-m-d-h-i-s"), 0);
+		$order = new Order(NULL, $_SESSION["user"]["id"], date("Y-m-d-h-i-s"), 1, checkInput($service_id), 1, date("Y-m-d-h-i-s"), 1);
 		Order::addOrder($order);
 		exit;
 
