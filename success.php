@@ -1,8 +1,14 @@
 <?php
+require_once("libs/php/classes/User.php");
+require_once("libs/php/classes/Service.php");
+require_once("libs/php/classes/Order.php");
+
+include("libs/php/functions/checkInput.php");
 
 include ('libs/php/isConnected.php');
 if (!isConnected()) {
 	header('Location: index.php?error=accessUnauthorized');
+	exit;
 }
 
 
@@ -20,7 +26,23 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 
 	$session = \Stripe\Checkout\Session::retrieve($_GET["session_id"]);
 
+	// Partie Service
+	if (isset($_GET["type"]) && !empty($_GET["type"]) && $_GET["type"] == "service") {
+
+		print_r($session);
+		$service_id = $_GET["sid"];
+		$service = Service::getServiceById($service_id);
+		$order = new Order(NULL, $_SESSION["user"]["id"], date("Y-m-d-h-i-s"), 1, checkInput($service_id), 1, date("Y-m-d-h-i-s"), 0);
+		Order::addOrder($order);
+		exit;
+
+	}
+
+
+	// Partie Abonnement
 	$customer_id = $session["customer"]; // cus_...
+
+
 	$subscribed_plan_id = $session["display_items"][0]["plan"]["id"]; // plan_...
 	$subscription_id = $session["subscription"]; // sub_...
 	$session_id = $session["id"]; // cs_...
@@ -67,7 +89,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	$date_now = date_create(date("Y-m-d"));
 
 	$date_expire = date_add(date_create(date("Y-m-d")), date_interval_create_from_date_string($duration ." month"));
-	
+
 	$queryInsertSubscription->execute([
 		$user_index,
 		$plan_index,
