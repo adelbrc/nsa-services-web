@@ -12,9 +12,9 @@ $list = Service::getAllServices();
 
 	<?php
 
-	foreach ($products as $key => $product) {
-		if ($product["id"] == $service->getId()) {
-			$id_product = $product["id"];
+	foreach ($plans as $key => $plan) {
+		if ($plan["id"] == $service->getId()) {
+			$id_product = $plan["id"];
 		}
 	}
 
