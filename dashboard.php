@@ -81,7 +81,7 @@ if (!isConnected()) {
 
 						// on selectionne user_id mais on pourrait selectionner n'importe quelle colonne,
 						// c'est juste pour voir si on a une ligne de retournée
-						$queryUserHasSubscription = $conn->prepare("SELECT membership_id FROM memberships_history WHERE user_id = ?");
+						$queryUserHasSubscription = $conn->prepare("SELECT membership_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
 						$queryUserHasSubscription->execute([$_SESSION["user"]["id"]]);
 						$result = $queryUserHasSubscription->fetch();
 
@@ -139,27 +139,35 @@ if (!isConnected()) {
 
 
 		function doAjax(url, obj) {
+
 			let xhttp = new XMLHttpRequest();
 
 			xhttp.onreadystatechange = function() {
 				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					if (this.response == 1)
+					console.log(this.responseText);
+					var jsonResponse = JSON.parse(this.responseText);
+					if (jsonResponse.status == true) {
 						$(".alert").show();
 						$(".alert").on('closed.bs.alert', function () {
 							location.reload();
 						});
+					} else {
+						console.log("pas ok");
+						console.log(jsonResponse.status);
+					}
 				}
 			};
 
-			xhttp.open("POST", url + "?obj=" + obj, true);
+			xhttp.open("GET", url + "?obj=" + obj, true);
 			xhttp.send();
 		}
 
+		var btn_resililer = document.getElementById("resilier_sub");
+		if (btn_resililer != null) {
 
-		if (document.getElementById("resilier_sub") != null) {
-			document.getElementById("resilier_sub").addEventListener("click", function() {
-				var user_id = document.getElementById("resilier_sub").getAttribute("data-user-id");
-				var membership_id = document.getElementById("resilier_sub").getAttribute("data-membership-id");
+			btn_resililer.addEventListener("click", function() {
+				var user_id = btn_resililer.getAttribute("data-user-id");
+				var membership_id = btn_resililer.getAttribute("data-membership-id");
 				doAjax("libs/php/resilier.php", JSON.stringify({"user_id": user_id, "membership_id": membership_id}));
 			});
 		}
@@ -167,10 +175,8 @@ if (!isConnected()) {
 		var PUBLISHABLE_KEY = "pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B";
 
 
-		var DOMAIN = "http://nsaservices.local";
-
-
-		// "http://localhost/ESGI/PA2020/nsa-services-web";
+		// var DOMAIN = "http://nsaservices.local";
+		var DOMAIN = "http://localhost/ESGI/PA2020/nsa-services-web";
 
 		var stripe = Stripe(PUBLISHABLE_KEY);
 
@@ -189,9 +195,10 @@ if (!isConnected()) {
 					successUrl:
 						// "https://" +
 						DOMAIN +
-						"success.php?session_id={CHECKOUT_SESSION_ID}",
+						"/success.php?session_id={CHECKOUT_SESSION_ID}",
 					// cancelUrl: "https://" + DOMAIN + "/canceled.html"
-					cancelUrl: DOMAIN + "/canceled.html"
+					cancelUrl: DOMAIN + "/canceled.html",
+					customerEmail: "<?= $_SESSION["user"]["email"] ?>"
 				})
 				.then(handleResult);
 		};

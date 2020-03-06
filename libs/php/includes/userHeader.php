@@ -49,34 +49,34 @@
 			$queryUserSubDate->execute([$_SESSION["user"]["id"]]);
 			$res = $queryUserSubDate->fetch();
 
-			$aujourdhui = date_create_from_format('Y-m-d', date("Y-m-d"));
+			if ($res) {
 
-			$date_fin = date_create($res["ending"]);
-			$date_alert = date_sub($date_fin, date_interval_create_from_date_string("7 days"));
+				$aujourdhui = date_create_from_format('Y-m-d', date("Y-m-d"));
 
-			$aujourdhui = date_add($aujourdhui, date_interval_create_from_date_string("24 days"));
+				$date_fin = date_create($res["ending"]);
+				$date_alert = date_sub($date_fin, date_interval_create_from_date_string("7 days"));
 
-			$diff = date_diff(
-				$aujourdhui,
-				// je rajoute 1 jour parce que la comparaison date_diff() prend pas le dernier jour de validite
-				date_add(date_create($res["ending"]), date_interval_create_from_date_string("1 day"))
-				// date_create($res["ending"])
-			);
+				// $aujourdhui = date_add($aujourdhui, date_interval_create_from_date_string("24 days"));
 
-			if ($aujourdhui >= $date_alert) { ?>
-				<div class="alert alert-danger m-0 mr-3" role="alert">
-				Votre abonnement expire dans <?= $diff->format("%a jour(s)") ?>
-				</div>
+				$diff = date_diff(
+					$aujourdhui,
+					// je rajoute 1 jour parce que la comparaison date_diff() prend pas le dernier jour de validite
+					date_add(date_create($res["ending"]), date_interval_create_from_date_string("1 day"))
+					// date_create($res["ending"])
+				);
+
+				if ($aujourdhui >= $date_alert) { ?>
+					<div class="alert alert-danger m-0 mr-3" role="alert">
+					Votre abonnement expire dans <?= $diff->format("%a jour(s)") ?>
+					</div>
+
 			<?php
+			
+				}
 			}
-
-			// echo $aujourdhui->format("d/m/Y");
 
 			?>
 
-
-
-		<?php //endif; ?>
 	
 		<form class="form-inline my-2 my-lg-0">
 			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

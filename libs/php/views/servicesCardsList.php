@@ -10,6 +10,21 @@ $list = Service::getAllServices();
 
 <?php foreach ($list as $key => $service): ?>
 
+	<?php
+
+	foreach ($products as $key => $product) {
+		if ($product["id"] == $service->getId()) {
+			$id_product = $product["id"];
+		}
+	}
+
+	?>
+
+
+	<!-- les cards ne se chevauchent pas  -->
+	<!-- <div class=""> -->
+
+	<!-- les cards se chevauchent -->
     <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
       <div class="card serviceCard" style="width: 18rem;">
         <img src="ressources/img/nsa-services.png" style="width:100px;height:100px;margin:auto" alt="...">
@@ -27,5 +42,6 @@ $list = Service::getAllServices();
         </div>
       </div>
     </div>
+
 
 <?php endforeach; ?>

@@ -1,8 +1,9 @@
 <?php
 
-if (isset($_POST["obj"]) && !empty($_POST["obj"])) {
 
-	$obj = json_decode($_POST["obj"]);
+if (isset($_GET["obj"]) && !empty($_GET["obj"])) {
+
+	$obj = json_decode($_GET["obj"]);
 
 	require_once "db/db_connect.php";
 	require_once('../stripe-php-master/init.php');
@@ -12,27 +13,31 @@ if (isset($_POST["obj"]) && !empty($_POST["obj"])) {
 	$querySubscriptionId->execute([$obj->user_id]);
 	$res = $querySubscriptionId->fetch();
 
+	// var_dump($res);
+
 	// normalement si le mec a cliqué sur "Resilier" c'est qu'il a un abonnement/une ligne dans la table
 	// on verifie quand meme
+
+
 	if ($querySubscriptionId->rowCount()) {
-		$queryRemoveSubscription = $conn->prepare("DELETE FROM memberships_history WHERE sub_id = ?");
+		$queryRemoveSubscription = $conn->prepare("UPDATE memberships_history SET status = 'unactive' WHERE sub_id = ?");
 		$queryRemoveSubscription->execute([$res["sub_id"]]);
+
 		if ($queryRemoveSubscription->rowCount()) {
 			$subscription = \Stripe\Subscription::retrieve($res["sub_id"]);
+
+			echo json_encode(['status' => true]);
 			$subscription->delete();
 
-			// on annule l'abonnement sur stripe aussi
-			echo 1;
+		} else {
+			echo json_encode(['status' => false, 'error' => 'removeSubRowCount', 'data' => $res["sub_id"]]);
 		}
 
+	} else {
+		echo json_encode(['status' => false, 'error' => 'noSubscriptionYet']);
 	}
-
-
-
-	// pour supprimer la souscription sur stripe on a besoin de l'id de souscription "sub_.." qu'on a dans notre bdd
-
-
-
+} else {
+	echo json_encode(['status' => false, 'error' => isset($_POST["obj"])]);
 }
 
 ?>

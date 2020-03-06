@@ -1,19 +1,19 @@
 @font-face {
-  font-family: roboto;
-  src: url(../font/RobotoCondensed-Regular.ttf);
+	font-family: roboto;
+	src: url(../font/RobotoCondensed-Regular.ttf);
 }
 
 
 /* -------------------- */
 /* Containers */
 .dataContainer {
-  max-width: 80%;
-  padding: 40px;
-  margin: auto;
-  margin-top: 60px;
-  margin-bottom: 40px;
-  border: 1px solid rgb(23, 133, 223);
-  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
+	max-width: 80%;
+	padding: 40px;
+	margin: auto;
+	margin-top: 60px;
+	margin-bottom: 40px;
+	border: 1px solid rgb(23, 133, 223);
+	box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* ---------------------- */
@@ -21,13 +21,13 @@
 /* ---------------------- */
 /* Custom Sections */
 .sizedSection {
-  max-width: 100%;
-  padding: 40px;
-  min-height: 400px;
+	max-width: 100%;
+	padding: 40px;
+	min-height: 400px;
 }
 
 .coloredSection {
-  background-color: #00bcd4;
+	background-color: #00bcd4;
 }
 
 
@@ -40,25 +40,25 @@ body {
 	margin: 0;
 }
 header{
-  background-color: #00bcd4;
+	background-color: #00bcd4;
 }
 a{
-  color : black;
+	color : black;
 }
 .title-nav{
-  margin-top: 10px;
+	margin-top: 10px;
 }
 .title-nav:hover{
-  transition: 0.5s;
-  background-color: blue;
-  color: white;
+	transition: 0.5s;
+	background-color: blue;
+	color: white;
 }
 
 #video{
-  padding-bottom: 862px;
-  background-color: #00bcd4;
-  text-align: center;
-  color: white;
+	padding-bottom: 862px;
+	background-color: #00bcd4;
+	text-align: center;
+	color: white;
 }
 
 .aboutImg{
@@ -69,23 +69,23 @@ padding-left: 0%;
 }
 
 .quiSommeNous{
-  background-color: white;
-  padding: 0px;
+	background-color: white;
+	padding: 0px;
 }
 #sommeNous{
-  display: flex;
+	display: flex;
 }
 #h3qui{
-  text-transform: uppercase;
-  font-size: 50px;
-  text-align: left;
-  padding-top: 100px;
-  padding-left: 75px
+	text-transform: uppercase;
+	font-size: 50px;
+	text-align: left;
+	padding-top: 100px;
+	padding-left: 75px
 }
 #quiSommeNousTexte{
-  padding-top: 20px;
-  padding-left: 75px;
-  font-size: 28px;
+	padding-top: 20px;
+	padding-left: 75px;
+	font-size: 28px;
 }
 #h3Abo{
 	text-align: center;
@@ -94,86 +94,87 @@ padding-left: 0%;
 }
 
 #abon{
-  display: flex;
+	display: flex;
 }
 div.scrollmenu {
-  overflow: auto;
-  white-space: nowrap;
+	overflow: auto;
+	white-space: nowrap;
 }
 
 div.scrollmenu a {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
+	display: inline-block;
+	color: white;
+	text-align: center;
+	padding: 14px;
+	text-decoration: none;
 }
 .aFooter{
-  font-size: 45px;
+	font-size: 45px;
 }
 
 
 /* ------------------- */
 /* Custom Input */
 .customInput {
-  padding: 5px 10px;
-  width: 100%;
-  border: 1px solid rgb(23, 133, 223);
-  border-radius: 20px;
+	padding: 5px 10px;
+	width: 100%;
+	border: 1px solid rgb(23, 133, 223);
+	border-radius: 20px;
 }
 
 @media screen and (max-width: 992px) {
-  .customInput {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
-  }
+	.customInput {
+	display: block;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	}
 
 }
 
 /* ------------------ */
 /* Page Services */
 .searchServicesForm {
-  margin-top: 30px;
+	margin-top: 30px;
 }
 
 .searchServicesBtn {
-  padding: 5px 10px;
-  margin-left: 10px;
-  background-color: rgb(27, 145, 195);
-  color: white;
-  border-radius: 20px;
-  border: none;
+	padding: 5px 10px;
+	margin-left: 10px;
+	background-color: rgb(27, 145, 195);
+	color: white;
+	border-radius: 20px;
+	border: none;
 }
 
 .serviceCard {
-  margin-top: 20px;
-  margin-bottom: 40px;
-  border: 1px solid rgb(23, 133, 223);
-  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
+/*	margin-top: 20px;
+	margin-bottom: 40px;
+*/
+	border: 1px solid rgb(23, 133, 223);
+	box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
 }
 
 .serviceCard:hover {
-  background-color: rgb(223, 222, 240);
+	background-color: rgb(223, 222, 240);
 }
 
 .serviceCard .card-link {
-  color: rgb(23, 133, 223);
+	color: rgb(23, 133, 223);
 }
 
 
 /* --------------------- */
 /* Page Profile */
 .profilePicture {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-  margin: auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
+	width: 150px;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 50%;
+	display: block;
+	margin: auto;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 
