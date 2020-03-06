@@ -20,6 +20,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 
 	$session = \Stripe\Checkout\Session::retrieve($_GET["session_id"]);
 
+
 	$customer_id = $session["customer"]; // cus_...
 	$subscribed_plan_id = $session["display_items"][0]["plan"]["id"]; // plan_...
 	$subscription_id = $session["subscription"]; // sub_...
@@ -44,7 +45,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	$user_index = $queryUser_index->fetch()[0];
 	// echo $user_index; // 1
 	if ($user_index == NULL) {
-		echo "Vous avez abonnez quelqu'un d'autre";
+		header("Location: dashboard.php?error=subscribedSomeoneElse");
 		exit;
 	}
 
@@ -68,25 +69,29 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 
 	$date_expire = date_add(date_create(date("Y-m-d")), date_interval_create_from_date_string($duration ." month"));
 	
-	$queryInsertSubscription->execute([
-		$user_index,
-		$plan_index,
 
-		$customer_id,
-		$subscribed_plan_id,
-		$subscription_id,
-		$session_id,
-		$date_now->format("Y-m-d"),
-		$date_expire->format("Y-m-d"),
-		"active"
+	try {
+		$queryInsertSubscription->execute([
+			$user_index,
+			$plan_index,
 
-	]);
-
-	if ($queryInsertSubscription->rowCount() == 1) {
-		echo "Tout s'est bien passé";
-	} else {
-		echo "error";
+			$customer_id,
+			$subscribed_plan_id,
+			$subscription_id,
+			$session_id,
+			$date_now->format("Y-m-d"),
+			$date_expire->format("Y-m-d"),
+			"active"
+		]);
+	} catch(Exception $e) {
+		header("Location: ./dashboard.php?error=link_expired");
+		// echo $e->getMessage();
+		// exit;
 	}
+
+	// if ($queryInsertSubscription->rowCount() == 1) {
+	// 	echo "Tout s'est bien passé";
+	// }
 }
 
 ?>
