@@ -14,19 +14,28 @@
 			<li class="nav-item">
 				<a class="nav-link" href="dashboard.php">Dashboard</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="services.php">Services</a>
+
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="services.php" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Services
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="mes_services.php">Mes services</a>
+					<a class="dropdown-item" href="services.php">Chercher un service</a>
+				</div>
 			</li>
+
+
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Account
 				</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="profile.php">Profile</a>
-				<a class="dropdown-item" href="orders.php">Orders</a>
-				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="#">Interventions</a>
-			</div>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="profile.php">Profile</a>
+					<a class="dropdown-item" href="orders.php">Orders</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#">Interventions</a>
+				</div>
 			</li>
 			<?php if ($_SESSION["user"]["rank"] == "3"): ?>
 				<li class="nav-item">
@@ -65,7 +74,10 @@
 					// date_create($res["ending"])
 				);
 
-				if ($aujourdhui >= $date_alert) { ?>
+				if ($aujourdhui >= $date_alert) { 
+
+					?>
+
 					<div class="alert alert-danger m-0 mr-3" role="alert">
 					Votre abonnement expire dans <?= $diff->format("%a jour(s)") ?>
 					</div>
@@ -75,7 +87,7 @@
 				}
 			}
 
-			?>
+		?>
 
 	
 		<form class="form-inline my-2 my-lg-0">

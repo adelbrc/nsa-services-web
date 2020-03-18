@@ -29,7 +29,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	// Partie Service
 	if (isset($_GET["type"]) && !empty($_GET["type"]) && $_GET["type"] == "service") {
 
-		print_r($session);
+		var_dump($session);
 		$service_id = $_GET["sid"];
 		$service = Service::getServiceById($service_id);
 		$order = new Order(NULL, $_SESSION["user"]["id"], date("Y-m-d-h-i-s"), 1, checkInput($service_id), 1, date("Y-m-d-h-i-s"), 1);
@@ -73,7 +73,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 //	}
 
 
-	$queryInsertSubscription = $conn->prepare("INSERT INTO memberships_history(
+	$queryInsertSubscription = $conn->prepare("INSERT INTO memberships_history (
 		user_id,
 		membership_id,
 
@@ -109,11 +109,12 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		header("Location: ./dashboard.php?error=link_expired");
 		// echo $e->getMessage();
 		// exit;
+	}
 
 	if ($queryInsertSubscription->rowCount() == 1) {
-		echo "Tout s'est bien passé";
+		// echo "Tout s'est bien passé";
 	} else {
-		echo "error";
+		// echo "error";
 	}
 
 }
@@ -138,7 +139,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	<body>
 
 		<?php include('libs/php/includes/userHeader.php');
-		include('libs/php/db/db_connect.php');
+			include('libs/php/db/db_connect.php');
 		?>
 		<div>
 			<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Abonnement réalisé avec succès</h2>

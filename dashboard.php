@@ -28,7 +28,7 @@ if (!isConnected()) {
 		include('libs/php/includes/userHeader.php');
 	?>
 	<div>
-		<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Découvrez nos services</h2>
+		<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Découvrez nos abonnements</h2>
 	</div>
 
 	<hr class="my-4">
@@ -117,8 +117,8 @@ if (!isConnected()) {
 						<p>Vous serez redirigé vers la page de paiement.</p>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Payer l'abonnement</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Passer au paiement</button>
 					</div>
 				</div>
 				</div>
@@ -197,7 +197,7 @@ if (!isConnected()) {
 						DOMAIN +
 						"/success.php?session_id={CHECKOUT_SESSION_ID}",
 					// cancelUrl: "https://" + DOMAIN + "/canceled.html"
-					cancelUrl: DOMAIN + "/canceled.html",
+					cancelUrl: DOMAIN + "/dashboard.php",
 					customerEmail: "<?= $_SESSION["user"]["email"] ?>"
 				})
 				.then(handleResult);
