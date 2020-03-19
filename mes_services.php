@@ -84,7 +84,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 					plugins: [  'dayGrid', 'timeGrid', 'bootstrap' ],
 					defaultView: 'timeGridWeek',
 
-					aspectRatio: 1.85,
+					// aspectRatio: 1.85,
 					// height: 600,
 					// contentHeight: 500,
 

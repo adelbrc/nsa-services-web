@@ -56,21 +56,80 @@ $list = Service::getAllServices();
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+							<h5 class="modal-title" id="exampleModalLabel">Commander : <?= $service->getName(); ?></h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
 						<div class="modal-body">
-							...
+
+
+						<form action="">
+							<?php
+							
+							// si c'est une intervention, on demande l'heure de debut
+							// si c'est une prestation avec heure de debut et fin, on demande les 2
+
+							if ($service->getDenombrable() == 0):
+							?>
+								<div class="form-group">
+									<label>Date</label>
+									<input type="date" class="form-control" id="date_input" placeholder="Date">
+								</div>
+			
+								<div class="form-group">
+									<label>Heure d'intervention</label>
+									<input type="time" class="form-control" id="intervention_time" placeholder="Date">
+								</div>
+
+							<?php endif;
+							
+							if ($service->getDenombrable() == 1):
+							?>
+								<div class="form-group">
+									<label>Jour de début</label>
+									<input type="date" class="form-control" id="date_input" placeholder="Jour de début">
+								</div>
+			
+								<div class="form-group">
+									<label>Heure de début</label>
+									<input type="time" class="form-control" id="intervention_debut" placeholder="Heure de début">
+								</div>
+
+
+								<div class="form-group">
+									<label>Jour de fin</label>
+									<input type="date" class="form-control" id="date_input" placeholder="Jour de fin">
+								</div>
+			
+								<div class="form-group">
+									<label>Heure de fin</label>
+									<input type="time" class="form-control" id="intervention_fin" placeholder="Heure de fin">
+								</div>
+
+							<?php endif; ?>
+
+
+
+							<div class="form-group">
+								<label>Lieu</label>
+								<input type="text" class="form-control" id="lieu_input" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
+							</div>
+						</form>
+
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 							<button 
 								type="button" 
-								class="btn btn-primary"
+								class="btn btn-success"
 								onclick="redirectToCheckout('<?php echo $service->getStripeID(); ?>', '<?php echo $service->getId(); ?>', '<?= $_SESSION["user"]["email"] ?>')">
-								Passer au paiement
+								Paiement Direct
+							</button>
+							<button 
+								type="button" 
+								class="btn btn-primary">
+								Ajouter au panier
 							</button>
 						</div>
 					</div>

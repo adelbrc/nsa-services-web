@@ -14,15 +14,17 @@ class Service {
 	private $discount_price;
 	private $description;
 	private $category_id;
+	private $denombrable;
 	private $stripe_id;
 
 
-	function __construct($id, $name, $price, $discount_price, $description, $category_id, $stripe_id) {
+	function __construct($id, $name, $price, $discount_price, $description, $denombrable, $category_id, $stripe_id) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->price = $price;
 		$this->discount_price = $discount_price;
 		$this->description = $description;
+		$this->denombrable = $denombrable;
 		$this->$category_id = $category_id;
 		$this->stripe_id = $stripe_id;
 	}
@@ -43,6 +45,10 @@ class Service {
 
 	public function getDiscountPrice(){
 		return $this->discount_price;
+	}
+
+	public function getDenombrable(){
+		return $this->denombrable;
 	}
 
 	public function getDescription(){
@@ -81,13 +87,14 @@ class Service {
 
 	// Insert a service in database
 	public function addService(Service $service){
-		$sql = "INSERT INTO service(name, price, discountPrice, description, category_id, id_service) VALUES(:n, :p, :dp, :d, :c, :sid)";
+		$sql = "INSERT INTO service(name, price, discountPrice, description, category_id, denombrable, id_service) VALUES(:n, :p, :dp, :d, :c, :denombrable, :sid)";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute(array(
 			"n" => $service->getName(),
 			"p" => $service->getPrice(),
 			"dp" => $service->getDiscountPrice(),
 			"d" => $service->getDescription(),
+			"denombrable" => $service->getDenombrable(),
 			"c" => $service->getCategoryId(),
 			"sid" => $service->getStripeID(),
 		));
@@ -100,7 +107,7 @@ class Service {
 		$req->execute([$id]);
 
 		if ($row = $req->fetch()) {
-			return new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"], $row["id_service"]);
+			return new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["denombrable"], $row["category_id"], $row["id_service"]);
 		}else {
 			return NULL;
 		}
@@ -114,7 +121,7 @@ class Service {
 
 		$result = array();
 		while ($row = $req->fetch()) {
-			$result[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"], $row["id_service"]);
+			$result[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["denombrable"], $row["category_id"], $row["id_service"]);
 		}
 
 		return $result;
@@ -143,7 +150,7 @@ class Service {
 		$results = [];
 
 		while ($row = $query->fetch()) {
-			$results[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["category_id"], $row["id_service"]);
+			$results[] = new Service($row["id"], $row["name"], $row["price"], $row["discountPrice"], $row["description"], $row["denombrable"], $row["category_id"], $row["id_service"]);
 		}
 
 		return $results;
