@@ -1,5 +1,14 @@
 <?php include ('libs/php/isConnected.php');
-include('libs/php/db/db_connect.php');?>
+include('libs/php/db/db_connect.php');
+include('libs/php/functions/translation.php');
+
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
+
+?>
 <html>
 	<head>
 		<title>nsa</title>
@@ -29,22 +38,17 @@ include('libs/php/db/db_connect.php');?>
 		    <div class="carousel-item active">
 		      <img src="ressources/img/premium-individuel-800x513.jpg" style="height: 920px;"  class="d-block w-100">
 		      <div class="carousel-caption d-none d-md-block">
-		        <h5>Un service à l'écoute </h5>
-		        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+		        <h5><?php echo $aLecoute[$langue]; ?> </h5>
 		      </div>
 		    </div>
 		    <div class="carousel-item">
 		      <img src="ressources/img/nsa-services.png" style="height: 920px;" class="d-block w-100" alt="">
 		      <div class="carousel-caption d-none d-md-block">
-		        <h5>Second slide label</h5>
-		        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 		      </div>
 		    </div>
 		    <div class="carousel-item">
 		      <img src="ressources/img/premium-individuel-800x513.jpg" style="height: 920px;" class="d-block w-100" >
 		      <div class="carousel-caption d-none d-md-block">
-		        <h5>Third slide label</h5>
-		        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
 		      </div>
 		    </div>
 		  </div>
@@ -62,11 +66,11 @@ include('libs/php/db/db_connect.php');?>
 						<img class="aboutImg" src="ressources/img/premium-individuel-800x513.jpg" alt="">
 					</div>
 					<div class="col-md-6 quiSommeNous">
-						<h3 id="h3qui">qui sommes nous ?</h3>
-						<p id="quiSommeNousTexte">NSA Services est un service de conciergerie privée à destination d’une clientèle haut de gamme, exigeante, pressée, à qui nous offrons l’excellence, la perfection et le sur-mesure.</p>
+						<h3 id="h3qui"><?php echo $quiSommeNous[$langue]; ?></h3>
+						<p id="quiSommeNousTexte"><?php echo $quiSommeNoustexte[$langue]; ?></p>
 					</div>
 				</div><br>
-				<h1 style="text-align:center;">Abonnement individuels</h2>
+				<h1 style="text-align:center;"><?php echo $aboIndiv[$langue] ?></h2>
 					<hr class="my-4">
 
 				<div id="abon"class="scrollmenu">
@@ -85,7 +89,7 @@ include('libs/php/db/db_connect.php');?>
 								<p style="font-size: 22px; text-align:center;"><?php echo $result['description']; ?></p>
 							</div>
 							<div>
-								<p style="font-size: 22px; text-align:center;">Ouvert <?php echo $result['openDays']; ?>j/7 de <?php echo $result['openHours']?>H a <?php echo $result['closeHours']; ?>H</p>
+								<p style="font-size: 22px; text-align:center;"><?php echo $open[$langue] ?> <?php echo $result['openDays']; ?>j/7 <?php echo $from[$langue] ?> <?php echo $result['openHours']?>H <?php echo $to[$langue] ?> <?php echo $result['closeHours']; ?>H</p>
 							</div>
 							<div id="btnInteresser" class="mx-auto">
 								<a style="margin-left: 25%;" type="button" class="btn btn-info" href="#">Je suis Interesse</a>
