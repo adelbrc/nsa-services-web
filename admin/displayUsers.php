@@ -36,10 +36,14 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 			<h1 class="h2" id='user'>Users Management</h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group mr-2">
-				<ul class="nav justify-content-center" role="tablist">
-					<li class="nav-item">
-					</li>
-				</ul>
+					<ul class="nav justify-content-center" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active button_export" role="button" href="functions/exportUser.php">Exporter les données</a>
+						</li>
+						<li class="nav-item">
+						<a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
+						</li>
+					</ul>
 				</div>
 			</div>
 			</div>
