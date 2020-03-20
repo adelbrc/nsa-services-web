@@ -22,8 +22,8 @@
 /* Custom Sections */
 .sizedSection {
 	max-width: 100%;
-	padding: 40px;
-	min-height: 400px;
+	padding: 0px 40px 60px;
+	/*min-height: 400px;*/
 }
 
 .coloredSection {
@@ -193,3 +193,15 @@ div.scrollmenu a {
 }
 
 /* ---------------------- */
+/* le panier */
+.services_basket {
+	cursor: pointer;
+	transition: all .5s;
+	border-radius: 3px;
+	padding: 4px;
+}
+
+.services_basket:hover {
+	background-color: lightblue;
+	transform: scale(1.2, 1.2);
+}

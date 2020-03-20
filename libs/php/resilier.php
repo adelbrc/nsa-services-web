@@ -20,7 +20,7 @@ if (isset($_GET["obj"]) && !empty($_GET["obj"])) {
 
 
 	if ($querySubscriptionId->rowCount()) {
-		$queryRemoveSubscription = $conn->prepare("UPDATE memberships_history SET status = 'unactive' WHERE sub_id = ?");
+		$queryRemoveSubscription = $conn->prepare("UPDATE memberships_history SET status = 'canceled' WHERE sub_id = ?");
 		$queryRemoveSubscription->execute([$res["sub_id"]]);
 
 		if ($queryRemoveSubscription->rowCount()) {
