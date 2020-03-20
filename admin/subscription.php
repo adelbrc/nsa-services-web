@@ -101,7 +101,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 	</div>
 </body>
 <script>
-	
+
 
 
 function supprimer(elem, abonnement_id) {

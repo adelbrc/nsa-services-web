@@ -38,10 +38,6 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 				<div class="btn-group mr-2">
 				<ul class="nav justify-content-center" role="tablist">
 					<li class="nav-item">
-					<a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">List</button></a>
-					</li>
-					<li class="nav-item">
-					<a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
 					</li>
 				</ul>
 				</div>

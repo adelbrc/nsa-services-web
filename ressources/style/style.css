@@ -179,3 +179,17 @@ div.scrollmenu a {
 
 
 /* ----------------------- */
+
+/* ---------------------- */
+/*  Style for Export Button */
+.button_export{
+	border: 2px solid  #3D9AF9;
+  border-radius: 5px;
+}
+.button_export:hover{
+   background-color:  #3D9AF9	;
+	 color : white;
+	 transition: background-color 0.5s;
+}
+
+/* ---------------------- */
