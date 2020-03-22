@@ -44,7 +44,6 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="ressources/style/style.css">
 
 		<title>Mes services - Home Services</title>
 
@@ -68,6 +67,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		<link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
 		<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
 
+		<link rel="stylesheet" href="ressources/style/style.css">
 
 		<script>
 
@@ -114,6 +114,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 					maxTime: "21:00:00",
 
 					events: [
+					
 						{
 							title:"Meeting1",
 							start:"2020-03-18T10:00:00+00:00",
@@ -144,9 +145,6 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		</script>
 
 
-
-
-
 	</head>
 	<body>
 		<header>
@@ -172,7 +170,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 				<?php endif; ?>	
 
 				<div class="dataContainer">
-					<h2 class="text-center">Services prévus</h2>
+					<h2 class="text-center">Planning - Services prévus</h2>
 
 						<div id='calendar'></div>
 
@@ -218,6 +216,62 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
  -->
 				</div>
 			</section>
+
+
+
+
+
+			<section class="sizedSection">
+				<div class="dataContainer">
+					<h2 class="text-center">Liste - Services prévus</h2>
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Prestation</th>
+									<th scope="col">Lieu</th>
+									<th scope="col">Date</th>
+									<th scope="col">Prix</th>
+									<th scope="col">Prestataire</th>
+									<th scope="col">Status</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<?php
+								
+								// !!!! la table order est aussi un mot clé ORDER BY donc faut mettre les ``
+								$queryMyServices = $conn->prepare("SELECT * FROM `order` WHERE customer_id = ?");
+								$queryMyServices->execute([$_SESSION["user"]["id"]]);
+
+								while (($row = $queryMyServices->fetch())): ?>
+
+									<tr>
+										<th scope="row"><?= $row["order_id"] ?></th>
+										<td>Mark</td>
+										<td>Otto</td>
+										<td>@mdo</td>
+										<td>@fat</td>
+										<td>@twitter</td>
+										<td>OK</td>
+									</tr>
+
+								<?php endwhile; ?>
+
+							</tbody>
+						</table>
+
+
+				</div>
+			</section>
+
+
+
+
+
+
+
 
 
 

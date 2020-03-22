@@ -127,9 +127,150 @@ if (isset($_POST["submitDemande"])		&&
 		<script src="libs/js/checkout.js" charset="utf-8"></script>
 
 		<script>
-			$(function () {
+			var panier = [];
 
-			});
+			// $(function () {
+				function removeBooking(booking) {
+					booking.parentNode.parentNode.parentNode.removeChild(booking.parentNode.parentNode);
+					// jour_compteur -= 1;
+					var maj = 1;
+					$(".compteurjour").each(function(index) {
+						// console.log($(".compteurjour")[index]);
+						// $(".compteurjour")[index].html("Jour " + maj);0
+						// $(".compteurjour")[index].text("Jour " + maj);
+						// maj += 1;
+					});
+				}
+
+				var jour_compteur = 2;
+
+				function addBooking() {
+					$("#bookings_container").append(`
+						<div class=\"container booking_box border m-0 mr-3\">
+							<div class=\"form-group\">
+								<span class=\"compteurjour\">Jour `+jour_compteur+`</span>
+								<span aria-hidden="true" class=\"removeBooking\" onclick=\"removeBooking(this)\">×</span>
+								<input type=\"date\" class=\"form-control form-input jour\" value=\"`+(new Date()).toISOString().substr(0,10)+`\">
+							</div>
+
+							<div class=\"form-group\">
+								<label>Heure de début</label>
+								<input type="time" class="form-control form-input tdebut" value="09:00" min="09:00" max="20:00" step="900">
+							</div>
+
+							<div class=\"form-group\">
+								<label>Heure de fin</label>
+								<input type="time" class="form-control form-input tfin" value="10:00" min="09:00" max="20:00" step="900">
+							</div>
+						</div>`
+					);
+
+					jour_compteur += 1;
+
+				}
+
+
+				function removePanierItem(el, service, idx) {
+					console.log("je supprime " + panier[service][idx].jour);
+					panier[service].splice(idx, 1);
+
+					el.parentNode.parentNode.removeChild(el.parentNode);
+					document.querySelector("#panier_text").innerText = parseInt(document.querySelector("#panier_text").innerText) - 1;
+					console.log(panier);
+
+				}
+
+
+				function addPanier() {
+					var service_name = $("#addPanier_button").attr("data-service-name");
+					var booking = [];
+					if (panier[service_name] == undefined)panier[service_name] = [];
+
+					// 1. creation du panier logique
+					// 2. ajout au panier graphique
+
+					// 1. creation du panier logique
+					var bookings_length = document.querySelectorAll(".booking_box ").length; 
+					var jours = document.querySelectorAll(".jour");
+					var tdebuts = document.querySelectorAll(".tdebut");
+					var tfins = document.querySelectorAll(".tfin");
+
+					for (var i = 0; i < bookings_length; i++) {
+						if (tdebuts[i].value > tfins[i].value) {
+							console.log("L'heure de fin ne peut pas etre avant celle du debut " + (i+1) + "e jour)");
+							return;
+						}
+
+						if (tdebuts[i].value == tfins[i].value) {
+							console.log("Les heures ne peuvent pas etre egales (" + (i+1) + "e jour)");
+							return;							
+						}
+					}
+
+					for (var i = 0; i < bookings_length; i++) {
+						booking.push({
+							"jour": jours[i].value,
+							"tdebut": tdebuts[i].value,
+							"tfin": tfins[i].value
+						});
+	
+						document.querySelector("#panier_text").innerText = parseInt(document.querySelector("#panier_text").innerText) + 1;
+
+					}
+
+					console.log(panier);
+
+
+					// 2. ajout au panier graphique
+
+					// on n'ajoute une nouvelle categorie que si ce service na pas deja ete commande
+					var rajouter = 1;
+					$(".panier_title").each(function(index) {
+						if ($(".panier_title")[index].innerText === service_name) {
+							rajouter = 0;
+						}
+					});
+
+					var service_name_id = service_name.replace(/ /g,'');
+
+					if (rajouter) {
+						$("#panier").append(`
+							<div class="container" id="panier_container_${service_name_id}">
+								<h4 class="panier_title">${service_name}</h4>
+								<ul id="panier_liste_${service_name_id}"></ul>
+							</div>
+						`);
+					}
+
+					console.log(booking);
+					for (var i = 0; i < bookings_length; i++) {
+						console.log(booking[i]);
+						
+						panier[service_name].push(booking[i]);
+
+
+						$("#panier_liste_"+service_name_id).append(`
+							<li>
+								<input type="date" value="` + booking[i].jour + `">
+								de
+								<input type="time" value="` + booking[i].tdebut + `">
+								à
+								<input type="time" value="` + booking[i].tfin + `">
+								<button class="btn btn-danger" onclick="removePanierItem(this, '${service_name}', ` + i + `)"><span aria-hidden="true">×</span></button>
+							</li>
+						`);
+					}
+
+
+					$('#bookingModal').modal('hide');
+
+				}
+				
+				$("#addPanier_button").on("click", addPanier);
+				$("#firstBookingBox").attr("value", (new Date()).toISOString().substr(0,10));
+		
+			// });
+
 		</script>
 	</body>
 </html>

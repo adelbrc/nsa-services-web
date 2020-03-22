@@ -44,7 +44,7 @@ $list = Service::getAllServices();
 						type="button" 
 						class="btn btn-success" 
 						data-toggle="modal" 
-						data-target="#exampleModal">
+						data-target="#bookingModal">
 					  Commander
 					</button>
 				</div>
@@ -52,11 +52,11 @@ $list = Service::getAllServices();
 			</div>
 
 			<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
+			<div class="modal fade bd-example-modal-lg" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg" id="bookingModal2" role="document">
+					<div class="modal-content" id="bookingModal3">
 						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Commander : <?= $service->getName(); ?></h5>
+							<h5 class="modal-title" id="bookingModalLabel">Commander : <?= $service->getName(); ?></h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -65,56 +65,46 @@ $list = Service::getAllServices();
 
 
 						<form action="">
-							<?php
-							
-							// si c'est une intervention, on demande l'heure de debut
-							// si c'est une prestation avec heure de debut et fin, on demande les 2
-
-							if ($service->getDenombrable() == 0):
-							?>
-								<div class="form-group">
-									<label>Date</label>
-									<input type="date" class="form-control" id="date_input" placeholder="Date">
-								</div>
-			
-								<div class="form-group">
-									<label>Heure d'intervention</label>
-									<input type="time" class="form-control" id="intervention_time" placeholder="Date">
-								</div>
-
-							<?php endif;
-							
-							if ($service->getDenombrable() == 1):
-							?>
-								<div class="form-group">
-									<label>Jour de début</label>
-									<input type="date" class="form-control" id="date_input" placeholder="Jour de début">
-								</div>
-			
-								<div class="form-group">
-									<label>Heure de début</label>
-									<input type="time" class="form-control" id="intervention_debut" placeholder="Heure de début">
-								</div>
-
-
-								<div class="form-group">
-									<label>Jour de fin</label>
-									<input type="date" class="form-control" id="date_input" placeholder="Jour de fin">
-								</div>
-			
-								<div class="form-group">
-									<label>Heure de fin</label>
-									<input type="time" class="form-control" id="intervention_fin" placeholder="Heure de fin">
-								</div>
-
-							<?php endif; ?>
-
-
+				
 
 							<div class="form-group">
 								<label>Lieu</label>
 								<input type="text" class="form-control" id="lieu_input" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
 							</div>
+							
+							<div class="container">
+								<button type="button" class="btn btn-primary" onclick="addBooking()">Ajouter une plage horaire</button>
+								<!-- <button type="button" class="btn btn-primary">Fermer</button> -->
+							</div>
+
+							<!-- 			
+								<div class="form-group">
+									<label>Heure de fin</label>
+									<input type="time" class="form-control" id="intervention_fin" placeholder="Heure de fin">
+								</div>
+							-->
+							<h4>Réservations : </h4>
+							<div class="container border p-3 d-flex flex-row" id="bookings_container">
+
+								<div class="container booking_box border m-0 mr-3">
+									<div class="form-group">
+										<span class="compteurjour">Jour 1</span>
+										<span aria-hidden="true" class="removeBooking" onclick="removeBooking(this)">×</span>
+										<input type="date" class="form-control form-input jour" id="firstBookingBox" value="">
+									</div>
+
+									<div class="form-group">
+										<label>Heure de début</label>
+										<input type="time" class="form-control form-input tdebut" value="09:00" min="09:00" max="20:00" step="900">
+									</div>
+
+									<div class="form-group">
+										<label>Heure de fin</label>
+										<input type="time" class="form-control form-input tfin" value="10:00" min="09:00" max="20:00" step="900">
+									</div>
+								</div>
+							</div>
+
 						</form>
 
 						</div>
@@ -123,12 +113,15 @@ $list = Service::getAllServices();
 							<button 
 								type="button" 
 								class="btn btn-success"
-								onclick="redirectToCheckout('<?php echo $service->getStripeID(); ?>', '<?php echo $service->getId(); ?>', '<?= $_SESSION["user"]["email"] ?>')">
+								>
+								<!-- onclick="redirectToCheckout('<?php echo $service->getStripeID(); ?>', '<?php echo $service->getId(); ?>', '<?= $_SESSION["user"]["email"] ?>')" -->
 								Paiement Direct
 							</button>
 							<button 
 								type="button" 
-								class="btn btn-primary">
+								class="btn btn-primary"
+								id="addPanier_button"
+								data-service-name="<?= $service->getName(); ?>">
 								Ajouter au panier
 							</button>
 						</div>

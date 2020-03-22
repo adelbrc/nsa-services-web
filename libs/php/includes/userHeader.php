@@ -89,7 +89,10 @@
 
 		?>
 
-		<img src="https://pngimage.net/wp-content/uploads/2018/06/icon-panier-png-8.png" class="services_basket" alt="" height="35" width="35">
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#panierModal" id="panier_button">
+			<span id="panier_text">0</span>
+			<img src="ressources/img/icon_panier.png" class="services_basket" alt="" height="35" width="35">
+		</button>
 	
 		<form class="form-inline my-2 my-lg-0 ml-3">
 			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -98,3 +101,53 @@
 
 	</div>
 </nav>
+
+
+<!-- Modal -->
+<div class="modal fade" id="panierModal" tabindex="-1" role="dialog" aria-labelledby="panierModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="panierModalLabel">Mon panier de services</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+					
+				<div class="container" id="panier">
+
+<!-- 					<div class="container">
+						
+						<h4 class="panier_title">Babysitting</h4>
+						<ul>
+							<li>
+								<input type="date" value="21/03/2020">
+								de
+								<input type="time" value="10:00">
+								à
+								<input type="time" value="12:00">
+								<button class="btn btn-danger"><span aria-hidden="true">×</span></button>
+							</li>
+
+							<li>
+								<input type="date" value="21/03/2020">
+								de
+								<input type="time" value="10:00">
+								à
+								<input type="time" value="12:00">
+								<button class="btn btn-danger"><span aria-hidden="true">×</span></button>
+							</li>
+						</ul>
+					</div>
+ -->
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+				<button type="button" class="btn btn-success">Commander</button>
+			</div>
+		</div>
+	</div>
+</div>
