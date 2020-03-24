@@ -125,6 +125,8 @@ if (isset($_POST["submitDemande"])		&&
 		<script src="libs/ajax/searchServices.js" charset="utf-8"></script>
 		<script src="https://js.stripe.com/v3/"></script>
 		<script src="libs/js/checkout.js" charset="utf-8"></script>
+		<!-- le js ci-dessous (script.js) contient doAjax() -->
+		<script src="ressources/js/script.js"></script>
 
 		<script>
 			var panier = [];
@@ -171,8 +173,9 @@ if (isset($_POST["submitDemande"])		&&
 
 
 				function removePanierItem(el, service, idx) {
-					console.log("je supprime " + panier[service][idx].jour);
-					panier[service].splice(idx, 1);
+					console.log("je supprime " + panier[service]["data"][idx].jour);
+					panier[service]["data"].splice(idx, 1);
+					// panier[service][idx] = null
 
 					el.parentNode.parentNode.removeChild(el.parentNode);
 					document.querySelector("#panier_text").innerText = parseInt(document.querySelector("#panier_text").innerText) - 1;
@@ -181,10 +184,29 @@ if (isset($_POST["submitDemande"])		&&
 				}
 
 
-				function addPanier() {
-					var service_name = $("#addPanier_button").attr("data-service-name");
+				function addPanier(el) {
+					var service_name = $(el).attr("data-service-name");
+					var service_plan_id = $(el).attr("data-service-plan_id");
+					var service_price = $(el).attr("data-service-price");
+					var service_id = $(el).attr("data-service-id");
+					var customer_id = $(el).attr("data-customer-id");
 					var booking = [];
-					if (panier[service_name] == undefined)panier[service_name] = [];
+					/*
+					* Important :
+					* Quand je fais : panier[0] = 1, length = 1 et l'index 0 renvoie 1
+					* les tableau en JS sont 0-indéxés (commencent par 0)
+					* par contre, quand je fais : panier["demo"] = {"name" : "eminem"}, length = 0 car (je suis pas sur encore mais ca marche pour linstant), 
+					* sauf que le premier element est a l'index 0 alors que la on a declare a l'index "demo", donc .length n'est pas adapté ici 
+					**/
+					if (panier[service_name] == undefined) {
+						panier[service_name] = new Object();
+						panier[service_name].name = service_name;
+						panier[service_name].plan_id = service_plan_id;
+						panier[service_name].price = service_price;
+						panier[service_name].id = service_id;
+						panier[service_name].customer_id = customer_id;
+						panier[service_name].data = [];
+					}
 
 					// 1. creation du panier logique
 					// 2. ajout au panier graphique
@@ -208,17 +230,29 @@ if (isset($_POST["submitDemande"])		&&
 					}
 
 					for (var i = 0; i < bookings_length; i++) {
-						booking.push({
+						panier[service_name].data.push({
 							"jour": jours[i].value,
 							"tdebut": tdebuts[i].value,
 							"tfin": tfins[i].value
 						});
-	
-						document.querySelector("#panier_text").innerText = parseInt(document.querySelector("#panier_text").innerText) + 1;
 
+						document.querySelector("#panier_text").innerText = parseInt(document.querySelector("#panier_text").innerText) + 1;
 					}
 
 					console.log(panier);
+					// console.log(Object.keys(panier));
+					// console.log(Object.keys(panier).length);
+					// console.log(panier.length);
+
+					$("#validateOrder").click(function() {
+						// on va faire une ajax pour toutes cateogires de services demandées (ex: babysitting, plomberie, ...)
+						// on recupere les index associatifs qu'on avait mis en place avant
+						var panier_keys = Object.keys(panier);
+						for (var i = 0; i < panier_keys.length; i++) {
+							// on envoie chaque categorie en json
+							doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[panier_keys[i]]));
+						}
+					});
 
 
 					// 2. ajout au panier graphique
@@ -242,20 +276,15 @@ if (isset($_POST["submitDemande"])		&&
 						`);
 					}
 
-					console.log(booking);
 					for (var i = 0; i < bookings_length; i++) {
-						console.log(booking[i]);
 						
-						panier[service_name].push(booking[i]);
-
-
 						$("#panier_liste_"+service_name_id).append(`
 							<li>
-								<input type="date" value="` + booking[i].jour + `">
+								<input type="date" value="` + panier[service_name].data[i].jour + `">
 								de
-								<input type="time" value="` + booking[i].tdebut + `">
+								<input type="time" value="` + panier[service_name].data[i].tdebut + `">
 								à
-								<input type="time" value="` + booking[i].tfin + `">
+								<input type="time" value="` + panier[service_name].data[i].tfin + `">
 								<button class="btn btn-danger" onclick="removePanierItem(this, '${service_name}', ` + i + `)"><span aria-hidden="true">×</span></button>
 							</li>
 						`);
@@ -266,7 +295,7 @@ if (isset($_POST["submitDemande"])		&&
 
 				}
 				
-				$("#addPanier_button").on("click", addPanier);
+				// $("#addPanier_button").on("click", addPanier);
 				$("#firstBookingBox").attr("value", (new Date()).toISOString().substr(0,10));
 		
 			// });

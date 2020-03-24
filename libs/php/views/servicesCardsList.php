@@ -121,7 +121,13 @@ $list = Service::getAllServices();
 								type="button" 
 								class="btn btn-primary"
 								id="addPanier_button"
-								data-service-name="<?= $service->getName(); ?>">
+								data-service-name="<?= $service->getName() ?>"
+								data-service-price="<?= $service->getPrice() ?>"
+								data-service-plan_id="<?= $service->getStripeID() ?>"
+								data-service-id="<?= $service->getId() ?>"
+								data-customer-id="<?= $_SESSION["user"]["id"] ?>"
+								onclick="addPanier(this)"
+								>
 								Ajouter au panier
 							</button>
 						</div>

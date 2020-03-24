@@ -134,33 +134,12 @@ if (!isConnected()) {
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<!-- le js ci-dessous (script.js) contient doAjax() -->
+	<script src="ressources/js/script.js"></script>
+
+
 
 	<script>
-
-
-		function doAjax(url, obj) {
-
-			let xhttp = new XMLHttpRequest();
-
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					console.log(this.responseText);
-					var jsonResponse = JSON.parse(this.responseText);
-					if (jsonResponse.status == true) {
-						$(".alert").show();
-						$(".alert").on('closed.bs.alert', function () {
-							location.reload();
-						});
-					} else {
-						console.log("pas ok");
-						console.log(jsonResponse.status);
-					}
-				}
-			};
-
-			xhttp.open("GET", url + "?obj=" + obj, true);
-			xhttp.send();
-		}
 
 		var btn_resililer = document.getElementById("resilier_sub");
 		if (btn_resililer != null) {
@@ -168,7 +147,7 @@ if (!isConnected()) {
 			btn_resililer.addEventListener("click", function() {
 				var user_id = btn_resililer.getAttribute("data-user-id");
 				var membership_id = btn_resililer.getAttribute("data-membership-id");
-				doAjax("libs/php/resilier.php", JSON.stringify({"user_id": user_id, "membership_id": membership_id}));
+				doAjax("libs/php/controllers/ajax_mirrors.php", "resilier", JSON.stringify({"user_id": user_id, "membership_id": membership_id}));
 			});
 		}
 
