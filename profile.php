@@ -13,7 +13,7 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 ?>
 
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fr" dir="ltr">
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

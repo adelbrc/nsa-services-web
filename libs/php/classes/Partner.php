@@ -195,32 +195,19 @@ class Partner {
 
   // ------------------------
   // Update a partner's infos
-  public function updatePartnerInfos($pid, $corp_name, $corp_id, $role_id, $address, $city, $email, $phone, $pricing, $dispo_begin, $dispo_end){
-
-    $this->corporation_name = $corp_name;
-    $this->corporation_id = $corp_id;
-    $this->role_id = $role_id;
+  public function updatePartnerInfos($pid, $address, $city, $email, $phone){
+    
     $this->address = $address;
     $this->city = $city;
     $this->email = $email;
     $this->phone = $phone;
-    $this->pricing = $pricing;
-    $this->disponibility_begin = $dispo_begin;
-    $this->disponibility_end = $dispo_end;
-
-    $sql = "UPDATE partner SET corporation_name = :corp_n, corporation_id = :corp_d, role_id = :rid, address = :addr, city = :ct, email = :mail, phone = :phonenumb, pricing = :price, disponibility_begin = :dispo_beg, disponibility_end = :dispo_end WHERE partner_id = :pid";
+    $sql = "UPDATE partner SET address = :addr, city = :ct, email = :mail, phone = :phonenumb WHERE partner_id = :pid";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute(array(
-      "corp_n" => $corp_name,
-      "corp_d" => $corp_id,
-      "rid" => $role_id,
       "addr" => $address,
       "ct" => $city,
       "mail" => $email,
       "phonenumb" => $phone,
-      "price" => $pricing,
-      "dispo_beg" => $dispo_begin,
-      "dispo_end" => $dispo_end,
       "pid" => $pid,
     ));
   }
