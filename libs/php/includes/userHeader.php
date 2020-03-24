@@ -146,7 +146,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-				<button type="button" class="btn btn-success">Commander</button>
+				<button type="button" class="btn btn-success" id="validateOrder">Commander</button>
 			</div>
 		</div>
 	</div>

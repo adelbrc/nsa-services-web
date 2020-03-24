@@ -70,7 +70,7 @@ function commandeService($conn, $booking) {
 	}
 
 	echo json_encode(['status' => "success", 'message' => $message . " and sessions added"]);
-	
+
 }
 
 	
