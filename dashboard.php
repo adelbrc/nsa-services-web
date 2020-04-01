@@ -2,13 +2,19 @@
 if (!isConnected()) {
 	header('location: index.php?error=accessUnauthorized');
 }
+include('libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 	<meta charset="utf-8">
-	<title>dashboard</title>
+	<title>Dashboard</title>
 
 	<!-- Stripe -->
 	<!-- <link rel="stylesheet" type="text/css" href="./ressources/css/global.css"> -->
@@ -28,7 +34,7 @@ if (!isConnected()) {
 		include('libs/php/includes/userHeader.php');
 	?>
 	<div>
-		<h2 style="text-align: center; font-size: 50px; padding-top: 50px">Découvrez nos abonnements</h2>
+		<h2 style="text-align: center; font-size: 50px; padding-top: 50px"><?php echo $decouvrirAbon[$langue]; ?></h2>
 	</div>
 
 	<hr class="my-4">
@@ -37,7 +43,7 @@ if (!isConnected()) {
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
-		<strong>Succès !</strong> Résiliation effectuée avec succès.
+		<strong>Succès !</strong> <?php echo $resiliationOk[$langue]; ?>
 	</div>
 
 
@@ -66,14 +72,14 @@ if (!isConnected()) {
 				</div>
 				<ul class="list-group list-group-flush">
 				<li class="list-group-item"><?= $membership["price"] ?> €</li>
-				<li class="list-group-item"><?= $membership["timeQuota"] ?> heures de services par mois</li>
-				<li class="list-group-item">Disponibilité <?= $membership["openDays"] ?>j / 7j</li>
-				<li class="list-group-item">De <?= $membership["openHours"] ?> h à <?= $membership["closeHours"] ?> h</li>
-				<li class="list-group-item">(Sans)/(Avec) Engagement <?= $membership["duration"] ?> mois</li>
+				<li class="list-group-item"><?= $membership["timeQuota"] ?> <?php echo $heureMois[$langue]; ?></li>
+				<li class="list-group-item"><?php echo $disponibilite[$langue]; ?> <?= $membership["openDays"] ?>j / 7j</li>
+				<li class="list-group-item"><?php echo $from[$langue]; ?> <?= $membership["openHours"] ?> h <?php echo $to[$langue]; ?> <?= $membership["closeHours"] ?> h</li>
+				<li class="list-group-item"><?php echo $engagement[$langue]; ?> <?= $membership["duration"] ?> mois</li>
 				</ul>
-				
+
 				<div class="card-body">
-					
+
 					<?php
 						// On va verifier ici que l'utilisateur n'est pas deja abonné a un abonnement
 						// s'il est abonné, on bloque le bouton de suscription
@@ -96,10 +102,10 @@ if (!isConnected()) {
 						} else {
 							echo "<a href=\"./#\" class=\"btn btn-primary\" id=\"" . $membership['id'] . "\" data-toggle=\"modal\" data-target=\"#paymentModal" . $membership['id'] ."\">Je choisis " . $membership['name'] . "</a>";
 						}
-					?>	
-				
+					?>
+
 				</div>
-			
+
 			</div>
 
 			<!-- Modal -->
@@ -107,18 +113,17 @@ if (!isConnected()) {
 				<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="paymentModalLabel">S'abonner à : <?= $membership['name'] ?> ?</h5>
+						<h5 class="modal-title" id="paymentModalLabel"><?php echo $sabonnerA[$langue]; ?> <?= $membership['name'] ?> ?</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
-						<p>N'attendez plus pour profiter de tous nos services !</p>
-						<p>Vous serez redirigé vers la page de paiement.</p>
+						<?php echo $attendPlus[$langue]; ?>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-						<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')">Passer au paiement</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
+						<button type="button" class="btn btn-primary" onclick="redirectToCheckout('<?= $membership["id_plan"] ?>')"><?php echo $passerPaiement[$langue]; ?></button>
 					</div>
 				</div>
 				</div>

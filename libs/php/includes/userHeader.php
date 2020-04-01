@@ -20,8 +20,8 @@
 					Services
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="mes_services.php">Mes services</a>
-					<a class="dropdown-item" href="services.php">Chercher un service</a>
+					<a class="dropdown-item" href="mes_services.php"><?php echo $mesServices[$langue]; ?></a>
+					<a class="dropdown-item" href="services.php"><?php echo $chercherServices[$langue]; ?></a>
 				</div>
 			</li>
 
@@ -32,7 +32,7 @@
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" href="profile.php">Profile</a>
-					<a class="dropdown-item" href="orders.php">Orders</a>
+					<a class="dropdown-item" href="orders.php"><?php echo $commande[$langue]; ?></a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#">Interventions</a>
 				</div>
@@ -46,8 +46,16 @@
 				<a class="nav-link" href="libs/php/deconnexion.php">Logout</a>
 			</li>
 
-			<li class="nav-item">
-			</li>
+			<li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          Langue
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		          <a class="dropdown-item" href="?lang=0"><img src="https://img.icons8.com/color/64/000000/france.png"/></a>
+		          <a class="dropdown-item" href="?lang=1"><img src="https://img.icons8.com/color/64/000000/usa.png"/></a>
+		          <!-- <a class="dropdown-item" href="index.php?langue=0">Something else here</a> -->
+		        </div>
+		      </li>
 		</ul>
 
 
@@ -74,7 +82,7 @@
 					// date_create($res["ending"])
 				);
 
-				if ($aujourdhui >= $date_alert) { 
+				if ($aujourdhui >= $date_alert) {
 
 					?>
 
@@ -83,7 +91,7 @@
 					</div>
 
 			<?php
-			
+
 				}
 			}
 
@@ -93,7 +101,7 @@
 			<span id="panier_text">0</span>
 			<img src="ressources/img/icon_panier.png" class="services_basket" alt="" height="35" width="35">
 		</button>
-	
+
 		<form class="form-inline my-2 my-lg-0 ml-3">
 			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 			<button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
@@ -108,17 +116,17 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title" id="panierModalLabel">Mon panier de services</h5>
+				<h3 class="modal-title" id="panierModalLabel"><?php echo $panier[$langue]; ?></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-					
+
 				<div class="container" id="panier">
 
 <!-- 					<div class="container">
-						
+
 						<h4 class="panier_title">Babysitting</h4>
 						<ul>
 							<li>
@@ -145,8 +153,8 @@
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-				<button type="button" class="btn btn-success" id="validateOrder">Commander</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
+				<button type="button" class="btn btn-success" id="validateOrder"><?php echo $commande[$langue]; ?></button>
 			</div>
 		</div>
 	</div>

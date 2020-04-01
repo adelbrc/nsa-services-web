@@ -3,7 +3,13 @@
 require_once('libs/php/classes/User.php');
 require_once('libs/php/classes/Order.php');
 include('libs/php/isConnected.php');
+include('libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 if (!isConnected()) {
   header("Location: login.php");
   exit;
@@ -30,12 +36,12 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
         <main>
             <div class="container-fluid">
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                  <h1 class="h2" id='user'>My Orders</h1>
+                  <h1 class="h2" id='user'><?php echo $mesCommandes[$langue]; ?></h1>
                   <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                       <ul class="nav justify-content-center" role="tablist">
                         <li class="nav-item">
-                          <a class="nav-link active" id="infos-tab" data-toggle="tab" href="#infos" role="tab" aria-controls="infos" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary">Orders</button></a>
+                          <a class="nav-link active" id="infos-tab" data-toggle="tab" href="#infos" role="tab" aria-controls="infos" aria-selected="true"><button type="button" class="btn btn-sm btn-outline-primary"><?php echo $commande[$langue]; ?></button></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Test</button></a>

@@ -3,7 +3,13 @@
 require_once("libs/php/classes/User.php");
 require_once("libs/php/classes/Service.php");
 include("libs/php/isConnected.php");
+include('libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 require_once('libs/stripe-php-master/init.php');
 \Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
@@ -33,7 +39,7 @@ if (isset($_POST["submitDemande"])		&&
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		
+
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="ressources/style/style.css">
 
@@ -47,11 +53,11 @@ if (isset($_POST["submitDemande"])		&&
 		<main>
 			<section class="sizedSection">
 				<div class="dataContainer">
-					<h2 class="text-center">Rechercher des services</h2>
+					<h2 class="text-center"><?php echo $chercherService[$langue]; ?></h2>
 					<form class="text-center searchServicesForm">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-								<input class="customInput" autocomplete="off" type="search" placeholder="Garde d'enfants, plomberie, réparation informatique..." onkeyup="showResult(this.value)">
+								<input class="customInput" autocomplete="off" type="search" placeholder="<?php echo $exPlacehorder[$langue]; ?>..." onkeyup="showResult(this.value)">
 								<div id="serviceSearch">
 
 								</div>
@@ -66,7 +72,7 @@ if (isset($_POST["submitDemande"])		&&
 
 
 			<section class="sizedSection">
-				<h2 class="text-center">Nos services</h2>
+				<h2 class="text-center"><?php echo $nosServices[$langue]; ?></h2>
 				<div class="row">
 					<?php include("libs/php/views/servicesCardsList.php"); ?>
 				</div>
@@ -74,18 +80,18 @@ if (isset($_POST["submitDemande"])		&&
 
 			<section class="sizedSection">
 				<div class="dataContainer">
-					<h2 class="text-center">Besoin d'un service non listé ?</h2>
+					<h2 class="text-center"><?php echo $serviceInconnu[$langue]; ?></h2>
 
 					<form action="" method="POST" class="w-50 mx-auto">
-						<p>Renseignez les informations concernant votre service et nous reviendrons vers vous le plus vite possible</p>
+						<p><?php echo $reseigneInfo[$langue]; ?></p>
 
 						<div class="form-group">
-							<label>Titre</label>
+							<label><?php echo $titre[$langue]; ?></label>
 							<input type="text" name="serviceTitle" class="form-control" placeholder="Titre de la demande">
 						</div>
 
 						<div class="form-group">
-							<label>Date et heure</label>
+							<label><?php echo $dateEtHeure[$langue]; ?></label>
 							<input placeholder="Date et heure du service demandé" type="text" id="date-picker-example" class="form-control datepicker">
 
 							<!-- <input type="date" id="datetimepicker" class="form-control">
@@ -97,8 +103,8 @@ if (isset($_POST["submitDemande"])		&&
 						</div>
 
 						<div class="form-group">
-							<label>Lieu de l'intervention</label>
-							<input type="text" name="servicePlace" class="form-control" placeholder="Lieu de l'intervention">
+							<label><?php echo $lieuIntervention[$langue]; ?></label>
+							<input type="text" name="servicePlace" class="form-control" placeholder="<?php echo $lieuIntervention[$langue]; ?>">
 						</div>
 
 						<div class="form-group">
@@ -106,7 +112,7 @@ if (isset($_POST["submitDemande"])		&&
 							<textarea class="form-control" name="serviceDescription" rows="3"></textarea>
 						</div>
 
-						<button type="submit" name="submitDemande" class="btn btn-primary">Envoyer ma demande</button>
+						<button type="submit" name="submitDemande" class="btn btn-primary"><?php echo $envoyerDemande[$langue]; ?></button>
 					</form>
 				</div>
 			</section>
@@ -195,8 +201,8 @@ if (isset($_POST["submitDemande"])		&&
 					* Important :
 					* Quand je fais : panier[0] = 1, length = 1 et l'index 0 renvoie 1
 					* les tableau en JS sont 0-indéxés (commencent par 0)
-					* par contre, quand je fais : panier["demo"] = {"name" : "eminem"}, length = 0 car (je suis pas sur encore mais ca marche pour linstant), 
-					* sauf que le premier element est a l'index 0 alors que la on a declare a l'index "demo", donc .length n'est pas adapté ici 
+					* par contre, quand je fais : panier["demo"] = {"name" : "eminem"}, length = 0 car (je suis pas sur encore mais ca marche pour linstant),
+					* sauf que le premier element est a l'index 0 alors que la on a declare a l'index "demo", donc .length n'est pas adapté ici
 					**/
 					if (panier[service_name] == undefined) {
 						panier[service_name] = new Object();
@@ -212,7 +218,7 @@ if (isset($_POST["submitDemande"])		&&
 					// 2. ajout au panier graphique
 
 					// 1. creation du panier logique
-					var bookings_length = document.querySelectorAll(".booking_box ").length; 
+					var bookings_length = document.querySelectorAll(".booking_box ").length;
 					var jours = document.querySelectorAll(".jour");
 					var tdebuts = document.querySelectorAll(".tdebut");
 					var tfins = document.querySelectorAll(".tfin");
@@ -225,7 +231,7 @@ if (isset($_POST["submitDemande"])		&&
 
 						if (tdebuts[i].value == tfins[i].value) {
 							console.log("Les heures ne peuvent pas etre egales (" + (i+1) + "e jour)");
-							return;							
+							return;
 						}
 					}
 
@@ -277,7 +283,7 @@ if (isset($_POST["submitDemande"])		&&
 					}
 
 					for (var i = 0; i < bookings_length; i++) {
-						
+
 						$("#panier_liste_"+service_name_id).append(`
 							<li>
 								<input type="date" value="` + panier[service_name].data[i].jour + `">
@@ -294,10 +300,10 @@ if (isset($_POST["submitDemande"])		&&
 					$('#bookingModal').modal('hide');
 
 				}
-				
+
 				// $("#addPanier_button").on("click", addPanier);
 				$("#firstBookingBox").attr("value", (new Date()).toISOString().substr(0,10));
-		
+
 			// });
 
 		</script>

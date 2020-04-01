@@ -2,7 +2,13 @@
 
 require_once('libs/php/classes/User.php');
 include('libs/php/isConnected.php');
+include('libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 if (!isConnected()) {
     header("Location: login.php");
     exit;

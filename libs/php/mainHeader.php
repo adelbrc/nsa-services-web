@@ -14,7 +14,7 @@
       <a class="nav-link" href="login.php"><?php echo $connexion[$langue]; ?></a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="signup.php">Inscription</a>
+      <a class="nav-link" href="signup.php"><?php echo $inscription[$langue]; ?></a>
     </li>
   <?php }
   if (isConnected()) { ?>

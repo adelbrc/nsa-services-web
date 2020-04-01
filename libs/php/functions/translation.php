@@ -34,4 +34,47 @@ $connexion = array('Connexion', 'Login');
 $wrongpass = array('Mauvais mot de passe' ,'Wrong password');
 $rediInscri = array('Vous pouvez désormais vous connecter', 'You can now log in');
 $pasEncoreInscrit = array('Pas encore inscrit ? Rejoingnez-nous !', 'Not registered yet? Join us!');
+
+//Dashboard
+$decouvrirAbon = array('Découvrez nos abonnements', 'Discover our subscriptions');
+$resiliationOk = array('Résiliation effectuée avec succès', 'Termination successfully completed.');
+$heureMois = array('heures de services par mois', 'hours of service per month');
+$disponibilite = array('Disponibilité', 'Availability');
+$engagement = array('(Sans)/(Avec) Engagement', '(Without)/(With) Commitment');
+$sabonnerA = array('S\'abonner à :', 'Subscribe to :');
+$attendPlus = array('<p>N\'attendez plus pour profiter de tous nos services !</p> <p>Vous serez redirigé vers la page de paiement.</p>', '<p>	Don\'t wait any longer to take advantage of all our services!</p><p>You will be redirected to the payment page.</p>');
+$close = array('Fermer', 'Close');
+$passerPaiement = array('Passer au paiement', 'Proceed to payment');
+
+//userheader
+$mesServices = array('Mes services', 'My services');
+$chercherServices = array('Chercher un service', 'Search for a service');
+$commande = array('Commandes', 'Orders');
+
+//mes_services.php
+$demandeOk = array('Votre demande a bien été prise en compte', 'Your request has been taken into account');
+$servicePrevu = array('Services prévus', 'Planned Services');
+$lieu = array('Lieu', 'Location');
+$prix = array('Prix', 'price');
+$prestataire = array('Prestataire', 'Provider');
+
+//service.php
+$chercherService = array('Rechercher des services', 'Search for services');
+$exPlacehorder = array('Garde d\'enfants, plomberie, réparation informatique', 'Childcare, plumbing, computer repairs');
+$nosServices = array('Nos services', 'Our services');
+$serviceInconnu = array('Besoin d\'un service non listé ?', 'Need an unlisted service?');
+$reseigneInfo = array('Renseignez les informations concernant votre service et nous reviendrons vers vous le plus vite possible', 'Fill in the information about your service and we will get back to you as soon as possible.');
+$titre = array('Titre', 'Title');
+$dateEtHeure = array('Date et Heure', 'Date and hours');
+$lieuIntervention = array('Lieu de l\'intervention', 'Location of the intervention');
+$envoyerDemande = array('Envoyer ma demande', 'Send my request');
+
+//Orders.php
+$mesCommandes= array('Mes Commandes', 'My Orders');
+$historiqueCommande = array('Historique des commandes', 'Orders History');
+$quantite = array('Quantite', 'Quantity');
+$etatPaiement = array('État des paiements', 'Payment Status');
+$dateReservation = array('Date de réservation', 'Reservation Date');
+$etatCommande = array('État de la commande', 'Order Status');
+$panier = array('Mon panier de services', 'My basket of services');
  ?>
