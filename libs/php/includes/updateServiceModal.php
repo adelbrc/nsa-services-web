@@ -12,17 +12,17 @@
           <div class="form-row">
             <input type="hidden" name="pid" value="<?php echo $result['id']; ?>">
             <div class="form-group col-md-6">
-              <label for="inputCorpName">Nom du service</label>
+              <label for="inputCorpName"><?php echo $nomService[$langue]; ?></label>
               <input type="text" class="form-control" id="inputname" name="inputname" value="<?php echo $result['name']; ?>">
             </div>
             <div class="form-group col-md-6">
-              <label for="inputCorpId">Prix </label>
+              <label for="inputCorpId"><?php echo $prix[$langue]; ?> </label>
               <input type="text" class="form-control" id="inputLname" name="inputPrice" value="<?php echo $result['price']; ?>">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputLname">Prix promo</label>
+              <label for="inputLname"><?php echo $prixReduit[$langue]; ?></label>
               <input type="text" class="form-control" id="inputDPrice" name="inputDPrice" value="<?php echo $result['discountPrice']; ?>">
             </div>
             <div class="form-group col-md-6">
@@ -42,7 +42,7 @@
           </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
           </div>
         </div>
       </div>

@@ -3,19 +3,19 @@ $list = Order::getUserOrders($user->getUID());
 ?>
 
 <div class="dataContainer">
-  <h3 class="text-center">Orders History</h3>
+  <h3 class="text-center"><?php echo $historiqueCommande[$langue]; ?></h3>
   <div class="row">
     <div class="table-responsive">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Order ID</th>
-            <th scope="col">Order Date</th>
-            <th scope="col">Quantity</th>
+            <th scope="col">ID</th>
+            <th scope="col">Date</th>
+            <th scope="col"><?php echo $quantite[$langue]; ?></th>
             <th scope="col">Service ID</th>
-            <th scope="col">Payment Status</th>
-            <th scope="col">Reservation Date</th>
-            <th scope="col">Order Status</th>
+            <th scope="col"><?php echo $etatPaiement[$langue]; ?></th>
+            <th scope="col"><?php echo $dateReservation[$langue]; ?></th>
+            <th scope="col"><?php echo $etatCommande[$langue]; ?></th>
           </tr>
         </thead>
         <tbody>

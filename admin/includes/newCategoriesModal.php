@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoryModal">
-  Creer une nouvelle catégorie
+  <?php echo $creenvlleCategorie[$langue]; ?>
 </button>
 
 <!-- Modal -->
@@ -8,7 +8,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">New Category</h5>
+        <h5 class="modal-title" id="modalTitle"><?php echo $nvlleCategorie[$langue]; ?></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -18,11 +18,11 @@
           <div class="form-row">
             <input type="hidden" name="pid" value="">
             <div class="form-group col-md-6 mx-auto">
-              <label for="inputName">Nom</label>
+              <label for="inputName"><?php echo $name[$langue]; ?></label>
               <input type="text" class="form-control" id="inputName" name="category_name" >
             </div>
             <div class="form-group col-md-6 mx-auto">
-              <label for="inputReduc">Nb avant réduction</label>
+              <label for="inputReduc"><?php echo $nbAvantReduc[$langue]; ?></label>
               <input type="number" class="form-control" id="inputReduc" name="inputReduc" >
             </div>
           </div>
@@ -32,7 +32,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
       </div>
     </div>
   </div>

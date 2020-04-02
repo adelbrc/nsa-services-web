@@ -8,7 +8,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 	  <div class="modal-header">
-		<h5 class="modal-title" id="modalTitle">New Service</h5>
+		<h5 class="modal-title" id="modalTitle">Service</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		  <span aria-hidden="true">&times;</span>
 		</button>
@@ -20,22 +20,22 @@
 		  <div class="form-row">
 			<input type="hidden" name="pid" value="">
 			<div class="form-group col-md-6">
-			  <label for="inputName">Nom du service</label>
+			  <label for="inputName"><?php echo $nomService[$langue]; ?></label>
 			  <input type="text" class="form-control" id="inputName" name="service_name" >
 			</div>
 			<div class="form-group col-md-6">
-			  <label for="inputPrice">Prix</label>
+			  <label for="inputPrice"><?php echo $prix[$langue]; ?></label>
 			  <input type="number" class="form-control" id="inputPrice" name="service_price">
 			</div>
 		  </div>
 		  <div class="form-row">
 			<div class="form-group col-md-6">
-			  <label for="inputDiscountPrice">Prix réduction</label>
+			  <label for="inputDiscountPrice"><?php echo $prixReduit[$langue]; ?></label>
 			  <input type="number" class="form-control" id="inputDiscountPrice" name="inputDiscountPrice">
 			</div>
 			<div class="form-group col-md-6">
 			  <div class="form-group">
-				<label for="service_category">Categorie</label>
+				<label for="service_category"><?php echo $categorie[$langue]; ?></label>
 				<select class="form-control" name="category" id="categoryList">
 				  <?php $q = $conn->query('SELECT * FROM category');
 						while($category = $q->fetch()){ ?>
@@ -57,7 +57,7 @@
 		</form>
 	  </div>
 	  <div class="modal-footer">
-		<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
 	  </div>
 	</div>
   </div>

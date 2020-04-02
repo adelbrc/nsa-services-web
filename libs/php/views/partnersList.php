@@ -4,22 +4,22 @@ $roles = Partner::getAllRoles();
 ?>
 
 <div class="dataContainer">
-  <h3 class="text-center">Partners List</h3>
+  <h3 class="text-center"><?php echo $listPartner[$langue]; ?></h3>
   <div class="row">
     <div class="table-responsive">
       <table class="table">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Corporation</th>
+            <th scope="col"><?php echo $entreprise[$langue]; ?></th>
             <th scope="col">SIREN</th>
-            <th scope="col">Firstname</th>
-            <th scope="col">Lastname</th>
+            <th scope="col"><?php echo $Prenom[$langue]; ?></th>
+            <th scope="col"><?php echo $Nom[$langue]; ?></th>
             <th scope="col">Email</th>
-            <th scope="col">Phone</th>
-            <th scope="col">City</th>
+            <th scope="col"><?php echo $telNumber[$langue]; ?></th>
+            <th scope="col"><?php echo $Ville[$langue]; ?></th>
             <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>

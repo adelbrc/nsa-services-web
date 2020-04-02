@@ -4,7 +4,13 @@ require_once("libs/php/classes/User.php");
 require_once("libs/php/classes/Service.php");
 require_once("libs/php/classes/Order.php");
 include("libs/php/functions/checkInput.php");
+include('libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 
 
 include("libs/php/isConnected.php");
@@ -28,7 +34,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		Order::addOrder($order);
 
 		$status = 1;
-		$message = "Votre demande a bien été prise en compte";
+		$message = $demandeOk[$langue];
 
 	}
 }
@@ -49,7 +55,7 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		
+
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 		<title>Mes services - Home Services</title>
@@ -96,7 +102,7 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 					// contentHeight: 500,
 
 					theme: true,
-					
+
 					// header
 					header: {
 					  left: 'prev,next today',
@@ -105,9 +111,9 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 					},
 
 					firstDay: 1,
-					
+
 					// cache mardi jeudi
-					// hiddenDays: [ 2, 4 ], 
+					// hiddenDays: [ 2, 4 ],
 
 					locale: "fr",
 
@@ -121,7 +127,7 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 					maxTime: "21:00:00",
 
 					events: [
-					
+
 						{
 							title:"Meeting1",
 							start:"2020-03-18T10:00:00+00:00",
@@ -162,22 +168,23 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 
 
 			<section class="sizedSection">
-				
+
 				<?php
 					if ($success):
 				?>
 
 				<div class="alert alert-success w-50 mx-auto" role="alert">
 					<?= $message ?>
+
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 
-				<?php endif; ?>	
+				<?php endif; ?>
 
 				<div class="dataContainer">
-					<h2 class="text-center">Planning - Services prévus</h2>
+					<h2 class="text-center">Planning - <?php echo $servicePrevu[$langue]; ?></h2>
 
 						<div id='calendar'></div>
 
@@ -230,24 +237,24 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 
 			<section class="sizedSection">
 				<div class="dataContainer">
-					<h2 class="text-center">Liste - Services prévus</h2>
+					<h2 class="text-center">Liste - <?php echo $servicePrevu[$langue]; ?></h2>
 
 						<table class="table">
 							<thead>
 								<tr>
 									<th scope="col">#</th>
-									<th scope="col">Prestation</th>
-									<th scope="col">Lieu</th>
+									<th scope="col">Service</th>
+									<th scope="col"><?php echo $lieu[$langue]; ?></th>
 									<th scope="col">Date</th>
-									<th scope="col">Prix</th>
-									<th scope="col">Prestataire</th>
+									<th scope="col"><?php echo $prix[$langue]; ?></th>
+									<th scope="col"><?php echo $prestataire[$langue]; ?></th>
 									<th scope="col">Status</th>
 								</tr>
 							</thead>
 							<tbody>
 
 								<?php
-								
+
 								// !!!! la table order est aussi un mot clé ORDER BY donc faut mettre les ``
 								$queryMyServices = $conn->prepare("SELECT * FROM `orders` WHERE customer_id = ?");
 								$queryMyServices->execute([$_SESSION["user"]["id"]]);
@@ -290,11 +297,11 @@ if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
 							<thead>
 								<tr>
 									<th scope="col">#</th>
-									<th scope="col">Prestation</th>
-									<th scope="col">Lieu</th>
+									<th scope="col">Service</th>
+									<th scope="col"><?php echo $lieu[$langue]; ?></th>
 									<th scope="col">Date</th>
-									<th scope="col">Prix</th>
-									<th scope="col">Prestataire</th>
+									<th scope="col"><?php echo $prix[$langue]; ?></th>
+									<th scope="col"><?php echo $prestataire[$langue]; ?></th>
 								</tr>
 							</thead>
 							<tbody>
