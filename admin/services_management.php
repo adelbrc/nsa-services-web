@@ -3,6 +3,13 @@ include ('../libs/php/isConnected.php');
 if ($_SESSION['user']['rank'] !=3) {
 	header('location: ../index.php?error=accessUnauthorized');
 }
+include('../libs/php/functions/translation.php');
+
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 include ('../libs/php/db/db_connect.php');
 ?>
 <!DOCTYPE html>
@@ -26,12 +33,12 @@ include ('../libs/php/db/db_connect.php');
 			<?php include('includes/sidebar.php'); ?>
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-				<h1 class="h2" id='user'>Services Management</h1>
+				<h1 class="h2" id='user'><?php echo $GestionService[$langue]; ?></h1>
 				<div class="btn-toolbar mb-2 mb-md-0">
 					<div class="btn-group mr-2">
 					<ul class="nav justify-content-center" role="tablist">
 						<li class="nav-item">
-							<a class="nav-link active button_export" role="button" href="functions/exportServices.php">Exporter les données</a>
+							<a class="nav-link active button_export" role="button" href="functions/exportServices.php">Export</a>
 						</li>
 						<li class="nav-item">
 						<a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
@@ -43,7 +50,7 @@ include ('../libs/php/db/db_connect.php');
 				<div class="tab-content" id="userTab">
 				<div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
 					<div class="dataContainer">
-					<h3 class="text-center">Services List</h3>
+					<h3 class="text-center"><?php echo $listeService[$langue]; ?></h3>
 					<?php if (isset($_GET['status']) && $_GET['status'] == 'field_blank') { ?>
 						<div class="alert text-center alert-danger" role="alert">
 						Tous les champs doivent être complétés !
@@ -56,12 +63,12 @@ include ('../libs/php/db/db_connect.php');
 							<thead>
 							<tr>
 								<th scope="col">#</th>
-								<th scope="col">Name</th>
-								<th scope="col">Price</th>
-								<th scope="col">Discount Price</th>
-								<th scope="col">Category</th>
+								<th scope="col"><?php echo $Nom[$langue]; ?></th>
+								<th scope="col"><?php echo $prix[$langue]; ?></th>
+								<th scope="col"><?php echo $prixReduit[$langue]; ?></th>
+								<th scope="col"><?php echo $categorie[$langue]; ?></th>
 								<th scope="col">Edit</th>
-								<th scope="col">Delete</th>
+								<th scope="col"></th>
 							</tr>
 							</thead>
 							<tbody>

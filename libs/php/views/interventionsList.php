@@ -9,8 +9,8 @@ $interventions = Intervention::getAllInterventions();
         <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Partner ID</th>
-            <th scope="col">Order ID</th>
+            <th scope="col"><?php echo $partenaires[$langue]; ?> ID</th>
+            <th scope="col"><?php echo $commande[$langue]; ?> ID</th>
             <th scope="col">Date</th>
           </tr>
         </thead>

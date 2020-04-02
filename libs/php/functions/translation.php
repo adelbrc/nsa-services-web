@@ -77,4 +77,57 @@ $etatPaiement = array('État des paiements', 'Payment Status');
 $dateReservation = array('Date de réservation', 'Reservation Date');
 $etatCommande = array('État de la commande', 'Order Status');
 $panier = array('Mon panier de services', 'My basket of services');
+
+//mainHeader
+$deconnexion = array('Deconnexion', 'Log Out');
+$langues = array('Langues','Languages');
+
+//admin/HeaderNavigation
+$settings = array('Parametres', 'Settings');
+// admin/sidebar
+$utilisateurs = array('Utilisateurs','Customers');
+$abonnement = array('Abonnements','Subscriptions');
+$partenaires = array('Partenaires','Partners');
+$report = array('Rapports','Saved reports');
+$cemois = array('Mois en cours',"Current month");
+$trimeste = array('Dernier trimestre','Last quarter');
+$cetteAnnee = array('Cette années','Year-end sale');
+
+// admin/displayUsers
+$gestionUser = array('Gestions des utilisateurs','Users Management');
+$listeUser = array('Liste des utilisateurs', 'Users List');
+
+// admin/subscriptions
+$gestionAbonnement = array('Gestion des abonnements','subscriptions managements');
+$duree = array('Duree (en mois)','Duration (month)');
+$nbHeureCompris = array('Nb d\'heure compris', 'nb of hours included');
+$nbJourCompris = array('Nb de jours compris', 'nb of days included');
+$heureOuvertFermer = array('Heure Ouvert/Fermer', 'Hour open/close');
+$heureOuverture = array('Heure ouverture', 'Opening time');
+$heureFermeture = array('Heure Fermeture','Time Closing');
+$creeAbonnement = array('Creer abonnement','Create subcription');
+
+// admin/partner_management
+$gestionPartner = array('Gestion des partenaires', 'Partners Management');
+$entreprise = array('Entreprise','Corporation');
+$listPartner = array('Liste des partenaires','Partners List');
+$disponibleDebut = array('Disponibilite debut', 'Disponibility Begin');
+$disponibleFin = array('Disponibilite fin', 'Disponibility end');
+
+
+// admin/services_management
+$GestionService = array('Gestion des services', 'Services Management');
+$listeService = array('Liste des services','Services List');
+$prixReduit = array('Prix réduit','Discount Price');
+$categorie = array('Catégorie','Category');
+$nomService = array('Nom du service','Service name');
+$name = array('Nom', 'Name');
+//newCategoriesModal
+$nvlleCategorie = array('Nouvelle catégorie', 'New category');
+$creenvlleCategorie = array('Creer une nouvelle catégorie', 'Create a new category');
+$nbAvantReduc = array('Nb avant réduction', 'Nb before discount');
+
+// admin/order_management
+$gestionCommande = array('Gestion des commandes','Orders Management');
+$dateCommande = array('Date commande','Order Date');
  ?>

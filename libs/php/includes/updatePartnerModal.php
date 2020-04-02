@@ -22,11 +22,11 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputLname">Lastname</label>
+              <label for="inputLname"><?php echo $Nom[$langue]; ?></label>
               <input type="text" class="form-control" id="inputLname" value="<?php echo $partner->getLastName(); ?>" disabled>
             </div>
             <div class="form-group col-md-6">
-              <label for="inputFname">Firstname</label>
+              <label for="inputFname"><?php echo $prestataire[$langue]; ?></label>
               <input type="text" class="form-control" id="inputFname" value="<?php echo $partner->getFirstname(); ?>" disabled>
             </div>
           </div>
@@ -36,33 +36,33 @@
               <input type="email" class="form-control" id="inputEmail" name="email" value="<?php echo $partner->getEmail(); ?>">
             </div>
             <div class="form-group col-md-6">
-              <label for="inputPhone">Phone</label>
+              <label for="inputPhone"><?php echo $telNumber[$langue]; ?></label>
               <input type="phone" class="form-control" id="inputPhone" name="phone" value="<?php echo $partner->getPhoneNumber(); ?>">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputAddr">Address</label>
+              <label for="inputAddr"><?php echo $address[$langue]; ?></label>
               <input type="text" class="form-control" id="inputAddr" name="addr" value="<?php echo $partner->getAddress(); ?>">
             </div>
             <div class="form-group col-md-6">
-              <label for="inputCity">City</label>
+              <label for="inputCity"><?php echo $Ville[$langue]; ?></label>
               <input type="text" class="form-control" id="inputCity" name="city" value="<?php echo $partner->getCity(); ?>">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputBegin">Disponibility Begin</label>
+              <label for="inputBegin"><?php echo $disponibleDebut[$langue]; ?></label>
               <input type="datetime" class="form-control" id="inputBegin" name="dispo_begin" value="<?php echo $partner->getDisponibilityBegin(); ?>">
             </div>
             <div class="form-group col-md-6">
-              <label for="inputEnd">Disponibility End</label>
+              <label for="inputEnd"><?php echo $disponibleFin[$langue]; ?></label>
               <input type="datetime" class="form-control" id="inputEnd" name="dispo_end" value="<?php echo $partner->getDisponibilityEnd(); ?>">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputPricing">Pricing</label>
+              <label for="inputPricing"><?php echo $prix[$langue]; ?></label>
               <input type="text" class="form-control" id="inputPricing" name="pricing" value="<?php echo $partner->getPricing(); ?>">
             </div>
             <div class="form-group">
@@ -81,7 +81,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
       </div>
     </div>
   </div>

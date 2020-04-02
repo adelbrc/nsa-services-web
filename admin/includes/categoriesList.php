@@ -14,8 +14,8 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Delete</th>
+                <th scope="col"><?php echo $name[$langue]; ?></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>

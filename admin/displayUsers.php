@@ -4,7 +4,13 @@ if ($_SESSION['user']['rank'] !=3) {
 	header('location: ../index.php?error=accessUnauthorized');
 }
 include ('../libs/php/db/db_connect.php');
+include('../libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 
 if(isset($_GET['id']) AND !empty($_GET['id'])) {
 	$supprimer = (int) $_GET['id'];
@@ -33,12 +39,12 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 		<?php include('includes/sidebar.php'); ?>
 		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-			<h1 class="h2" id='user'>Users Management</h1>
+			<h1 class="h2" id='user'><?php echo $gestionUser[$langue]; ?></h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group mr-2">
 					<ul class="nav justify-content-center" role="tablist">
 						<li class="nav-item">
-							<a class="nav-link active button_export" role="button" href="functions/exportUser.php">Exporter les données</a>
+							<a class="nav-link active button_export" role="button" href="functions/exportUser.php">Export</a>
 						</li>
 						<li class="nav-item">
 						<a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>
@@ -50,19 +56,19 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 			<div class="tab-content" id="userTab">
 			<div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list">
 				<div class="dataContainer">
-				<h3 class="text-center">Users List</h3>
+				<h3 class="text-center"><?php echo $listeUser[$langue]; ?></h3>
 				<div class="row">
 					<div class="table-responsive">
 					<table class="table" id="dtBasicExample">
 						<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Firstname</th>
-							<th scope="col">Lastname</th>
+							<th scope="col"><?php echo $Prenom[$langue]; ?></th>
+							<th scope="col"><?php echo $Nom[$langue]; ?></th>
 							<th scope="col">Email</th>
-							<th scope="col">Phone</th>
+							<th scope="col"><?php echo $telNumber[$langue]; ?></th>
 							<th scope="col">Edit</th>
-							<th scope="col">Delete</th>
+							<th scope="col"></th>
 						</tr>
 						</thead>
 						<tbody>

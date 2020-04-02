@@ -9,14 +9,14 @@ $list = Order::getAllOrders();
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Order ID</th>
-            <th scope="col">Customer ID</th>
-            <th scope="col">Order Date</th>
-            <th scope="col">Quantity</th>
+            <th scope="col"><?php echo $commande[$langue]; ?> ID</th>
+            <th scope="col"><?php echo $utilisateurs[$langue]; ?> ID</th>
+            <th scope="col"><?php echo $dateCommande[$langue]; ?> </th>
+            <th scope="col"><?php echo $quantite[$langue]; ?></th>
             <th scope="col">Service ID</th>
-            <th scope="col">Payment Status</th>
-            <th scope="col">Reservation Date</th>
-            <th scope="col">Order Status</th>
+            <th scope="col"><?php echo $etatPaiement[$langue]; ?></th>
+            <th scope="col"><?php echo $dateReservation[$langue]; ?></th>
+            <th scope="col"><?php echo $etatCommande[$langue]; ?></th>
             <th scope="col">Cancel</th>
           </tr>
         </thead>

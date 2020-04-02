@@ -2,7 +2,13 @@
 require_once("../libs/php/classes/User.php");
 require_once("../libs/php/classes/Partner.php");
 include("../libs/php/isConnected.php");
+include('../libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 if (!isConnected()) {
   header("Location: ../login.php");
   exit;
@@ -26,7 +32,7 @@ if ($user->getRank() != "3") {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Home Services | Partners Management</title>
+    <title>Home Services | <?php echo $gestionPartner[$langue]; ?></title>
   </head>
   <body>
     <header>
@@ -37,12 +43,12 @@ if ($user->getRank() != "3") {
         <?php include('includes/sidebar.php'); ?>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2" id='user'>Partners Management</h1>
+            <h1 class="h2" id='user'><?php echo $gestionPartner[$langue]; ?></h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
                 <ul class="nav justify-content-center" role="tablist">
                   <li class="nav-item">
-                    <a class="nav-link active button_export" role="button" href="functions/exportPartner.php">Exporter les données</a>
+                    <a class="nav-link active button_export" role="button" href="functions/exportPartner.php">Export</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Stats</button></a>

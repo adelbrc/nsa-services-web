@@ -4,7 +4,13 @@ require_once("../libs/php/classes/Partner.php");
 require_once("../libs/php/classes/Order.php");
 require_once("../libs/php/classes/Intervention.php");
 include("../libs/php/isConnected.php");
+include('../libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 if (!isConnected()) {
   header("Location: ../login.php");
   exit;
@@ -28,7 +34,7 @@ if ($user->getRank() != "3") {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Home Services | Orders Management</title>
+    <title>Home Services | <?php echo $gestionCommande[$langue]; ?></title>
   </head>
   <body>
     <header>
@@ -39,12 +45,12 @@ if ($user->getRank() != "3") {
         <?php include('includes/sidebar.php'); ?>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2" id='user'>Orders Management</h1>
+            <h1 class="h2" id='user'><?php echo $gestionCommande[$langue]; ?></h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
                 <ul class="nav justify-content-center" role="tablist">
                   <li class="nav-item">
-                    <a class="nav-link active button_export" role="button" href="functions/exportOrders.php">Exporter les données</a>
+                    <a class="nav-link active button_export" role="button" href="functions/exportOrders.php">Export</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="interventions-tab" data-toggle="tab" href="#interventions" role="tab" aria-controls="interventions" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Interventions</button></a>

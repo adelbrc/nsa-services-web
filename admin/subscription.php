@@ -4,7 +4,13 @@ if ($_SESSION['user']['rank'] !=3) {
 header('location: ../index.php?error=accessUnauthorized');
 }
 include ('../libs/php/db/db_connect.php');
+include('../libs/php/functions/translation.php');
 
+if (isset($_GET['lang'])) {
+	$langue = $_GET["lang"];
+}else {
+$langue = 0;
+}
 
 if(isset($_GET['id']) AND !empty($_GET['id'])) {
 	$supprimer = (int) $_GET['id'];
@@ -18,7 +24,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 <html lang="fr" dir="ltr">
 <head>
 	<meta charset="utf-8">
-	<title>Gestion des abonnements</title>
+	<title><?php echo $gestionAbonnement[$langue]; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="../ressources/style/admin.css">
 	<link rel="stylesheet" href="../ressources/style/sidebar.css">
@@ -46,7 +52,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 			if (isset($_GET['error']) && $_GET['error'] == 'fieldblanks') {
 			echo '<div class="alert alert-danger col-md-12" role="alert" style="margin-top: 20px; text-align: center;">' . 'Vous devez remplir tout les champs !' . '</div>';
 			} ?>
-			<h1 class="display-5" style="text-align: center;">Abonnements</h1>
+			<h1 class="display-5" style="text-align: center;"><?php echo $abonnement[$langue]; ?></h1>
 			<?php include('createSubscriptionBtn.php');?>
 			<br>
 			<?php
@@ -59,12 +65,12 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 			<thead>
 				<tr>
 				<th scope="col">#</th>
-				<th scope="col">nom</th>
-				<th scope="col">Prix</th>
-				<th scope="col">Nb d'heure compris</th>
-				<th scope="col">Nb de jours ouverts</th>
-				<th scope="col">Heure open/close</th>
-				<th scope="col">Durée</th>
+				<th scope="col"><?php echo $Nom[$langue]; ?></th>
+				<th scope="col"><?php echo $prix[$langue]; ?></th>
+				<th scope="col"><?php echo $nbHeureCompris[$langue]; ?></th>
+				<th scope="col"><?php echo $nbJourCompris[$langue]; ?></th>
+				<th scope="col"><?php echo $heureOuvertFermer[$langue]; ?></th>
+				<th scope="col"><?php echo $duree[$langue]; ?></th>
 				<th scope="col"></th>
 				<th scope="col"></th>
 				</tr>

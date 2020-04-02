@@ -22,12 +22,12 @@
       <a class="nav-link" href="dashboard.php">Dashboard</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="libs/php/deconnexion.php">Deconnexion</a>
+      <a class="nav-link" href="libs/php/deconnexion.php"><?php echo $deconnexion[$langue]; ?></a>
     </li>
   <?php } ?>
   <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Langue
+          <?php echo $langues[$langue]; ?>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="?lang=0"><img src="https://img.icons8.com/color/64/000000/france.png"/></a>
