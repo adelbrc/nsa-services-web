@@ -68,7 +68,7 @@ class Order {
 	// Add new order
 	public static function addOrder(Order $order) {
 
-			$sql = "INSERT INTO nsaservices_db.order(customer_id, order_date, nbHours, service_id,
+			$sql = "INSERT INTO nsaservices_db.orders(customer_id, order_date, nbHours, service_id,
 					payment_status, reservation_date, order_status) VALUES(:cid, :odate, :nbh, :sid,
 					:paystatus, :reservdate, :orderstatus)";
 
@@ -87,7 +87,7 @@ class Order {
 	// Get an order by ID
 	public function getOrderByID($id){
 
-		$sql = "SELECT * FROM nsaservices_db.order WHERE order_id = ?";
+		$sql = "SELECT * FROM nsaservices_db.orders WHERE order_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute([$id]);
 
@@ -103,7 +103,7 @@ class Order {
 	// Get user's orders
 	public function getUserOrders($uid) {
 
-		$sql = "SELECT * FROM nsaservices_db.order WHERE customer_id = ?";
+		$sql = "SELECT * FROM nsaservices_db.orders WHERE customer_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute([$uid]);
 
@@ -121,7 +121,7 @@ class Order {
 	// List all orders
 	public static function getAllOrders(){
 
-		$sql = "SELECT * FROM nsaservices_db.order ORDER BY order_date DESC";
+		$sql = "SELECT * FROM nsaservices_db.orders ORDER BY order_date DESC";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute();
 
@@ -144,7 +144,7 @@ class Order {
 
 			$this->order_status = 2;
 
-			$sql = "UPDATE nsaservices_db.order SET order_status = ? WHERE order_id = ?";
+			$sql = "UPDATE nsaservices_db.orders SET order_status = ? WHERE order_id = ?";
 			$req = $GLOBALS["conn"]->prepare($sql);
 			$req->execute([2, $this->order_id]);
 

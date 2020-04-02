@@ -38,17 +38,15 @@ function resilier() {
 }
 
 
-function commandeService($conn, $booking) {
-	// var_dump($booking);
-	// var_dump($a->data);
-	
+function commandeService($conn, $booking) {	
 	// 1. On insert la commande
 	// 2. On insert la/les sessions / horaires à intervenir
 
 	// 1. On insert la commande
-	$queryInsertOrder = $conn->prepare("INSERT INTO `order`(`customer_id`, `order_date`, `service_id`) VALUES (?, NOW(), ?)");
+	$queryInsertOrder = $conn->prepare("INSERT INTO `orders`(`customer_id`, `total_price`, `order_date`, `service_id`) VALUES (?, ?, NOW(), ?)");
 	$res = $queryInsertOrder->execute([
 		$booking->customer_id,
+		10.1,
 		$booking->id
 	]);
 
@@ -73,6 +71,42 @@ function commandeService($conn, $booking) {
 
 }
 
+
+
+
+function commandeServiceSpontanee($conn, $data) {
+	// var_dump($data);
+
+	$now = date("Y-m-d H:i:s");
+
+	$queryInsertSpontanService = $conn->prepare("INSERT INTO spontaneous_service(user_id, title, description, order_date, service_date, start_time, end_time, service_place) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+	$res = $queryInsertSpontanService->execute([
+		$data->customer_id,
+		$data->title,
+		$data->description,
+		$now,
+		$data->date,
+		$data->start_time,
+		$data->end_time,
+		$data->place
+	]);
+
+	if ($queryInsertSpontanService->rowCount())
+		echo json_encode(['status' => "success", "action" => "redirect", 'message' => "mes_services.php?status=serviceBooked"]);
+	else
+		echo json_encode(['status' => "error", 'message' => "Une erreur s'est produite, veuillez réessayer plus tard"]);
+
+
+
+
+}
+
+
+
+
+
+
+
 	
 if (isset($_GET["form"]) && !empty($_GET["form"])) {
 
@@ -92,8 +126,12 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 			commandeService($conn, $obj);
 			break;
 
+		case 'commandeServiceSpontanee':
+			commandeServiceSpontanee($conn, $obj);
+			break;
+
 		default:
-			header("Location: /index.php");
+			header("Location: /".$form.".php");
 			break;
 	}
 

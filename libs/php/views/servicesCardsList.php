@@ -35,7 +35,7 @@ $list = Service::getAllServices();
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item"><?php echo "Prix: " . $service->getPrice() . "€/h"; ?></li>
 					<li class="list-group-item"><?php echo "Categorie: " . $service->getServiceCategory(); ?></li>
-					<li class="list-group-item"><?php echo "Id Plan: " . $service->getStripeID(); ?></li>
+					<!-- <li class="list-group-item"><?php echo "Id Plan: " . $service->getStripeID(); ?></li> -->
 				</ul>
 				
 				<div class="card-body">
@@ -101,6 +101,10 @@ $list = Service::getAllServices();
 									<div class="form-group">
 										<label>Heure de fin</label>
 										<input type="time" class="form-control form-input tfin" value="10:00" min="09:00" max="20:00" step="900">
+									</div>
+
+									<div>
+										<p>Prix : <span class="prix">10</span> €</p>
 									</div>
 								</div>
 							</div>

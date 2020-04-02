@@ -8,24 +8,6 @@ require_once('libs/stripe-php-master/init.php');
 \Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
 
-if (isset($_POST["submitDemande"])		&&
-	isset($_POST["serviceTitle"])		&& !empty($_POST["serviceTitle"]) &&
-	isset($_POST["servicePlace"])		&& !empty($_POST["servicePlace"]) &&
-	isset($_POST["serviceDescription"]) && !empty($_POST["serviceDescription"])
-) {
-
-		var_dump($_POST);
-
-		// les services spontanés sont facturés 24 h après
-		$plan = \Stripe\Plan::create([
-			'product' => "prod_GpapCVaO00gLke",
-
-		]);
-
-} else {
-	$error = "Veuillez remplir tous les champs";
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -66,9 +48,12 @@ if (isset($_POST["submitDemande"])		&&
 
 
 			<section class="sizedSection">
-				<h2 class="text-center">Nos services</h2>
-				<div class="row">
-					<?php include("libs/php/views/servicesCardsList.php"); ?>
+				<div class="dataContainer">
+					<h2 class="text-center">Nos services</h2>
+					<div class="row">
+						<?php include("libs/php/views/servicesCardsList.php"); ?>
+					</div>
+
 				</div>
 			</section>
 
@@ -76,37 +61,44 @@ if (isset($_POST["submitDemande"])		&&
 				<div class="dataContainer">
 					<h2 class="text-center">Besoin d'un service non listé ?</h2>
 
-					<form action="" method="POST" class="w-50 mx-auto">
+					<form action="mes_services.php" method="POST" class="w-50 mx-auto">
 						<p>Renseignez les informations concernant votre service et nous reviendrons vers vous le plus vite possible</p>
 
 						<div class="form-group">
 							<label>Titre</label>
-							<input type="text" name="serviceTitle" class="form-control" placeholder="Titre de la demande">
+							<input type="text" id="service_title" class="form-control" placeholder="Titre de la demande">
 						</div>
 
 						<div class="form-group">
-							<label>Date et heure</label>
-							<input placeholder="Date et heure du service demandé" type="text" id="date-picker-example" class="form-control datepicker">
-
-							<!-- <input type="date" id="datetimepicker" class="form-control">
-							<div class="input-append date form_datetime" data-date="2013-02-21T15:25:00Z">
-								<input size="16" type="text" value="" readonly>
-								<span class="add-on"><i class="icon-remove"></i></span>
-								<span class="add-on"><i class="icon-calendar"></i></span>
-							</div> -->
+							<label>Date</label>
+							<input type="date" placeholder="Date de l'intervention" id="service_date" class="form-control" value="<?= date('Y-m-d', time()); ?>">
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="service_time_box">
+							<label id="service_startTime_title">Heure</label>
+							<input type="time" id="service_startTime" class="form-control" value="09:00">
+							<small>Votre demande nécessite une heure de fin ? <input type="checkbox" id="more_time"></small>
+						</div>
+						
+
+						<div class="form-group" id="service_endTime_box" style="display: none;">
+							<label id="service_endTime_title">Heure de fin</label>
+							<input type="time" id="service_endTime" value="15:00" class="form-control">
+						</div>
+
+						<div class="form-group" id="">
 							<label>Lieu de l'intervention</label>
-							<input type="text" name="servicePlace" class="form-control" placeholder="Lieu de l'intervention">
+							<input type="text" id="service_place" class="form-control" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
 						</div>
 
 						<div class="form-group">
 							<label>Description</label>
-							<textarea class="form-control" name="serviceDescription" rows="3"></textarea>
+							<textarea class="form-control" id="service_description" rows="3"></textarea>
 						</div>
 
-						<button type="submit" name="submitDemande" class="btn btn-primary">Envoyer ma demande</button>
+						<p>Nous reviendrons vers vous aussi vite que possible afin de donner suite à votre demande.</p>
+
+						<button type="button" name="submit_demande" id="submit_demande" class="btn btn-primary">Envoyer ma demande</button>
 					</form>
 				</div>
 			</section>
@@ -127,6 +119,12 @@ if (isset($_POST["submitDemande"])		&&
 		<script src="libs/js/checkout.js" charset="utf-8"></script>
 		<!-- le js ci-dessous (script.js) contient doAjax() -->
 		<script src="ressources/js/script.js"></script>
+
+
+
+
+
+
 
 		<script>
 			var panier = [];
@@ -294,8 +292,52 @@ if (isset($_POST["submitDemande"])		&&
 					$('#bookingModal').modal('hide');
 
 				}
+
+
+				// la petite gestion du checkbox : affiche/cacher l'input pour un temps de fin de service
+				$("#more_time").click(function() {
+					if ($("#service_startTime_title").text() == "Heure de début") {
+						$("#service_startTime_title").text("Heure");
+						$("#service_endTime").removeAttr("name");
+					} else {
+						$("#service_startTime_title").text("Heure de début");
+						$("#service_endTime").attr("name", "service_endTime");
+					}
+					$("#service_endTime_box").toggle();
+				});
+
+
+				// quand on clique pour envoyer un service NON propose
+				$("#submit_demande").click(function() {
+					var title = $("#service_title").val();
+					var date = $("#service_date").val();
+					var start_time = $("#service_startTime").val();
+					var place = $("#service_place").val();
+					var description = $("#service_description").val();
+
+					var data = {
+						"customer_id" : "<?= $_SESSION["user"]["id"] ?>",
+						"title" : title,
+						"date" : date,
+						"start_time" : start_time,
+						"end_time" : null,
+						"place" : place,
+						"description" : description
+					};
+
+					// si on a un attribut name sur l'input d'heure de fin, on ajoute sa valeur dans notre objet data
+					if ($("#service_endTime").attr("name") === "service_endTime") {
+						data["end_time"] = $("#service_endTime").val();
+					}
+
+					console.log(data);
+
+					doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeServiceSpontanee', JSON.stringify(data));
+
+				});
+
+
 				
-				// $("#addPanier_button").on("click", addPanier);
 				$("#firstBookingBox").attr("value", (new Date()).toISOString().substr(0,10));
 		
 			// });

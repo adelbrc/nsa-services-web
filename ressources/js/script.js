@@ -72,19 +72,17 @@ function doAjax(url, form, obj) {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			console.log(this.responseText);
 			var jsonResponse = JSON.parse(this.responseText);
-			if (jsonResponse.status == true) {
-				$(".alert").show();
-				$(".alert").on('closed.bs.alert', function () {
-					location.reload();
-				});
-			} else {
-				console.log(jsonResponse.status);
+			console.log(jsonResponse);
+
+			// on prend en charge les differentes actions possibles
+			if (jsonResponse.action === "redirect") {
+				window.location.replace("./"+jsonResponse.message); 
 			}
+
+
 		}
 	};
 
-	console.log("my obj = ");
-	console.log(obj);
 	xhttp.open("GET", url+"?form=" + form + "&obj=" + obj, true);
 	xhttp.send();
 }

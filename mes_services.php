@@ -28,8 +28,15 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		Order::addOrder($order);
 
 		$status = 1;
+		$message = "Votre demande a bien été prise en compte";
 
 	}
+}
+
+if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
+	$success = 1;
+	$message = "Votre demande a bien été envoyée, nous vous notifierons dès qu'elle sera prise en charge par un prestataire";
+
 }
 
 
@@ -161,7 +168,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 				?>
 
 				<div class="alert alert-success w-50 mx-auto" role="alert">
-					Votre demande a bien été prise en compte
+					<?= $message ?>
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -242,7 +249,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 								<?php
 								
 								// !!!! la table order est aussi un mot clé ORDER BY donc faut mettre les ``
-								$queryMyServices = $conn->prepare("SELECT * FROM `order` WHERE customer_id = ?");
+								$queryMyServices = $conn->prepare("SELECT * FROM `orders` WHERE customer_id = ?");
 								$queryMyServices->execute([$_SESSION["user"]["id"]]);
 
 								while (($row = $queryMyServices->fetch())): ?>

@@ -141,7 +141,12 @@
 						</ul>
 					</div>
  -->
+
 				</div>
+
+ 				<div class="container">
+ 					<p class="font-weight-bold">Total : <span id="panier_total">0</span> €</p>
+ 				</div>
 
 			</div>
 			<div class="modal-footer">
