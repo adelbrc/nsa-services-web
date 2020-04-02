@@ -39,9 +39,22 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	}
 }
 
-if (isset($_GET["status"]) && $_GET["status"] == "serviceBooked") {
-	$success = 1;
-	$message = "Votre demande a bien été envoyée, nous vous notifierons dès qu'elle sera prise en charge par un prestataire";
+if (isset($_GET["status"]) && !empty($_GET["status"])) {
+	switch ($_GET["status"]) {
+		case 'serviceBooked':
+			$success = 1;
+			$message = "Réservation effectuée avec succès !";
+			break;
+
+		case 'otherServiceBooked':
+			$success = 1;
+			$message = "Votre demande a bien été envoyée, nous vous notifierons dès qu'elle sera prise en charge par un prestataire";
+			break;
+		
+		default:
+			# code...
+			break;
+	}
 
 }
 

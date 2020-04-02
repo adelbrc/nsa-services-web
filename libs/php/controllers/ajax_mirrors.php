@@ -67,7 +67,7 @@ function commandeService($conn, $booking) {
 		]);
 	}
 
-	echo json_encode(['status' => "success", 'message' => $message . " and sessions added"]);
+	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
 
 }
 
@@ -92,7 +92,7 @@ function commandeServiceSpontanee($conn, $data) {
 	]);
 
 	if ($queryInsertSpontanService->rowCount())
-		echo json_encode(['status' => "success", "action" => "redirect", 'message' => "mes_services.php?status=serviceBooked"]);
+		echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=otherServiceBooked", "message" => ""]);
 	else
 		echo json_encode(['status' => "error", 'message' => "Une erreur s'est produite, veuillez réessayer plus tard"]);
 
