@@ -9,6 +9,7 @@ if (isset($_GET['lang'])) {
 }else {
 $langue = 0;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

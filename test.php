@@ -22,13 +22,10 @@ require_once('libs/stripe-php-master/init.php');
 
 
 // commande d'unité de babysitting
-\Stripe\SubscriptionItem::createUsageRecord(
-	'si_GxDyoFvXXkslHr',
-	[
-		'quantity' => 100,
-		'timestamp' => 1522893428,
-		'action' => "increment",
-	]
-);
+
+$customers = \Stripe\Customer::all(['email' => "narek@ok.com"]);
+
+var_dump($customers["data"][0]);
+var_dump($customers["data"][0]["id"]);
 
 ?>

@@ -149,23 +149,33 @@ require_once('libs/stripe-php-master/init.php');
 
 				var jour_compteur = 2;
 
-				function addBooking() {
-					$("#bookings_container").append(`
-						<div class=\"container booking_box border m-0 mr-3\">
+
+
+
+
+
+
+				function addBooking(plan_, p_id) {
+					$("#"+plan_).append(`
+						<div class=\"container booking_box booking_`+p_id+` border m-0 mr-3\">
 							<div class=\"form-group\">
 								<span class=\"compteurjour\">Jour `+jour_compteur+`</span>
 								<span aria-hidden="true" class=\"removeBooking\" onclick=\"removeBooking(this)\">×</span>
-								<input type=\"date\" class=\"form-control form-input jour\" value=\"`+(new Date()).toISOString().substr(0,10)+`\">
+								<input type=\"date\" class=\"form-control form-input jour_${p_id}\" value=\"`+(new Date()).toISOString().substr(0,10)+`\">
 							</div>
 
 							<div class=\"form-group\">
 								<label>Heure de début</label>
-								<input type="time" class="form-control form-input tdebut" value="09:00" min="09:00" max="20:00" step="900">
+								<input type="time" class="form-control form-input tdebut_${p_id}" value="09:00" min="09:00" max="20:00" step="900">
 							</div>
 
 							<div class=\"form-group\">
 								<label>Heure de fin</label>
-								<input type="time" class="form-control form-input tfin" value="10:00" min="09:00" max="20:00" step="900">
+								<input type="time" class="form-control form-input tfin_${p_id}" value="10:00" min="09:00" max="20:00" step="900">
+							</div>
+							
+							<div>
+								<p>Prix : <span class="prix">15</span> €</p>
 							</div>
 						</div>`
 					);
@@ -175,10 +185,23 @@ require_once('libs/stripe-php-master/init.php');
 				}
 
 
+
+
+
+
+
 				function removePanierItem(el, service, idx) {
+					service = service.replace("\/", "");
+					console.log(service);
+					console.log(panier[service]);
 					console.log("je supprime " + panier[service]["data"][idx].jour);
+
+					// en fait, imagine chaque item dans le panier a un idx respectif, 1, 2, 3
+					// si je supprime le premier, ca marche, mais maintenant tout s'est décalé a gauche d'un cran, a[1] est devenu a[0], ...
+					// du coup, les idx initiaux sont d'un rang a droite de trop, il faudrait html-ment les mettre a jour, c chiant
+					// du coup, on peut juste mettre lelement en question a vide, pas de decalage d'idx, et a la verification, on verifie que ca vaut pas rien
 					panier[service]["data"].splice(idx, 1);
-					// panier[service][idx] = null
+					// panier[service][idx] = undefined;
 
 					el.parentNode.parentNode.removeChild(el.parentNode);
 					document.querySelector("#panier_text").innerText = parseInt(document.querySelector("#panier_text").innerText) - 1;
@@ -187,12 +210,17 @@ require_once('libs/stripe-php-master/init.php');
 				}
 
 
+
+
+
+
 				function addPanier(el) {
 					var service_name = $(el).attr("data-service-name");
 					var service_plan_id = $(el).attr("data-service-plan_id");
 					var service_price = $(el).attr("data-service-price");
 					var service_id = $(el).attr("data-service-id");
 					var customer_id = $(el).attr("data-customer-id");
+					var stripe_cus_id = $(el).attr("data-customer-stripe-id");
 					var booking = [];
 					/*
 					* Important :
@@ -208,6 +236,7 @@ require_once('libs/stripe-php-master/init.php');
 						panier[service_name].price = service_price;
 						panier[service_name].id = service_id;
 						panier[service_name].customer_id = customer_id;
+						panier[service_name].stripe_cus_id = stripe_cus_id;
 						panier[service_name].data = [];
 					}
 
@@ -215,10 +244,11 @@ require_once('libs/stripe-php-master/init.php');
 					// 2. ajout au panier graphique
 
 					// 1. creation du panier logique
-					var bookings_length = document.querySelectorAll(".booking_box ").length;
-					var jours = document.querySelectorAll(".jour");
-					var tdebuts = document.querySelectorAll(".tdebut");
-					var tfins = document.querySelectorAll(".tfin");
+					var bookings_length = document.querySelectorAll(".booking_"+service_id).length;
+
+					var jours = document.querySelectorAll(".jour_"+service_id);
+					var tdebuts = document.querySelectorAll(".tdebut_"+service_id);
+					var tfins = document.querySelectorAll(".tfin_"+service_id);
 
 					for (var i = 0; i < bookings_length; i++) {
 						if (tdebuts[i].value > tfins[i].value) {
@@ -247,14 +277,61 @@ require_once('libs/stripe-php-master/init.php');
 					// console.log(Object.keys(panier).length);
 					// console.log(panier.length);
 
+
+
+
 					$("#validateOrder").click(function() {
 						// on va faire une ajax pour toutes cateogires de services demandées (ex: babysitting, plomberie, ...)
 						// on recupere les index associatifs qu'on avait mis en place avant
 						var panier_keys = Object.keys(panier);
+						// for (var i = 0; i < panier_keys.length; i++) {
+
+						// for (key of panier_keys) {
+							console.log(panier_keys.length);
 						for (var i = 0; i < panier_keys.length; i++) {
-							// on envoie chaque categorie en json
-							doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[panier_keys[i]]));
+							console.log("i");						
+							// console.log("Pour " + panier_keys[i] + ", j'ai " + panier[panier_keys[i]].data.length + " jours");
+							// var total_heures = 0;
+							for (session of panier[panier_keys[i]].data) {
+								console.log("j");
+							// 	// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
+							// 	// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
+							// 	total_heures += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
+							// 	// console.log(session);
+							}
+							// console.log("En tout, pour " + panier_keys[i] + ", j'ai " + total_heures + " h");
 						}
+
+							// on envoie chaque categorie en json
+							// BDD
+							//	doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[panier_keys[i]]));
+							console.log(service_plan_id); // plan_...
+							
+
+							// var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
+
+							// stripe.redirectToCheckout({
+							// 	items: [
+							// 		{"plan": service_plan_id, quantity: 1}],
+
+							// 	// Do not rely on the redirect to the successUrl for fulfilling
+							// 	// purchases, customers may not always reach the success_url after
+							// 	// a successful payment.
+							// 	// Instead use one of the strategies described in
+							// 	// https://stripe.com/docs/payments/checkout/fulfillment
+							// 	successUrl: 'https://your-website.com/success',
+							// 	cancelUrl: 'https://your-website.com/canceled',
+							// })
+							// .then(function (result) {
+							// 	if (result.error) {
+							// 		// If `redirectToCheckout` fails due to a browser or network
+							// 		// error, display the localized error message to your customer.
+							// 		var displayError = document.getElementById('error-message');
+							// 		displayError.textContent = result.error.message;
+							// 	}
+							// });
+
+						// } pour le for initial
 					});
 
 
@@ -268,7 +345,9 @@ require_once('libs/stripe-php-master/init.php');
 						}
 					});
 
-					var service_name_id = service_name.replace(/ /g,'');
+					var service_name_id;
+					service_name_id = service_name.replace(/ /g,'');
+					service_name_id = service_name_id.replace(/\'/g,'');
 
 					if (rajouter) {
 						$("#panier").append(`
@@ -280,21 +359,26 @@ require_once('libs/stripe-php-master/init.php');
 					}
 
 					for (var i = 0; i < bookings_length; i++) {
+						var service_name2 = service_name.replace(/'/g,"\\'");
 
 						$("#panier_liste_"+service_name_id).append(`
 							<li>
-								<input type="date" value="` + panier[service_name].data[i].jour + `">
+								<input type="date" value="${panier[service_name].data[i].jour}">
 								de
-								<input type="time" value="` + panier[service_name].data[i].tdebut + `">
+								<input type="time" value="${panier[service_name].data[i].tdebut}">
 								à
-								<input type="time" value="` + panier[service_name].data[i].tfin + `">
-								<button class="btn btn-danger" onclick="removePanierItem(this, '${service_name}', ` + i + `)"><span aria-hidden="true">×</span></button>
+								<input type="time" value="${panier[service_name].data[i].tfin}">
+								<button class="btn btn-danger" onclick="removePanierItem(this, '${service_name2}', ${i})">
+									<span aria-hidden="true">×</span>
+								</button>
 							</li>
 						`);
+
+
 					}
 
 
-					$('#bookingModal').modal('hide');
+					$('#bookingModal'+service_id).modal('hide');
 
 				}
 

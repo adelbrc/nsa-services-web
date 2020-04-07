@@ -233,7 +233,7 @@ div.scrollmenu a {
 	border-radius: 3px;
 }
 
-#bookings_container {
+.bookings_container {
 	overflow-x: auto;
 }
 
