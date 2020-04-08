@@ -58,16 +58,17 @@ function commandeService($conn, $booking) {
 	$lastInsertId = $conn->lastInsertId();
 
 	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
-	$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? AND RAND ( ) LIMIT 1 ");
-	$querysearchPartner->execute([$booking->id]);
-	$resta = $querysearchPartner->fetch();
+  $response = 0;
+  while ($response != 1) {
 
-	$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
-	$queryCompareDatePartner->execute([$resta['partner_id']]);
-	$resCompareDatePartner = $queryCompareDatePartner -> fetchAll();
+		$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
+		$querysearchPartner->execute([$booking->id]);
+		$resta = $querysearchPartner->fetch();
 
-	$response = 0;
-	while ($response != 1) {
+		$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
+		$queryCompareDatePartner->execute([$resta['partner_id']]);
+		$resCompareDatePartner = $queryCompareDatePartner -> fetchAll();
+
 		//Je recupere tout les services du prestataire
 		foreach ($resCompareDatePartner as $compareDate ) {
 
@@ -84,7 +85,7 @@ function commandeService($conn, $booking) {
 				$response =1;
 			}
 		}
-	}
+	 }
 
 
 	// 3. On insert la/les sessions / horaires à intervenir
