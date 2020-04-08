@@ -53,7 +53,7 @@
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 		          <a class="dropdown-item" href="?lang=0"><img src="https://img.icons8.com/color/64/000000/france.png"/></a>
 		          <a class="dropdown-item" href="?lang=1"><img src="https://img.icons8.com/color/64/000000/usa.png"/></a>
-		          <!-- <a class="dropdown-item" href="index.php?langue=0">Something else here</a> -->
+		          <a class="dropdown-item" href="index.php?langue=0">Demande de traduction</a>
 		        </div>
 		      </li>
 		</ul>
@@ -125,30 +125,6 @@
 
 				<div class="container" id="panier">
 
-<!-- 					<div class="container">
-
-						<h4 class="panier_title">Babysitting</h4>
-						<ul>
-							<li>
-								<input type="date" value="21/03/2020">
-								de
-								<input type="time" value="10:00">
-								à
-								<input type="time" value="12:00">
-								<button class="btn btn-danger"><span aria-hidden="true">×</span></button>
-							</li>
-
-							<li>
-								<input type="date" value="21/03/2020">
-								de
-								<input type="time" value="10:00">
-								à
-								<input type="time" value="12:00">
-								<button class="btn btn-danger"><span aria-hidden="true">×</span></button>
-							</li>
-						</ul>
-					</div>
- -->
 
 				</div>
 

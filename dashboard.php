@@ -160,7 +160,7 @@ $langue = 0;
 
 
 		// var DOMAIN = "http://nsaservices.local";
-		var DOMAIN = "http://localhost/ESGI/PA2020/nsa-services-web";
+		var DOMAIN = "http://nsaservices.local";
 
 		var stripe = Stripe(PUBLISHABLE_KEY);
 
