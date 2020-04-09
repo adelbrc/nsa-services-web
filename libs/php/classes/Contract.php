@@ -10,11 +10,6 @@ $conn = DBManager::getConn();
  */
 class Contract extends FPDF
 {
-    private $id;
-    private $beginning_date;
-    private $end_date;
-    private $clauses;
-    private $partner_id;
 
     // Page header
     function Header()
@@ -42,6 +37,7 @@ class Contract extends FPDF
         $this->Cell(0,10,'Page '.$this->PageNo(),0,0,'C');
     }
 
+    
 
 }
 

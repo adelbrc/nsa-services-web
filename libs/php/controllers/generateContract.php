@@ -39,7 +39,9 @@ if (!isset($clauses) || empty($clauses)) {
 }
 
 
-
 Partner::generateContract($partner_id, $begin, $end, $clauses);
+
+header("Location: ../../../admin/partners_management.php?contract=success");
+exit;
 
 ?>

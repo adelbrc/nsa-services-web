@@ -243,6 +243,10 @@ class Partner {
   // Generate pdf contract
   public function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
       $pdf = new Contract();
+      $file_name = "contract-" . $partner_id . "-" . date("Y-m-d-h-i-s");
+      $destination = "/var/www/nsa-services-web/collaborateur/contracts/" . $file_name;
+
+
       $pdf->AddPage();
       $pdf->Ln(10);
       $pdf->SetFont('Arial','B',16);
@@ -257,9 +261,21 @@ class Partner {
       $pdf->Ln(10);
       $pdf->Cell(40,10, 'Clauses : ');
       $pdf->Ln(10);
-      $pdf->Cell(40,10, $clauses);
-      $pdf->Output();
+      $pdf->MultiCell(0,5,$clauses);
+      $pdf->Output('F', $destination, true);
+
+      $sql = "INSERT INTO contract(beginning, end_date, clauses, partner_id, file_path) VALUES(:beginning, :end_date, :clauses, :pid, :filepath)";
+      $req = $GLOBALS["conn"]->prepare($sql);
+      $req->execute(array(
+         "beginning" => $beginning_date,
+         "end_date" => $end_date,
+         "clauses" => $clauses,
+         "pid" => $partner_id,
+         "filepath" => $destination,
+      ));
+
   }
+
 
 }
 
