@@ -243,8 +243,8 @@ class Partner {
   // Generate pdf contract
   public function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
       $pdf = new Contract();
-      $file_name = "contract-" . $partner_id . "-" . date("Y-m-d-h-i-s");
-      $destination = "/var/www/nsa-services-web/collaborateur/contracts/" . $file_name;
+      $file_name = "contract-" . $partner_id . "-" . date("Y-m-d-H-i-s");
+      $destination = $_SERVER['DOCUMENT_ROOT']. "/collaborateur/contracts/" . $file_name;
 
 
       $pdf->AddPage();
@@ -274,6 +274,17 @@ class Partner {
          "filepath" => $destination,
       ));
 
+  }
+
+  public function getContract() {
+
+      $sql = "SELECT file_path FROM contract WHERE partner_id = ?";
+      $req = $GLOBALS["conn"]->prepare($sql);
+      $req->execute([$this->partner_id]);
+
+      $result = $req->fetch();
+
+      return $result;
   }
 
 

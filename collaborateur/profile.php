@@ -1,7 +1,10 @@
-<?php include ('../libs/php/isConnected.php');
+<?php
+
+include ('../libs/php/isConnected.php');
 if (!isConnected()) {
   header('location: ../index.php?error=accessUnauthorized');
 }
+
 require_once('../libs/php/classes/Partner.php');
 
 $partnerId = Partner::getPartnerById($_SESSION["user"]["partner_id"]);
@@ -37,6 +40,9 @@ $partnerId = Partner::getPartnerById($_SESSION["user"]["partner_id"]);
                       </li>
                       <li class="nav-item">
                         <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Settings</button></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="<?php echo $partnerId->getContract(); ?>"><button type="button" class="btn btn-sm btn-outline-primary">Contrat</button></a>
                       </li>
                     </ul>
                   </div>
