@@ -57,16 +57,14 @@ function resilier($conn, $obj) {
 }
 
 
-function commandeService($conn, $booking) {	
 
-
-	// partie stripe
-	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
-
-
+function commandeService($conn, $booking) {
 	// 1. On insert la commande
-	// 2. On insert la/les sessions / horaires à intervenir
-	// partie bdd
+	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
+	// 2Bis. On compare la date du service avec tout les autres services deja affecter au meme prestataire
+	// 3. On insert la/les sessions / horaires à intervenir
+
+	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
 	// 1. On insert la commande
 	$queryInsertOrder = $conn->prepare("INSERT INTO `orders`(`customer_id`, `total_price`, `order_date`, `service_id`) VALUES (?, ?, NOW(), ?)");
@@ -81,8 +79,6 @@ function commandeService($conn, $booking) {
 	} else {
 		echo json_encode(['status' => "error", "message" => "Order was not inserted"]);
 	}
-
-	// 2. On insert la/les sessions / horaires à intervenir
 	$lastInsertId = $conn->lastInsertId();
 
 
@@ -90,26 +86,58 @@ function commandeService($conn, $booking) {
 	* For (pour chaque type de service commandé)
 	*	1. On crée l'abonnement
 	*	2. Pour autant de sessions commandées, on crée des "usage records" => des "entrées" d'utilisation
-	*
-	*
 	*/
 
-
 	// echo $booking->stripe_cus_id;
-
-
 	$session_counter = 0;	
+	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
+	$response = 0;
+
+	while ($response != 1) {
+
+		$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
+		$querysearchPartner->execute([$booking->id]);
+		$resta = $querysearchPartner->fetch();
+
+		$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
+		$queryCompareDatePartner->execute([$resta['partner_id']]);
+		$resCompareDatePartner = $queryCompareDatePartner -> fetchAll();
+
+		//Je recupere tout les services du prestataire
+		foreach ($resCompareDatePartner as $compareDate ) {
+
+			//Je recupere le panier en cours pour le comparer avec les services deja commandé
+			foreach ($booking->data as $sess) {
+				$dateInBDD = $compareDate[2];
+				$dateUnPanier = $sess->jour;
+
+				//Si le prestataire est deja occuper ce jour alors on en cherche un autre
+				if ($dateInBDD == $dateUnPanier) {
+					$response = 0;
+					//echo json_encode(['dateBDD' => $dateInBDD, "DatePanier" => $dateUnPanier]);
+				} else {
+					$response =1;
+				}
+			}
+		}
+	}
+
+	// 3. On insert la/les sessions / horaires à intervenir
+
 	foreach ($booking->data as $session) {
-		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`) VALUES (?, ?, ?, ?)");
+		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id) VALUES (?,?, ?, ?, ?)");
 		$queryInsertSession->execute([
 			$lastInsertId,
 			$session->jour,
 			$session->tdebut,
-			$session->tfin
+			$session->tfin,
+			$resta['partner_id']
 		]);
+
 		$session_counter += 1;
 	}
 
+	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
 
 	// stripe
 	// on verifie si l'USER A DEJA un ABONNEMENT ACTIF a ce SERVICE
@@ -197,7 +225,7 @@ function commandeServiceSpontanee($conn, $data) {
 
 
 
-	
+
 if (isset($_GET["form"]) && !empty($_GET["form"])) {
 
 	$form = htmlentities($_GET["form"], ENT_QUOTES);
@@ -211,7 +239,7 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 		case 'resilier':
 			resilier($conn, $obj);
 			break;
-		
+
 		case 'commandeService':
 			commandeService($conn, $obj);
 			break;

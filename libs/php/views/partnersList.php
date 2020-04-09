@@ -19,7 +19,8 @@ $roles = Partner::getAllRoles();
             <th scope="col"><?php echo $telNumber[$langue]; ?></th>
             <th scope="col"><?php echo $Ville[$langue]; ?></th>
             <th scope="col">Edit</th>
-            <th scope="col"></th>
+            <th scope="col">Delete</th>
+            <th scope="col">Générer Contrat</th>
           </tr>
         </thead>
         <tbody>
@@ -44,6 +45,11 @@ $roles = Partner::getAllRoles();
                   <i class="fa fa-close"></i>
                 </button>
               </td>
+              <td>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalContract<?php echo $partner->getPID(); ?>">
+                  <i class="fa fa-clone"></i>
+                </button>
+              </td>
             </tr>
 
             <!-- Modal Update Partner -->
@@ -52,6 +58,10 @@ $roles = Partner::getAllRoles();
 
             <!-- Modale Delete Partner -->
             <?php include("../libs/php/includes/deletePartnerModal.php"); ?>
+            <!-- End Modal -->
+
+            <!-- Modal Generate Contract -->
+            <?php include("../libs/php/includes/generateContractModal.php"); ?>
             <!-- End Modal -->
           <?php endforeach; ?>
         </tbody>

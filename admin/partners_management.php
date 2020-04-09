@@ -9,6 +9,7 @@ if (isset($_GET['lang'])) {
 }else {
 $langue = 0;
 }
+
 if (!isConnected()) {
   header("Location: ../login.php");
   exit;

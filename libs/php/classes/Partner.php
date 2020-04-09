@@ -1,5 +1,6 @@
 <?php
 
+require_once("Contract.php");
 require_once("DBManager.php");
 
 $conn = DBManager::getConn();
@@ -196,7 +197,7 @@ class Partner {
   // ------------------------
   // Update a partner's infos
   public function updatePartnerInfos($pid, $address, $city, $email, $phone){
-    
+
     $this->address = $address;
     $this->city = $city;
     $this->email = $email;
@@ -236,6 +237,30 @@ class Partner {
 
     return $result;
   }
+
+
+  // --------------------
+  // Generate pdf contract
+  public function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
+      $pdf = new Contract();
+      $pdf->AddPage();
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial','B',16);
+      $pdf->Cell(40,10,'Hello World!');
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial','',12);
+      $pdf->Cell(40,10, 'Partner ID : ' . $partner_id);
+      $pdf->Ln(10);
+      $pdf->Cell(40,10, 'Starting Date : ' . $beginning_date);
+      $pdf->Ln(10);
+      $pdf->Cell(40,10, 'Ending Date : ' . $end_date);
+      $pdf->Ln(10);
+      $pdf->Cell(40,10, 'Clauses : ');
+      $pdf->Ln(10);
+      $pdf->Cell(40,10, $clauses);
+      $pdf->Output();
+  }
+
 }
 
 
