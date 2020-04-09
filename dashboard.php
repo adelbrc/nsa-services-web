@@ -10,6 +10,16 @@ if (isset($_GET['lang'])) {
 $langue = 0;
 }
 
+// \Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
+
+// $session = \Stripe\Checkout\Session::create([
+//   'payment_method_types' => ['card'],
+//   'mode' => 'setup',
+//   'customer' => 'cus_FOsk5sbh3ZQpAU',
+//   'success_url' => 'https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
+//   'cancel_url' => 'https://example.com/cancel',
+// ]);
+
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -147,6 +157,10 @@ $langue = 0;
 
 	<script>
 
+
+
+
+
 		var btn_resililer = document.getElementById("resilier_sub");
 		if (btn_resililer != null) {
 
@@ -177,13 +191,12 @@ $langue = 0;
 		var redirectToCheckout = function(planId) {
 			stripe.redirectToCheckout({
 					items: [{ plan: planId, quantity: 1 }],
-					successUrl:
-						// "https://" +
-						DOMAIN +
-						"/success.php?session_id={CHECKOUT_SESSION_ID}",
-					// cancelUrl: "https://" + DOMAIN + "/canceled.html"
-					cancelUrl: DOMAIN + "/dashboard.php",
+					successUrl:DOMAIN + "/success.php?session_id={CHECKOUT_SESSION_ID}",
+					cancelUrl: DOMAIN + "/dashboard.php?session_id={CHECKOUT_SESSION_ID}",
 					customerEmail: "<?= $_SESSION["user"]["email"] ?>"
+					// payment_method: {card: cardElement}
+
+
 				})
 				.then(handleResult);
 		};

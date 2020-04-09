@@ -50,6 +50,11 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 			$success = 1;
 			$message = "Votre demande a bien été envoyée, nous vous notifierons dès qu'elle sera prise en charge par un prestataire";
 			break;
+
+		case 'cancel':
+			$success = 1;
+			$message = "Réservation annulée";
+			break;
 		
 		default:
 			# code...

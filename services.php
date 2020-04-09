@@ -52,6 +52,12 @@ require_once('libs/stripe-php-master/init.php');
 				</div>
 			</section>
 
+			<section class="sizedSection">
+				<div class="dataContainer">
+					<div class="row" id="error-message">
+					</div>
+				</div>
+			</section>
 
 			<section class="sizedSection">
 				<div class="dataContainer">
@@ -135,6 +141,10 @@ require_once('libs/stripe-php-master/init.php');
 			var panier = [];
 
 			// $(function () {
+
+				/* * * * * * * * 
+				* RemoveBooking
+				/* * * * * * * */
 				function removeBooking(booking) {
 					booking.parentNode.parentNode.parentNode.removeChild(booking.parentNode.parentNode);
 					// jour_compteur -= 1;
@@ -154,7 +164,9 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
-
+				/* * * * * * * * 
+				* AddBooking
+				* * * * * * * * */
 				function addBooking(plan_, p_id) {
 					$("#"+plan_).append(`
 						<div class=\"container booking_box booking_`+p_id+` border m-0 mr-3\">
@@ -190,6 +202,9 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
+				/* * * * * * * * 
+				* RemovePanierItem
+				* * * * * * * * */
 				function removePanierItem(el, service, idx) {
 					service = service.replace("\/", "");
 					console.log(service);
@@ -211,9 +226,91 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
+				/* * * * * * * * 
+				* ValidateOrder
+				* * * * * * * * */
+				$("#validateOrder").click(function() {
+					// on va faire une ajax pour toutes cateogires de services demandées (ex: babysitting, plomberie, ...)
+					// on recupere les index associatifs qu'on avait mis en place avant
+					var panier_keys = Object.keys(panier);
+
+					// var stripe_items = [];
+
+					// for (key of panier_keys) {
+					// 	console.log(key);
+					// 	console.log("Pour " + key + ", j'ai " + panier[key].data.length + " jours");
+					// 	var total_heures = 0;
+					// 	for (session of panier[key].data) {
+					// 		// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
+					// 		// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
+					// 		total_heures += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
+					// 		// console.log(session);
+					// 	}
+					// 	console.log("En tout, pour " + key + ", j'ai " + total_heures + " h");
+
+					// 	// stripe_items.push({"plan": panier[key].plan_id, quantity: total_heures});
+					// 	stripe_items.push({"plan": panier[key].plan_id, quantity: 1});
+					// 	break;
+					// }
+
+					// console.log(stripe_items);
+
+
+					// let xhttp = new XMLHttpRequest();
+
+					// xhttp.onreadystatechange = function() {
+					// 	if (xhttp.readyState === 4 && xhttp.status === 200) {
+					// 		console.log("here");
+					// 		console.log(xhttp.responseText);
+					// 	}
+					// };
+
+					// xhttp.open("GET", "libs/php/controllers/ajax_mirrors.php?form=stripe_service");
+
+					// xhttp.send();
+
+					// on envoie chaque categorie en json
+					// BDD
+
+					for (service of panier_keys) {
+						doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
+					}
+					// console.log(service_plan_id); // plan_...
+
+					// var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
+
+					// stripe.redirectToCheckout({
+					// 	items: stripe_items,
+
+					// 	// Do not rely on the redirect to the successUrl for fulfilling
+					// 	// purchases, customers may not always reach the success_url after
+					// 	// a successful payment.
+					// 	// Instead use one of the strategies described in
+					// 	// https://stripe.com/docs/payments/checkout/fulfillment
+					// 	successUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=serviceBooked',
+					// 	cancelUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=cancel'
+					// })
+					// .then(function (result) {
+					// 	if (result.error) {
+					// 		// If `redirectToCheckout` fails due to a browser or network
+					// 		// error, display the localized error message to your customer.
+					// 		var displayError = document.getElementById('error-message');
+					// 		displayError.textContent = result.error.message;
+					// 	}
+					// });
+
+				});
 
 
 
+
+
+
+
+
+				/* * * * * * * * 
+				* AddPanier
+				* * * * * * * * */
 				function addPanier(el) {
 					var service_name = $(el).attr("data-service-name");
 					var service_plan_id = $(el).attr("data-service-plan_id");
@@ -280,60 +377,6 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
-					$("#validateOrder").click(function() {
-						// on va faire une ajax pour toutes cateogires de services demandées (ex: babysitting, plomberie, ...)
-						// on recupere les index associatifs qu'on avait mis en place avant
-						var panier_keys = Object.keys(panier);
-						// for (var i = 0; i < panier_keys.length; i++) {
-
-						// for (key of panier_keys) {
-							console.log(panier_keys.length);
-						for (var i = 0; i < panier_keys.length; i++) {
-							console.log("i");						
-							// console.log("Pour " + panier_keys[i] + ", j'ai " + panier[panier_keys[i]].data.length + " jours");
-							// var total_heures = 0;
-							for (session of panier[panier_keys[i]].data) {
-								console.log("j");
-							// 	// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
-							// 	// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
-							// 	total_heures += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
-							// 	// console.log(session);
-							}
-							// console.log("En tout, pour " + panier_keys[i] + ", j'ai " + total_heures + " h");
-						}
-
-							// on envoie chaque categorie en json
-							// BDD
-							//	doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[panier_keys[i]]));
-							console.log(service_plan_id); // plan_...
-							
-
-							// var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
-
-							// stripe.redirectToCheckout({
-							// 	items: [
-							// 		{"plan": service_plan_id, quantity: 1}],
-
-							// 	// Do not rely on the redirect to the successUrl for fulfilling
-							// 	// purchases, customers may not always reach the success_url after
-							// 	// a successful payment.
-							// 	// Instead use one of the strategies described in
-							// 	// https://stripe.com/docs/payments/checkout/fulfillment
-							// 	successUrl: 'https://your-website.com/success',
-							// 	cancelUrl: 'https://your-website.com/canceled',
-							// })
-							// .then(function (result) {
-							// 	if (result.error) {
-							// 		// If `redirectToCheckout` fails due to a browser or network
-							// 		// error, display the localized error message to your customer.
-							// 		var displayError = document.getElementById('error-message');
-							// 		displayError.textContent = result.error.message;
-							// 	}
-							// });
-
-						// } pour le for initial
-					});
-
 
 					// 2. ajout au panier graphique
 
@@ -383,6 +426,16 @@ require_once('libs/stripe-php-master/init.php');
 				}
 
 
+
+
+
+
+
+
+
+				/* * * * * * * * 
+				* MoreTime
+				* * * * * * * * */
 				// la petite gestion du checkbox : affiche/cacher l'input pour un temps de fin de service
 				$("#more_time").click(function() {
 					if ($("#service_startTime_title").text() == "Heure de début") {
@@ -396,6 +449,14 @@ require_once('libs/stripe-php-master/init.php');
 				});
 
 
+
+
+
+
+
+				/* * * * * * * * 
+				* SubmiteDemande (service non propose)
+				* * * * * * * * */
 				// quand on clique pour envoyer un service NON propose
 				$("#submit_demande").click(function() {
 					var title = $("#service_title").val();
