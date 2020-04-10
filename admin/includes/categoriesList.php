@@ -20,12 +20,12 @@
             </thead>
             <tbody>
               <?php $q = $conn->query('SELECT * FROM category');
-                    while($result = $q->fetch()){ ?>
+                    while($category = $q->fetch()){ ?>
                 <tr>
-                  <th scope="row"><?php echo $result['id']; ?></th>
-                  <td><?php echo $result['name']; ?></td>
+                  <th scope="row"><?php echo $category['id']; ?></th>
+                  <td><?php echo $category['name']; ?></td>
                   <td>
-                    <button type="button" onclick="supprimerCategorie(<?php echo $result['id']; ?>)"  id="deleteSub" class="btn btn-danger">
+                    <button type="button" onclick="supprimerCategorie(<?php echo $category['id']; ?>)"  id="deleteSub" class="btn btn-danger">
                       <i class="fa fa-close"></i>
                     </button>
                   </td>
