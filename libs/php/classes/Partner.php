@@ -44,93 +44,93 @@ class Partner {
 
 	// ---------------------------
 	// Getters
-	public static function getPID() {
+	public function getPID() {
 		return $this->partner_id;
 	}
 
-	public static function getFirstname(){
+	public function getFirstname(){
 		return $this->firstname;
 	}
 
-	public static function getLastName(){
+	public function getLastName(){
 		return $this->lastname;
 	}
 
-	public static function getCorpName(){
+	public function getCorpName(){
 		return $this->corp_name;
 	}
 
-	public static function getCorpId(){
+	public function getCorpId(){
 		return $this->corp_id;
 	}
 
-	public static function getRoleId(){
+	public function getRoleId(){
 		return $this->role_id;
 	}
 
-	public static function getAddress(){
+	public function getAddress(){
 		return $this->address;
 	}
 
-	public static function getCity(){
+	public function getCity(){
 		return $this->city;
 	}
 
-	public static function getEmail(){
+	public function getEmail(){
 		return $this->email;
 	}
 
-	public static function getPassword(){
+	public function getPassword(){
 		return $this->address;
 	}
 
-	public static function getPhoneNumber(){
+	public function getPhoneNumber(){
 		return $this->phone;
 	}
 
-	public static function getQRCode(){
+	public function getQRCode(){
 		return $this->qrcode;
 	}
 
-	public static function getPricing(){
+	public function getPricing(){
 		return $this->pricing;
 	}
 
-	public static function getDisponibilityBegin(){
+	public function getDisponibilityBegin(){
 		return $this->disponibility_begin;
 	}
 
-	public static function getDisponibilityEnd(){
+	public function getDisponibilityEnd(){
 		return $this->disponibility_end;
 	}
 
 	// -------------------------
 	// Setters
-	public static function setCorpName($name){
+	public function setCorpName($name){
 		$this->corp_name = $name;
 	}
 
-	public static function setCorpId($id){
+	public function setCorpId($id){
 		$this->corp_id = $id;
 	}
 
-	public static function setRoleId($id){
+	public function setRoleId($id){
 	 $this->role_id = $id;
 	}
 
-	public static function setQRCode($qrcode){
+	public function setQRCode($qrcode){
 	 $this->qrcode = $qrcode;
 	}
 
-	public static function setPricing($price){
+	public function setPricing($price){
 	 $this->pricing = $price;
 	}
 
-	public static function setDisponibilityBegin($date){
+	public function setDisponibilityBegin($date){
 	 $this->disponibility_begin = $date;
 	}
 
-	public static function setDisponibilityEnd($date){
+	public function setDisponibilityEnd($date){
 	 $this->disponibility_end = $date;
 	}
 
@@ -138,7 +138,7 @@ class Partner {
 	// Methods
 
 	// Get a partner by ID
-	public static function getPartnerById($id){
+	public function getPartnerById($id){
 		$sql = "SELECT * FROM partner WHERE partner_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute([$id]);
@@ -155,7 +155,7 @@ class Partner {
 
 	// ------------------
 	// Check if PID exists
-	public static function checkPID($pid){
+	public function checkPID($pid){
 
 		$sql = "SELECT partner_id FROM partner WHERE partner_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
@@ -167,7 +167,7 @@ class Partner {
 	}
 
 	// Get a partner's role with role ID
-	public static function getRoleById($id){
+	public function getRoleById($id){
 		$sql = "SELECT name FROM role WHERE id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute([$id]);
@@ -196,7 +196,7 @@ class Partner {
 
 	// ------------------------
 	// Update a partner's infos
-	public static function updatePartnerInfos($pid, $address, $city, $email, $phone){
+	public function updatePartnerInfos($pid, $address, $city, $email, $phone){
 
 		$this->address = $address;
 		$this->city = $city;
@@ -215,7 +215,7 @@ class Partner {
 
 	// -----------------------
 	// Delete Partner
-	public static function delete(){
+	public function delete(){
 		$sql = "DELETE FROM partner WHERE partner_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute([$this->partner_id]);
@@ -241,7 +241,7 @@ class Partner {
 
 	// --------------------
 	// Generate pdf contract
-	public static function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
+	public function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
 			$pdf = new Contract();
 			$file_name = "contract-" . $partner_id . "-" . date("Y-m-d-H-i-s");
 			// $destination = $_SERVER['DOCUMENT_ROOT']. "/collaborateur/contracts/" . $file_name;
@@ -277,7 +277,7 @@ class Partner {
 
 	}
 
-	public static function getContract() {
+	public function getContract() {
 
 			$sql = "SELECT file_path FROM contract WHERE partner_id = ?";
 			$req = $GLOBALS["conn"]->prepare($sql);
