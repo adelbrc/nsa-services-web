@@ -138,7 +138,7 @@ class Partner {
   // Methods
 
   // Get a partner by ID
-  public function getPartnerById($id){
+  public static function getPartnerById($id){
     $sql = "SELECT * FROM partner WHERE partner_id = ?";
     $req = $GLOBALS["conn"]->prepare($sql);
     $req->execute([$id]);
@@ -284,7 +284,7 @@ class Partner {
 
       $result = $req->fetch();
 
-      return $result;
+      return $result["file_path"];
   }
 
 
