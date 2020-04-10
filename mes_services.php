@@ -55,7 +55,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 			$success = 1;
 			$message = "Réservation annulée";
 			break;
-		
+
 		default:
 			# code...
 			break;
@@ -152,7 +152,35 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 							end:"2020-03-18T11:00:00+00:00",
 							allDay : false // will make the time show
 						},
+						<?php
+							$rechercheCommande = $conn->prepare("SELECT * FROM orders WHERE customer_id = ?");
+							$rechercheCommande->execute([$_SESSION['user']['id']]);
+							$resCommande = $rechercheCommande -> fetchAll();
 
+
+
+							foreach ($resCommande as $resCommandes) {
+
+								$rechercheNomService = $conn->prepare("SELECT * FROM service WHERE id = ?");
+								$rechercheNomService->execute([$resCommandes[4]]);
+								$resNomService = $rechercheNomService -> fetch();
+
+								$rechercheOrderSession = $conn->prepare("SELECT * FROM order_session WHERE order_id = ?");
+								$rechercheOrderSession->execute([$resCommandes[0]]);
+								$resOrderSession = $rechercheOrderSession -> fetchAll();
+								foreach ($resOrderSession as $resOrderSessions) {
+						?>
+								{
+									title:"<?php echo  $resNomService[2] ?>",
+									start:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[3];?>",
+									end:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[4];?>",
+									allDay : false // will make the time show
+								},
+
+						<?php
+								}
+							}
+						 	?>
 						{
 							title:"Meeting2",
 							start:"2020-03-18T12:30:00+00:00",

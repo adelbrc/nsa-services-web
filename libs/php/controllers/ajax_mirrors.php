@@ -9,7 +9,7 @@ if (!isset($_GET["obj"]) || empty($_GET["obj"])) {
 }
 
 /*
-* Sommaire des fonctions 
+* Sommaire des fonctions
 * 1. resilier()
 * 2. commandeService()
 * 3. commandeServiceSpontanee
@@ -46,7 +46,7 @@ function resilier($conn, $obj) {
 			} catch (Exception $e) {
 				echo json_encode(['status' => "error", "data" => "This subscription ID has currently no subscription"]);
 			}
-		
+
 		} else {
 			echo json_encode(['status' => false, 'error' => 'removeSubRowCount', 'data' => $res["sub_id"]]);
 		}
@@ -89,19 +89,20 @@ function commandeService($conn, $booking) {
 	*/
 
 	// echo $booking->stripe_cus_id;
-	$session_counter = 0;	
+	$session_counter = 0;
 	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
-	$response = 0;
+	$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
+	$querysearchPartner->execute([$booking->id]);
+	$resta = $querysearchPartner->fetch();
 
-	while ($response != 1) {
+	$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
+	$queryCompareDatePartner->execute([$resta['partner_id']]);
+	$resCompareDatePartner = $queryCompareDatePartner -> fetchAll();
 
-		$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
-		$querysearchPartner->execute([$booking->id]);
-		$resta = $querysearchPartner->fetch();
+	$response = 1;
 
-		$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
-		$queryCompareDatePartner->execute([$resta['partner_id']]);
-		$resCompareDatePartner = $queryCompareDatePartner -> fetchAll();
+	while ($response == 0) {
+	//
 
 		//Je recupere tout les services du prestataire
 		foreach ($resCompareDatePartner as $compareDate ) {
@@ -120,6 +121,15 @@ function commandeService($conn, $booking) {
 				}
 			}
 		}
+		if ($response == 0) {
+			$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
+			$querysearchPartner->execute([$booking->id]);
+			$resta = $querysearchPartner->fetch();
+
+			$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
+			$queryCompareDatePartner->execute([$resta['partner_id']]);
+			$resCompareDatePartner = $queryCompareDatePartner -> fetchAll();
+		}
 	}
 
 	// 3. On insert la/les sessions / horaires à intervenir
@@ -136,8 +146,6 @@ function commandeService($conn, $booking) {
 
 		$session_counter += 1;
 	}
-
-	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
 
 	// stripe
 	// on verifie si l'USER A DEJA un ABONNEMENT ACTIF a ce SERVICE

@@ -175,7 +175,7 @@ $langue = 0;
 
 
 		// var DOMAIN = "http://nsaservices.local";
-		var DOMAIN = "http://nsaservices.local";
+		var DOMAIN = "http://localhost/nsa-services-web";
 
 		var stripe = Stripe(PUBLISHABLE_KEY);
 

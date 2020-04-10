@@ -14,7 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="../../libs/php/controllers/newCategory.php" method="post">
+        <form action="../libs/php/controllers/newCategory.php" method="post">
           <div class="form-row">
             <input type="hidden" name="pid" value="">
             <div class="form-group col-md-6 mx-auto">
