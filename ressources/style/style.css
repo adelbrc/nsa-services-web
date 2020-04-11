@@ -248,4 +248,11 @@ div.scrollmenu a {
 	max-width: 65%;
 }
 
-
+/* Dashboard Collaborateur */
+.containerd{
+	color : white;
+	padding: 20px;
+	border-style:  solid ;
+	border-radius: 10px;
+	font-size: 25px;
+}

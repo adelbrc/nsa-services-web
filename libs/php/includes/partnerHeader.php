@@ -23,7 +23,7 @@
 				<div class="dropdown-divider"></div>
 				<a class="dropdown-item" href="mon_planning.php">Interventions</a>
 			</div>
-			</li>
+    </li>
       <li class="nav-item">
         <a class="nav-link" href="../libs/php/deconnexion.php">Logout</a>
       </li>
