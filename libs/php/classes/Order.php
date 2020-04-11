@@ -8,21 +8,15 @@ class Order {
 	private $order_id;
 	private $customer_id;
 	private $order_date;
-	private $nbHours;
 	private $service_id;
 	private $payment_status;
-	private $reservation_date;
-	private $order_status;
 
-	function __construct($order_id, $customer_id, $order_date, $nbHours, $service_id, $payment_status, $reservation_date, $order_status) {
+	function __construct($order_id, $customer_id, $order_date, $service_id, $payment_status) {
 		$this->order_id = $order_id;
 		$this->customer_id = $customer_id;
 		$this->order_date = $order_date;
-		$this->nbHours = $nbHours;
 		$this->service_id = $service_id;
 		$this->payment_status = $payment_status;
-		$this->reservation_date = $reservation_date;
-		$this->order_status = $order_status;
 	}
 
 	// -------------------
@@ -40,10 +34,6 @@ class Order {
 		return $this->order_date;
 	}
 
-	public function getNbHours(){
-		return $this->nbHours;
-	}
-
 	public function getServiceId(){
 		return $this->service_id;
 	}
@@ -52,35 +42,22 @@ class Order {
 		return $this->payment_status;
 	}
 
-	public function getReservationDate(){
-		return $this->reservation_date;
-	}
-
-	public function getOrderStatus(){
-		return $this->order_status;
-	}
-
-
-
 	// ----------------------
 	// Methods
 
 	// Add new order
 	public static function addOrder(Order $order) {
 
-			$sql = "INSERT INTO nsaservices_db.orders(customer_id, order_date, nbHours, service_id,
-					payment_status, reservation_date, order_status) VALUES(:cid, :odate, :nbh, :sid,
-					:paystatus, :reservdate, :orderstatus)";
+			$sql = "INSERT INTO nsaservices_db.orders(customer_id, order_date, service_id,
+					payment_status) VALUES(:cid, :odate, :sid,
+					:paystatus)";
 
 			$req = $GLOBALS["conn"]->prepare($sql);
 			$req->execute(array(
-					"cid" => $order->customer_id,
-					"odate" => $order->order_date,
-					"nbh" => $order->nbHours,
-					"sid" => $order->service_id,
-					"paystatus" => $order->payment_status,
-					"reservdate" => $order->reservation_date,
-					"orderstatus" => $order->order_status,
+				"cid" => $order->customer_id,
+				"odate" => $order->order_date,
+				"sid" => $order->service_id,
+				"paystatus" => $order->payment_status
 			));
 	}
 
@@ -92,9 +69,7 @@ class Order {
 		$req->execute([$id]);
 
 		if ($row = $req->fetch()) {
-			return new Order($row["order_id"], $row["customer_id"], $row["order_date"],
-			$row["nbHours"], $row["service_id"], $row["payment_status"], $row["reservation_date"],
-			$row["order_status"]);
+			return new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["payment_status"]);
 		}else {
 			return NULL;
 		}
@@ -110,9 +85,7 @@ class Order {
 		$result = array();
 
 		while ($row = $req->fetch()) {
-			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"],
-			$row["nbHours"], $row["service_id"], $row["payment_status"], $row["reservation_date"],
-			$row["order_status"]);
+			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["payment_status"]);
 		}
 
 		return $result;
@@ -128,9 +101,7 @@ class Order {
 		$result = array();
 
 		while ($row = $req->fetch()) {
-			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"],
-			$row["nbHours"], $row["service_id"], $row["payment_status"], $row["reservation_date"],
-			$row["order_status"]);
+			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["payment_status"]);
 		}
 
 		return $result;
