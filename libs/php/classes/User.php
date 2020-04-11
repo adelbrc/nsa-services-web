@@ -218,6 +218,89 @@ class User {
 
 	}
 
+	public function generateMemberShipInvoice(Membership $membership) {
+			$pdf = new Invoice();
+			$file_name = "invoice-" . $this->id . "-" . $membership->getIdPlan() . "-" . date("Y-m-d-H-i-s");
+			$destination = $_SERVER["DOCUMENT_ROOT"] . "admin/docs/invoices/" . $file_name . ".pdf";
+
+
+			$pdf->AddPage();
+			$pdf->Ln(10);
+			$pdf->SetFont('Arial','B',16);
+			$pdf->Cell(40,10,'Hello World!');
+			$pdf->Ln(10);
+			$pdf->SetFont('Arial','',12);
+			$pdf->Cell(40,10, 'Date of issue : ' . date("d-m-Y"));
+			$pdf->Ln(10);
+			$pdf->Cell(40,10, 'Customer ID : ' . $this->id);
+			$pdf->Ln(10);
+			$pdf->Cell(40,10, 'Customer Email : ' . $this->email);
+			$pdf->Ln(10);
+			$pdf->Cell(40,10, 'Starting Date : ' . $this->getUserMembershipStartingDate($membership->getId()));
+			$pdf->Ln(10);
+			$pdf->Cell(40,10, 'Ending Date : ' . $this->getUserMembershipStartingDate($membership->getId()));
+			$pdf->Ln(10);
+			$pdf->Cell(40,10, 'Price : ' . $membership->getPrice());
+			$pdf->Ln(10);
+			$pdf->Cell(40,10, 'Description : ');
+			$pdf->Ln(10);
+			$pdf->MultiCell(0,5, $membership->getDescription());
+			$pdf->Output('F', $destination, true);
+
+			$sql = "INSERT INTO invoice(customer_id, amount_paid, date_issue, membership_id, file_path) VALUES (:cid, :pr, :di, :mid, :fp)";
+			$req = $GLOBALS["conn"]->prepare($sql);
+			$req->execute(array(
+				"cid" => $this->id,
+				"pr" => $membership->getPrice(),
+				"di" => date("Y-m-d-H-i-s"),
+				"mid" => $membership->getId(),
+				"fp" => $destination,
+			));
+
+	}
+
+	public function generateServiceInvoice($beginning_date, $end_date, $clauses) {
+		$pdf = new Invoice();
+		$file_name = "invoice-" . $this->id . "-" . date("Y-m-d-H-i-s");
+		$destination = $_SERVER["DOCUMENT_ROOT"] . "/admin/docs/invoices/" . $file_name . ".pdf";
+
+
+		$pdf->AddPage();
+		$pdf->Ln(10);
+		$pdf->SetFont('Arial','B',16);
+		$pdf->Cell(40,10,'Hello World!');
+		$pdf->Ln(10);
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(40,10, 'Date of issue : ' . date("d-m-Y"));
+		$pdf->Ln(10);
+		$pdf->Cell(40,10, 'Customer ID : ' . $this->id);
+		$pdf->Ln(10);
+		$pdf->Cell(40,10, 'Customer Email : ' . $this->email);
+		$pdf->Ln(10);
+		$pdf->Cell(40,10, 'Price : ' . $beginning_date);
+		$pdf->Ln(10);
+		$pdf->Cell(40,10, 'Quantity : ' . $end_date);
+		$pdf->Ln(10);
+		$pdf->Cell(40,10, 'Description : ');
+		$pdf->Ln(10);
+		$pdf->MultiCell(0,5,$clauses);
+		$pdf->Output();
+
+	}
+
+	// --------------------------------
+	// Get Customer's membership starting date
+
+	public function getUserMembershipStartingDate($membership_id) {
+		$sql = "SELECT beginning FROM memberships_history WHERE user_id = :uid AND membership_id = :mid AND status = :st";
+		$req = $GLOBALS["conn"]->prepare($sql);
+		$req->execute(array(
+			"uid" => $this->id,
+			"mid" => $membership_id,
+			"st" => "active",
+		));
+	}
+
 }
 
 

@@ -35,6 +35,7 @@
 					<a class="dropdown-item" href="profile.php">Profile</a>
 					<a class="dropdown-item" href="orders.php"><?php echo $commande[$langue]; ?></a>
 					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="invoices.php">Factures</a>
 					<a class="dropdown-item" href="#">Interventions</a>
 				</div>
 			</li>
