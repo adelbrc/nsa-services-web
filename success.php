@@ -1,8 +1,7 @@
 <?php
 require_once("libs/php/classes/User.php");
-require_once("libs/php/classes/Service.php");
-require_once("libs/php/classes/Order.php");
-
+require_once("libs/php/classes/Membership.php");
+require_once("libs/php/classes/Invoice.php");
 include("libs/php/functions/checkInput.php");
 
 include ('libs/php/isConnected.php');
@@ -10,7 +9,6 @@ if (!isConnected()) {
 	header('Location: index.php?error=accessUnauthorized');
 	exit;
 }
-
 
 if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	require_once('libs/stripe-php-master/init.php');
@@ -25,18 +23,6 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	// 2. on l'insert en bdd
 
 	$session = \Stripe\Checkout\Session::retrieve($_GET["session_id"]);
-
-	// Partie Service
-	if (isset($_GET["type"]) && !empty($_GET["type"]) && $_GET["type"] == "service") {
-
-		var_dump($session);
-		$service_id = $_GET["sid"];
-		$service = Service::getServiceById($service_id);
-		$order = new Order(NULL, $_SESSION["user"]["id"], date("Y-m-d-h-i-s"), 1, checkInput($service_id), 1, date("Y-m-d-h-i-s"), 1);
-		Order::addOrder($order);
-		exit;
-
-	}
 
 
 	// Partie Abonnement
@@ -117,6 +103,17 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		// echo "error";
 	}
 
+	// -------------------------------------------------
+    // Récupération de l'objet User qui correspond à un customer
+    $user = User::getUserByID($_SESSION["user"]["id"]);
+
+    // Récupération de l'objet Membership qui correspond à l'abonnement choisi par le customer
+    $membership = Membership::getMembershipById($plan_index);
+
+    // Génération de la facture de l'abonnement choisi
+    $user->generateMemberShipInvoice($membership);
+
+	
 }
 
 ?>
