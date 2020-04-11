@@ -40,5 +40,11 @@ if (isset($_GET['category_id']) && !empty($_GET['category_id']) ) {
 	));
 	exit;
 }
-
+if (isset($_GET['id_devis']) && !empty($_GET['id_devis']) ) {
+	$requeteSupprime =$conn->prepare("UPDATE devis SET status = 'Rejeter' WHERE devis_id = ? ");
+	$requeteSupprime ->execute(array(
+		$_GET['id_devis'],
+	));
+	exit;
+}
  ?>

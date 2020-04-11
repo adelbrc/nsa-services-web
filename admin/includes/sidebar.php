@@ -32,6 +32,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="devis_management.php">
+          <i class="fa fa-usd" aria-hidden="true"></i>
+          Devis
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="orders_management.php">
           <i class="fa fa-eur"></i>
           <?php echo $commande[$langue]; ?>
