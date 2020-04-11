@@ -33,8 +33,13 @@ require_once('libs/stripe-php-master/init.php');
 
 		</header>
 		<main>
+
+			<!-- Recherche de services -->
 			<section class="sizedSection">
 				<div class="dataContainer">
+					<div class="row" id="error-message">
+					</div>
+			
 					<h2 class="text-center"><?php echo $chercherService[$langue]; ?></h2>
 					<form class="text-center searchServicesForm">
 						<div class="form-row">
@@ -52,13 +57,8 @@ require_once('libs/stripe-php-master/init.php');
 				</div>
 			</section>
 
-			<section class="sizedSection">
-				<div class="dataContainer">
-					<div class="row" id="error-message">
-					</div>
-				</div>
-			</section>
 
+			<!-- Nos services -->
 			<section class="sizedSection">
 				<div class="dataContainer">
 					<h2 class="text-center"><?php echo $nosServices[$langue]; ?></h2>
@@ -68,6 +68,10 @@ require_once('libs/stripe-php-master/init.php');
 				</div>
 			</section>
 
+
+
+
+			<!-- Besoin d'un service non liste ? -->
 			<section class="sizedSection">
 				<div class="dataContainer">
 					<h2 class="text-center"><?php echo $serviceInconnu[$langue]; ?></h2>
@@ -82,11 +86,13 @@ require_once('libs/stripe-php-master/init.php');
 
 						<div class="form-group">
 							<label>Date</label>
+							<small>(Optionnel - Inclure une date nous permettra de vous donner un meilleur prix)</small>
 							<input type="date" placeholder="Date de l'intervention" id="service_date" class="form-control" value="<?= date('Y-m-d', time()); ?>">
 						</div>
 
 						<div class="form-group" id="service_time_box">
 							<label id="service_startTime_title">Heure</label>
+							<small>(Optionnel)</small>
 							<input type="time" id="service_startTime" class="form-control" value="09:00">
 							<small>Votre demande nécessite une heure de fin ? <input type="checkbox" id="more_time"></small>
 						</div>
@@ -109,11 +115,28 @@ require_once('libs/stripe-php-master/init.php');
 
 						<p>Nous reviendrons vers vous aussi vite que possible afin de donner suite à votre demande.</p>
 
-						<button type="button" name="submit_demande" id="submit_demande" class="btn btn-primary"><?php echo $envoyerDemande[$langue]; ?></button>
+						<button type="button" name="submit_devis" id="submit_devis" class="btn btn-primary"><?php echo $envoyerDemande[$langue]; ?></button>
 					</form>
 				</div>
 			</section>
 
+
+
+			<!-- Obtenir un devis -->
+<!-- 			<section class="sizedSection">
+				<div class="dataContainer">
+					<h2 class="text-center">Obtenir un devis</h2>
+			
+					<form action="" method="POST" class="w-50 mx-auto">
+						<p>Obtenez un devis pour votre demande et sécurisez votre prix pour plus tard.</p>
+
+
+					</form>
+
+				</div>
+			</section>
+
+ -->			
 		</main>
 
 		<!-- jQuery -->
@@ -145,7 +168,7 @@ require_once('libs/stripe-php-master/init.php');
 				/* * * * * * * * 
 				* RemoveBooking
 				/* * * * * * * */
-				function removeBooking(booking) {
+				function removeBooking(booking, plan_id, prix) {
 					booking.parentNode.parentNode.parentNode.removeChild(booking.parentNode.parentNode);
 					// jour_compteur -= 1;
 					var maj = 1;
@@ -155,6 +178,8 @@ require_once('libs/stripe-php-master/init.php');
 						// $(".compteurjour")[index].text("Jour " + maj);
 						// maj += 1;
 					});
+					
+					document.querySelector(".totalprix_service_"+plan_id).innerHTML =  parseInt(document.querySelector(".totalprix_service_"+plan_id).innerHTML) - prix;
 				}
 
 				var jour_compteur = 2;
@@ -167,30 +192,40 @@ require_once('libs/stripe-php-master/init.php');
 				/* * * * * * * * 
 				* AddBooking
 				* * * * * * * * */
-				function addBooking(plan_, p_id) {
+				function addBooking(plan_, plan_id, prix) {
+
+
+					var bookings_length = document.querySelectorAll(".booking_"+plan_id).length;
+					if (!bookings_length && document.querySelector("#err_msg_"+plan_id)) {
+						document.querySelector("#err_msg_"+plan_id).style.display = "none";
+					}
+
+
 					$("#"+plan_).append(`
-						<div class=\"container booking_box booking_`+p_id+` border m-0 mr-3\">
+						<div class=\"container booking_box booking_`+plan_id+` border m-0 mr-3\">
 							<div class=\"form-group\">
 								<span class=\"compteurjour\">Jour `+jour_compteur+`</span>
-								<span aria-hidden="true" class=\"removeBooking\" onclick=\"removeBooking(this)\">×</span>
-								<input type=\"date\" class=\"form-control form-input jour_${p_id}\" value=\"`+(new Date()).toISOString().substr(0,10)+`\">
+								<span aria-hidden="true" class=\"removeBooking\" onclick=\"removeBooking(this, '${plan_id}', ${prix})\">×</span>
+								<input type=\"date\" class=\"form-control form-input jour_${plan_id}\" value=\"`+(new Date()).toISOString().substr(0,10)+`\">
 							</div>
 
 							<div class=\"form-group\">
 								<label>Heure de début</label>
-								<input type="time" class="form-control form-input tdebut_${p_id}" value="09:00" min="09:00" max="20:00" step="900">
+								<input type="time" class="form-control form-input tdebut_${plan_id}" value="09:00" min="09:00" max="20:00" step="900">
 							</div>
 
 							<div class=\"form-group\">
 								<label>Heure de fin</label>
-								<input type="time" class="form-control form-input tfin_${p_id}" value="10:00" min="09:00" max="20:00" step="900">
+								<input type="time" class="form-control form-input tfin_${plan_id}" value="10:00" min="09:00" max="20:00" step="900">
 							</div>
 							
 							<div>
-								<p>Prix : <span class="prix">15</span> €</p>
+								<p>Prix : <span class="prix">${prix}</span> €</p>
 							</div>
 						</div>`
 					);
+
+					document.querySelector(".totalprix_service_"+plan_id).innerHTML =  parseInt(document.querySelector(".totalprix_service_"+plan_id).innerHTML) + prix;
 
 					jour_compteur += 1;
 
@@ -226,85 +261,6 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
-				/* * * * * * * * 
-				* ValidateOrder
-				* * * * * * * * */
-				$("#validateOrder").click(function() {
-					// on va faire une ajax pour toutes cateogires de services demandées (ex: babysitting, plomberie, ...)
-					// on recupere les index associatifs qu'on avait mis en place avant
-					var panier_keys = Object.keys(panier);
-
-					// var stripe_items = [];
-
-					// for (key of panier_keys) {
-					// 	console.log(key);
-					// 	console.log("Pour " + key + ", j'ai " + panier[key].data.length + " jours");
-					// 	var total_heures = 0;
-					// 	for (session of panier[key].data) {
-					// 		// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
-					// 		// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
-					// 		total_heures += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
-					// 		// console.log(session);
-					// 	}
-					// 	console.log("En tout, pour " + key + ", j'ai " + total_heures + " h");
-
-					// 	// stripe_items.push({"plan": panier[key].plan_id, quantity: total_heures});
-					// 	stripe_items.push({"plan": panier[key].plan_id, quantity: 1});
-					// 	break;
-					// }
-
-					// console.log(stripe_items);
-
-
-					// let xhttp = new XMLHttpRequest();
-
-					// xhttp.onreadystatechange = function() {
-					// 	if (xhttp.readyState === 4 && xhttp.status === 200) {
-					// 		console.log("here");
-					// 		console.log(xhttp.responseText);
-					// 	}
-					// };
-
-					// xhttp.open("GET", "libs/php/controllers/ajax_mirrors.php?form=stripe_service");
-
-					// xhttp.send();
-
-					// on envoie chaque categorie en json
-					// BDD
-
-					for (service of panier_keys) {
-						doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
-					}
-					// console.log(service_plan_id); // plan_...
-
-					// var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
-
-					// stripe.redirectToCheckout({
-					// 	items: stripe_items,
-
-					// 	// Do not rely on the redirect to the successUrl for fulfilling
-					// 	// purchases, customers may not always reach the success_url after
-					// 	// a successful payment.
-					// 	// Instead use one of the strategies described in
-					// 	// https://stripe.com/docs/payments/checkout/fulfillment
-					// 	successUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=serviceBooked',
-					// 	cancelUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=cancel'
-					// })
-					// .then(function (result) {
-					// 	if (result.error) {
-					// 		// If `redirectToCheckout` fails due to a browser or network
-					// 		// error, display the localized error message to your customer.
-					// 		var displayError = document.getElementById('error-message');
-					// 		displayError.textContent = result.error.message;
-					// 	}
-					// });
-
-				});
-
-
-
-
-
 
 
 
@@ -318,6 +274,7 @@ require_once('libs/stripe-php-master/init.php');
 					var service_id = $(el).attr("data-service-id");
 					var customer_id = $(el).attr("data-customer-id");
 					var stripe_cus_id = $(el).attr("data-customer-stripe-id");
+					var address = $("#address_input_"+service_id).val();
 					var booking = [];
 					/*
 					* Important :
@@ -331,9 +288,11 @@ require_once('libs/stripe-php-master/init.php');
 						panier[service_name].name = service_name;
 						panier[service_name].plan_id = service_plan_id;
 						panier[service_name].price = service_price;
-						panier[service_name].id = service_id;
+						panier[service_name].service_id = service_id;
 						panier[service_name].customer_id = customer_id;
 						panier[service_name].stripe_cus_id = stripe_cus_id;
+						panier[service_name].address = address;
+						panier[service_name].nature = "service";
 						panier[service_name].data = [];
 					}
 
@@ -346,6 +305,19 @@ require_once('libs/stripe-php-master/init.php');
 					var jours = document.querySelectorAll(".jour_"+service_id);
 					var tdebuts = document.querySelectorAll(".tdebut_"+service_id);
 					var tfins = document.querySelectorAll(".tfin_"+service_id);
+
+					if (bookings_length === 0) {
+						if (!document.querySelector("#err_msg_"+service_id)) {
+							var err_msg = document.createElement("p");
+							err_msg.innerHTML = "Veuillez ajouter au moins une réservation pour commande ce service";
+							err_msg.setAttribute("style", "color:red");
+							err_msg.setAttribute("id", "err_msg_"+service_id);
+							document.querySelector("#form_"+service_id).appendChild(err_msg);
+						} else {
+							document.querySelector("#err_msg_"+service_id).style.display = "block";
+						}
+						return;
+					}
 
 					for (var i = 0; i < bookings_length; i++) {
 						if (tdebuts[i].value > tfins[i].value) {
@@ -433,6 +405,99 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
+
+
+
+
+
+
+
+				/* * * * * * * * 
+				* ValidateOrder
+				* * * * * * * * */
+				$("#validateOrder").click(function() {
+					// on va faire une ajax pour toutes cateogires de services demandées (ex: babysitting, plomberie, ...)
+					// on recupere les index associatifs qu'on avait mis en place avant
+					var panier_keys = Object.keys(panier);
+
+					// var stripe_items = [];
+
+					// for (key of panier_keys) {
+					// 	console.log(key);
+					// 	console.log("Pour " + key + ", j'ai " + panier[key].data.length + " jours");
+					// 	var total_heures = 0;
+					// 	for (session of panier[key].data) {
+					// 		// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
+					// 		// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
+					// 		total_heures += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
+					// 		// console.log(session);
+					// 	}
+					// 	console.log("En tout, pour " + key + ", j'ai " + total_heures + " h");
+
+					// 	// stripe_items.push({"plan": panier[key].plan_id, quantity: total_heures});
+					// 	stripe_items.push({"plan": panier[key].plan_id, quantity: 1});
+					// 	break;
+					// }
+
+					// console.log(stripe_items);
+
+
+					// let xhttp = new XMLHttpRequest();
+
+					// xhttp.onreadystatechange = function() {
+					// 	if (xhttp.readyState === 4 && xhttp.status === 200) {
+					// 		console.log("here");
+					// 		console.log(xhttp.responseText);
+					// 	}
+					// };
+
+					// xhttp.open("GET", "libs/php/controllers/ajax_mirrors.php?form=stripe_service");
+
+					// xhttp.send();
+
+					// on envoie chaque categorie en json
+					// BDD
+
+					for (service of panier_keys) {
+						doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
+					}
+					// console.log(service_plan_id); // plan_...
+
+					// var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
+
+					// stripe.redirectToCheckout({
+					// 	items: stripe_items,
+
+					// 	// Do not rely on the redirect to the successUrl for fulfilling
+					// 	// purchases, customers may not always reach the success_url after
+					// 	// a successful payment.
+					// 	// Instead use one of the strategies described in
+					// 	// https://stripe.com/docs/payments/checkout/fulfillment
+					// 	successUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=serviceBooked',
+					// 	cancelUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=cancel'
+					// })
+					// .then(function (result) {
+					// 	if (result.error) {
+					// 		// If `redirectToCheckout` fails due to a browser or network
+					// 		// error, display the localized error message to your customer.
+					// 		var displayError = document.getElementById('error-message');
+					// 		displayError.textContent = result.error.message;
+					// 	}
+					// });
+
+				});
+
+
+
+
+
+
+
+
+
+
+
+
 				/* * * * * * * * 
 				* MoreTime
 				* * * * * * * * */
@@ -452,17 +517,40 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
+				/* * * * * * * * 
+				* Submit devis pour service
+				* * * * * * * * */
+				$("#submit_devis_service").click(function() {
+					var panier_keys = Object.keys(panier);
+					if (!panier_keys.length) {
+						console.log("[Erreur] Demande de devis sans services - Veuillez ajouter des services");
+						return;
+					}
+
+					for (service of panier_keys) {
+						doAjax('libs/php/controllers/ajax_mirrors.php', 'askDevis', JSON.stringify(panier[service]));
+					}
+				});
+
+
+
+
+
+
+
+
+
 
 
 				/* * * * * * * * 
-				* SubmiteDemande (service non propose)
+				* SubmiteDevis
 				* * * * * * * * */
 				// quand on clique pour envoyer un service NON propose
-				$("#submit_demande").click(function() {
+				$("#submit_devis").click(function() {
 					var title = $("#service_title").val();
 					var date = $("#service_date").val();
 					var start_time = $("#service_startTime").val();
-					var place = $("#service_place").val();
+					var address = $("#service_place").val();
 					var description = $("#service_description").val();
 
 					var data = {
@@ -471,8 +559,9 @@ require_once('libs/stripe-php-master/init.php');
 						"date" : date,
 						"start_time" : start_time,
 						"end_time" : null,
-						"place" : place,
-						"description" : description
+						"address" : address,
+						"description" : description, 
+						"nature" : "devis"
 					};
 
 					// si on a un attribut name sur l'input d'heure de fin, on ajoute sa valeur dans notre objet data
@@ -482,7 +571,7 @@ require_once('libs/stripe-php-master/init.php');
 
 					console.log(data);
 
-					doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeServiceSpontanee', JSON.stringify(data));
+					doAjax('libs/php/controllers/ajax_mirrors.php', 'askDevis', JSON.stringify(data));
 
 				});
 

@@ -22,6 +22,7 @@
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" href="mes_services.php"><?php echo $mesServices[$langue]; ?></a>
 					<a class="dropdown-item" href="services.php"><?php echo $chercherServices[$langue]; ?></a>
+					<a class="dropdown-item" href="devis.php"><?php echo $headerDevis[$langue]; ?></a>
 				</div>
 			</li>
 
@@ -111,7 +112,13 @@
 </nav>
 
 
-<!-- Modal -->
+
+
+
+
+
+
+<!-- Modal du Panier -->
 <div class="modal fade" id="panierModal" tabindex="-1" role="dialog" aria-labelledby="panierModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -134,6 +141,7 @@
 
 			</div>
 			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="submit_devis_service" data-dismiss="modal"><?php echo $obtenirDevis[$langue]; ?></button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $close[$langue]; ?></button>
 				<button type="button" class="btn btn-success" id="validateOrder"><?php echo $commande[$langue]; ?></button>
 			</div>

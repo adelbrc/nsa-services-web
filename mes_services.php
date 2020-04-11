@@ -56,6 +56,11 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 			$message = "Réservation annulée";
 			break;
 
+		case 'serviceDevisBooked':
+			$success = 1;
+			$message = "Devis reçu avec succès, nous reviendrons vers vous au plus vite";
+			break;
+
 		default:
 			# code...
 			break;

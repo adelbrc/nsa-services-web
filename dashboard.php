@@ -7,7 +7,7 @@ include('libs/php/functions/translation.php');
 if (isset($_GET['lang'])) {
 	$langue = $_GET["lang"];
 }else {
-$langue = 0;
+	$langue = 0;
 }
 
 // \Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');

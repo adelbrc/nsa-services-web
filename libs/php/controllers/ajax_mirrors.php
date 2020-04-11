@@ -12,7 +12,7 @@ if (!isset($_GET["obj"]) || empty($_GET["obj"])) {
 * Sommaire des fonctions
 * 1. resilier()
 * 2. commandeService()
-* 3. commandeServiceSpontanee
+* 3. commandeDevis
 *
 *
 */
@@ -58,6 +58,17 @@ function resilier($conn, $obj) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 function commandeService($conn, $booking) {
 	// 1. On insert la commande
 	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
@@ -67,11 +78,11 @@ function commandeService($conn, $booking) {
 	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
 	// 1. On insert la commande
-	$queryInsertOrder = $conn->prepare("INSERT INTO `orders`(`customer_id`, `total_price`, `order_date`, `service_id`) VALUES (?, ?, NOW(), ?)");
+	$queryInsertOrder = $conn->prepare("INSERT INTO `orders`(`customer_id`, `order_date`, `service_id`, address) VALUES (?, NOW(), ?, ?)");
 	$res = $queryInsertOrder->execute([
 		$booking->customer_id,
-		10.1,
-		$booking->id
+		$booking->service_id,
+		$booking->address
 	]);
 
 	if ($res) {
@@ -92,7 +103,7 @@ function commandeService($conn, $booking) {
 	$session_counter = 0;
 	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
 	$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
-	$querysearchPartner->execute([$booking->id]);
+	$querysearchPartner->execute([$booking->service_id]);
 	$resta = $querysearchPartner->fetch();
 
 	$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
@@ -123,7 +134,7 @@ function commandeService($conn, $booking) {
 		}
 		if ($response == 0) {
 			$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
-			$querysearchPartner->execute([$booking->id]);
+			$querysearchPartner->execute([$booking->service_id]);
 			$resta = $querysearchPartner->fetch();
 
 			$queryCompareDatePartner = $conn->prepare("SELECT * FROM order_session WHERE partner_id = ?");
@@ -135,7 +146,7 @@ function commandeService($conn, $booking) {
 	// 3. On insert la/les sessions / horaires à intervenir
 
 	foreach ($booking->data as $session) {
-		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id) VALUES (?,?, ?, ?, ?)");
+		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id) VALUES (?, ?, ?, ?, ?)");
 		$queryInsertSession->execute([
 			$lastInsertId,
 			$session->jour,
@@ -190,42 +201,152 @@ function commandeService($conn, $booking) {
 
 
 	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
-
 }
 
 
-function commandeServiceSpontanee($conn, $data) {
-	// var_dump($data);
-
-	// partie stripe
 
 
 
 
 
 
-	// partie bdd
 
-	$now = date("Y-m-d H:i:s");
 
-	$queryInsertSpontanService = $conn->prepare("INSERT INTO spontaneous_service(user_id, title, description, order_date, service_date, start_time, end_time, service_place) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-	$res = $queryInsertSpontanService->execute([
-		$data->customer_id,
-		$data->title,
-		$data->description,
-		$now,
-		$data->date,
-		$data->start_time,
-		$data->end_time,
-		$data->place
-	]);
 
-	if ($queryInsertSpontanService->rowCount())
+
+
+
+
+
+
+
+
+function askDevis($conn, $nature, $booking) {
+
+	// 1. On insert le devis general
+	// 2. On insert les sessions du devis demandées
+	// en fonction de la nature, le code de la query et les parametres donnés changent, on adapte donc le contexte
+
+
+
+
+	switch ($nature) {
+		// ce devis provient de services proposés
+		case 'service':	
+			$queryDevis = "INSERT INTO devis(
+				customer_id,
+				service_id,
+				ordered_date,
+				address
+			) VALUES (?, ?, NOW(), ?)";
+
+			$queryArray = [
+				$booking->customer_id,
+				$booking->service_id,
+				$booking->address
+			];
+			break;
+
+		case 'devis':
+			$queryDevis = "INSERT INTO devis(
+				customer_id,
+				title,
+				ordered_date,
+				description,
+				address
+			) VALUES (?, ?, NOW(), ?, ?)";
+
+			$queryArray = [
+				$booking->customer_id,
+				$booking->title,
+				$booking->description,
+				$booking->address
+			];
+			break;
+
+		
+		default:
+			# code...
+			break;
+	}
+
+
+	// 1. On insert le devis general
+	$queryInsertDevis = $conn->prepare($queryDevis);
+
+	$res = $queryInsertDevis->execute($queryArray);
+	if (!$res) {
+		echo json_encode(['status' => "error", "action" => "redirect", "link" => "mes_services.php?status=otherServiceBooked", "message" => "error de devis /"]);
+	}
+
+	$lastInsertId = $conn->lastInsertId();
+
+	// on ajoute la/les sessions pour le type de devis demandé
+	if ($nature == "service") {
+		foreach ($booking->data as $session) {
+			$queryInsertSession = $conn->prepare("INSERT INTO devis_session(
+				devis_id_fk,
+				devis_day,
+				devis_begin_time,
+				devis_end_time
+				) VALUES (?, ?, ?, ?)");
+
+			$queryInsertSession->execute([
+				$lastInsertId,
+				$session->jour,
+				$session->tdebut,
+				$session->tfin,
+			]);
+		}
+
+		echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceDevisBooked", "message" => "Devis reçu avec succès, nous reviendrons vers vous au plus vite"]);
+		exit;
+
+	} else if ($nature == "devis") {
+
+		if (empty($booking->date))
+			$booking->date = NULL;
+
+		if (empty($booking->start_time))
+			$booking->start_time = NULL;
+
+		if (empty($booking->end_time))
+			$booking->end_time = NULL;
+
+
+		// si au moins date & start time sont vides, on n'entre pas de session
+		if ($booking->date == NULL && $booking->start_time == NULL) {
+			echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=otherServiceBooked", "message" => ""]);
+			exit;
+		}
+
+		$queryInsertSessionDevis = $conn->prepare("INSERT INTO devis_session(
+			devis_id_fk,
+			devis_day,
+			devis_begin_time,
+			devis_end_time
+		) VALUES (?, ?, ?, ?)");
+
+		$queryInsertSessionDevis->execute([
+			$lastInsertId,
+			$booking->date,
+			$booking->start_time,
+			$booking->end_time
+		]);
+		
 		echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=otherServiceBooked", "message" => ""]);
-	else
-		echo json_encode(['status' => "error", 'message' => "Une erreur s'est produite, veuillez réessayer plus tard"]);
+		exit;
+	}
+
+
 
 }
+
+
+
+
+
+
 
 
 
@@ -252,12 +373,12 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 			commandeService($conn, $obj);
 			break;
 
-		case 'commandeServiceSpontanee':
-			commandeServiceSpontanee($conn, $obj);
+		case 'askDevis':
+			askDevis($conn, $obj->nature, $obj);
 			break;
 
 		case 'stripe_service':
-			stripe_service($conn, $obj);
+			// stripe_service($conn, $obj);
 			break;
 
 		default:

@@ -49,7 +49,10 @@ $passerPaiement = array('Passer au paiement', 'Proceed to payment');
 //userheader
 $mesServices = array('Mes services', 'My services');
 $chercherServices = array('Chercher un service', 'Search for a service');
-$commande = array('Commandes', 'Orders');
+$obtenirDevis = array('Obtenir un devis', 'Provide quote');
+$commande = array('Commander', 'Order');
+$headerDevis = ["Mes devis", "My quotes"];
+
 
 //mes_services.php
 $demandeOk = array('Votre demande a bien été prise en compte', 'Your request has been taken into account');
@@ -62,7 +65,7 @@ $prestataire = array('Prestataire', 'Provider');
 $chercherService = array('Rechercher des services', 'Search for services');
 $exPlacehorder = array('Garde d\'enfants, plomberie, réparation informatique', 'Childcare, plumbing, computer repairs');
 $nosServices = array('Nos services', 'Our services');
-$serviceInconnu = array('Besoin d\'un service non listé ?', 'Need an unlisted service?');
+$serviceInconnu = array('Besoin d\'un devis ?', 'Need an unlisted service ? Make your quote');
 $reseigneInfo = array('Renseignez les informations concernant votre service et nous reviendrons vers vous le plus vite possible', 'Fill in the information about your service and we will get back to you as soon as possible.');
 $titre = array('Titre', 'Title');
 $dateEtHeure = array('Date et Heure', 'Date and hours');

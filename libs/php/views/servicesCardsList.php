@@ -64,16 +64,16 @@ $list = Service::getAllServices();
 						<div class="modal-body">
 
 
-						<form action="">
+						<form action="" id="form_<?= $service->getID() ?>">
 				
 
 							<div class="form-group">
 								<label>Lieu</label>
-								<input type="text" class="form-control" id="lieu_input" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
+								<input type="text" class="form-control" id="address_input_<?= $service->getID() ?>" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
 							</div>
 							
 							<div class="container">
-								<button type="button" class="btn btn-primary" onclick="addBooking('bookings_container_<?= $service->getStripeID() ?>', '<?= $service->getID() ?>')">Ajouter une plage horaire</button>
+								<button type="button" class="btn btn-primary" onclick="addBooking('bookings_container_<?= $service->getStripeID() ?>', '<?= $service->getID() ?>', <?= $service->getPrice() ?>)">Ajouter une plage horaire</button>
 								<!-- <button type="button" class="btn btn-primary">Fermer</button> -->
 							</div>
 
@@ -89,7 +89,7 @@ $list = Service::getAllServices();
 								<div class="container booking_box booking_<?= $service->getId() ?> border m-0 mr-3">
 									<div class="form-group">
 										<span class="compteurjour">Jour 1</span>
-										<span aria-hidden="true" class="removeBooking" onclick="removeBooking(this)">×</span>
+										<span aria-hidden="true" class="removeBooking" onclick="removeBooking(this, '<?= $service->getID() ?>', <?= $service->getPrice() ?>)">×</span>
 										<input type="date" class="form-control form-input jour_<?= $service->getID() ?>" id="firstBookingBox" value="<?= date('Y-m-d') ?>">
 									</div>
 
@@ -104,10 +104,11 @@ $list = Service::getAllServices();
 									</div>
 
 									<div>
-										<p>Prix : <span class="prix">99</span> €</p>
+										<p>Prix : <span class="prix"><?= $service->getPrice() ?></span> €</p>
 									</div>
 								</div>
 							</div>
+							<h5>Total : <span class="totalprix_service_<?= $service->getId() ?>"><?= $service->getPrice() ?></span> €</h5>
 
 						</form>
 
