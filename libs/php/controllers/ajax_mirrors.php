@@ -234,13 +234,15 @@ function askDevis($conn, $nature, $booking) {
 		// ce devis provient de services proposés
 		case 'service':	
 			$queryDevis = "INSERT INTO devis(
+				title,
 				customer_id,
 				service_id,
 				ordered_date,
 				address
-			) VALUES (?, ?, NOW(), ?)";
+			) VALUES (?, ?, ?, NOW(), ?)";
 
 			$queryArray = [
+				"Devis pour : " . $booking->name,
 				$booking->customer_id,
 				$booking->service_id,
 				$booking->address
