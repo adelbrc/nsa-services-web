@@ -1,6 +1,4 @@
 <?php
-
-require_once("Contract.php");
 require_once("DBManager.php");
 
 $conn = DBManager::getConn();
@@ -244,9 +242,7 @@ class Partner {
 	public function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
 			$pdf = new Contract();
 			$file_name = "contract-" . $partner_id . "-" . date("Y-m-d-H-i-s");
-			// $destination = $_SERVER['DOCUMENT_ROOT']. "/collaborateur/contracts/" . $file_name;
-			$destination = "../../../collaborateur/contracts/" . $file_name . ".pdf";
-
+			$destination = $_SERVER["DOCUMENT_ROOT"] . "collaborateur/contracts/" . $file_name . ".pdf";
 
 			$pdf->AddPage();
 			$pdf->Ln(10);
@@ -265,15 +261,9 @@ class Partner {
 			$pdf->MultiCell(0,5,$clauses);
 			$pdf->Output('F', $destination, true);
 
-			$sql = "INSERT INTO contract(beginning, end_date, clauses, partner_id, file_path) VALUES(:beginning, :end_date, :clauses, :pid, :filepath)";
+			$sql = "INSERT INTO contract(beginning, end_date, clauses, partner_id, file_path) VALUES(?, ?, ?, ?, ?)";
 			$req = $GLOBALS["conn"]->prepare($sql);
-			$req->execute(array(
-				 "beginning" => $beginning_date,
-				 "end_date" => $end_date,
-				 "clauses" => $clauses,
-				 "pid" => $partner_id,
-				 "filepath" => $destination,
-			));
+			$req->execute([$beginning_date, $end_date, $clauses, $partner_id, $destination]);
 
 	}
 

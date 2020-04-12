@@ -1,5 +1,4 @@
 <?php
-
 require_once("DBManager.php");
 
 $conn = DBManager::getConn();
@@ -259,10 +258,10 @@ class User {
 
 	}
 
-	public function generateServiceInvoice($beginning_date, $end_date, $clauses) {
+	public function generateServiceInvoice(Service $service) {
 		$pdf = new Invoice();
-		$file_name = "invoice-" . $this->id . "-" . date("Y-m-d-H-i-s");
-		$destination = $_SERVER["DOCUMENT_ROOT"] . "/admin/docs/invoices/" . $file_name . ".pdf";
+		$file_name = "invoice-" . $service->getId() . "-" . date("Y-m-d-H-i-s");
+		$destination = $_SERVER["DOCUMENT_ROOT"] . "admin/docs/invoices/" . $file_name . ".pdf";
 
 
 		$pdf->AddPage();
@@ -277,14 +276,14 @@ class User {
 		$pdf->Ln(10);
 		$pdf->Cell(40,10, 'Customer Email : ' . $this->email);
 		$pdf->Ln(10);
-		$pdf->Cell(40,10, 'Price : ' . $beginning_date);
+		$pdf->Cell(40,10, 'Prestation : ' . $service->getName());
 		$pdf->Ln(10);
-		$pdf->Cell(40,10, 'Quantity : ' . $end_date);
+		$pdf->Cell(40,10, 'Price : ' . $service->getPrice());
 		$pdf->Ln(10);
-		$pdf->Cell(40,10, 'Description : ');
+		$pdf->Cell(40,10, 'Description :');
 		$pdf->Ln(10);
-		$pdf->MultiCell(0,5,$clauses);
-		$pdf->Output();
+		$pdf->MultiCell(0,5,$service->getDescription());
+		$pdf->Output('F', $destination, true);
 
 	}
 

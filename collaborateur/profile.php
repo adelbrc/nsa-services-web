@@ -8,6 +8,7 @@ if (!isConnected()) {
 require_once('../libs/php/classes/Partner.php');
 
 $partnerId = Partner::getPartnerById($_SESSION["user"]["partner_id"]);
+$contract_path = str_replace("/var/www/nsa-services-web/collaborateur/", "", $partnerId->getContract());
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +43,7 @@ $partnerId = Partner::getPartnerById($_SESSION["user"]["partner_id"]);
 												<a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Settings</button></a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="<?php echo $partnerId->getContract(); ?>"><button type="button" class="btn btn-sm btn-outline-primary">Contrat</button></a>
+												<a class="nav-link" href="<?php echo $contract_path; ?>"><button type="button" class="btn btn-sm btn-outline-primary">Contrat</button></a>
 											</li>
 										</ul>
 									</div>

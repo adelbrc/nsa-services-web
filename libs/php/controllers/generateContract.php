@@ -2,6 +2,7 @@
 
 require_once("../classes/User.php");
 require_once("../classes/Partner.php");
+require_once("../classes/Contract.php");
 include("../isConnected.php");
 include("../functions/checkInput.php");
 

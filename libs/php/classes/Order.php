@@ -46,7 +46,7 @@ class Order {
 	// Methods
 
 	// Add new order
-	public static function addOrder(Order $order) {
+	public static function addOrder() {
 
 			$sql = "INSERT INTO nsaservices_db.orders(customer_id, order_date, service_id,
 					payment_status) VALUES(:cid, :odate, :sid,
@@ -54,10 +54,10 @@ class Order {
 
 			$req = $GLOBALS["conn"]->prepare($sql);
 			$req->execute(array(
-				"cid" => $order->customer_id,
-				"odate" => $order->order_date,
-				"sid" => $order->service_id,
-				"paystatus" => $order->payment_status
+				"cid" => $this->customer_id,
+				"odate" => $this->order_date,
+				"sid" => $this->service_id,
+				"paystatus" => $this->payment_status
 			));
 	}
 
