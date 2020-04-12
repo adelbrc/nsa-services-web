@@ -14,7 +14,7 @@ class Invoice extends FPDF
     function Header()
     {
         // Logo
-        $this->Image($_SERVER["DOCUMENT_ROOT"] . '/ressources/img/nsa-services.png',10,6,30);
+        $this->Image($_SERVER["DOCUMENT_ROOT"] . 'ressources/img/nsa-services.png',10,6,30);
         // Arial bold 15
         $this->SetFont('Arial','B',15);
         // Move to the right
