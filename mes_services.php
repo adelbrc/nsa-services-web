@@ -167,7 +167,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 							foreach ($resCommande as $resCommandes) {
 
 								$rechercheNomService = $conn->prepare("SELECT * FROM service WHERE id = ?");
-								$rechercheNomService->execute([$resCommandes[4]]);
+								$rechercheNomService->execute([$resCommandes['service_id']]);
 								$resNomService = $rechercheNomService -> fetch();
 
 								$rechercheOrderSession = $conn->prepare("SELECT * FROM order_session WHERE order_id = ?");
@@ -176,7 +176,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 								foreach ($resOrderSession as $resOrderSessions) {
 						?>
 								{
-									title:"<?php echo  $resNomService[2] ?>",
+									title:"<?php echo  $resNomService['name'] ?>",
 									start:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[3];?>",
 									end:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[4];?>",
 									allDay : false // will make the time show
