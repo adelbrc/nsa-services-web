@@ -207,7 +207,25 @@ function commandeService($conn, $booking) {
 
 
 
+function searchUser($conn, $obj){
+	$idOrder = $obj->id;
 
+	$quesryService = $conn->prepare("SELECT order_id FROM order_session WHERE session_id = ? ");
+	$quesryService->execute([$idOrder]);
+	$resService = $quesryService->fetch();
+	//var_dump($resService);
+
+	$queryOrders = $conn->prepare("SELECT customer_id FROM orders WHERE order_id = ? ");
+	$queryOrders->execute([$resService[0]]);
+	$resOrder = $queryOrders->fetch();
+
+	$queryUser = $conn->prepare("SELECT * FROM user WHERE id = ? ");
+	$queryUser->execute([$resOrder[0]]);
+	$resUser = $queryUser->fetch();
+
+	echo json_encode(['status' => "success", "dataUser" => $resUser]);
+
+}
 
 
 
@@ -232,7 +250,7 @@ function askDevis($conn, $nature, $booking) {
 
 	switch ($nature) {
 		// ce devis provient de services proposés
-		case 'service':	
+		case 'service':
 			$queryDevis = "INSERT INTO devis(
 				title,
 				customer_id,
@@ -266,7 +284,7 @@ function askDevis($conn, $nature, $booking) {
 			];
 			break;
 
-		
+
 		default:
 			# code...
 			break;
@@ -335,7 +353,7 @@ function askDevis($conn, $nature, $booking) {
 			$booking->start_time,
 			$booking->end_time
 		]);
-		
+
 		echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=otherServiceBooked", "message" => ""]);
 		exit;
 	}
@@ -343,8 +361,6 @@ function askDevis($conn, $nature, $booking) {
 
 
 }
-
-
 
 
 
@@ -371,8 +387,8 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 			resilier($conn, $obj);
 			break;
 
-		case 'commandeService':
-			commandeService($conn, $obj);
+		case 'searchUser':
+			searchUser($conn, $obj);
 			break;
 
 		case 'askDevis':

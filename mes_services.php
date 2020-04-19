@@ -190,8 +190,6 @@ if(isset($_POST['cancelledOrder'])){
 									if ($resOrderSessions['orderStatus']  != 'Cancelled') {
 						?>
 								{
-
-
 									id: "<?php echo $resOrderSessions[0]; ?>",
 									title:"<?php echo  $resNomService['name'] ?>",
 									start:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[3];?>",
@@ -398,7 +396,6 @@ if(isset($_POST['cancelledOrder'])){
           </div>
 					<div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="submit" name="cancelledOrder" class="btn btn-primary">Annuler le RDV</button>
 		      </div>
         </form>
       </div>
