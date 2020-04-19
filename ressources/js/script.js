@@ -73,7 +73,6 @@ function doAjax(url, form, obj) {
 			console.log(this.responseText);
 			var jsonResponse = JSON.parse(this.responseText);
 			console.log(jsonResponse);
-			return jsonResponse;
 			// on prend en charge les differentes actions possibles
 			if (jsonResponse.action === "redirect") {
 				window.location.replace("./"+jsonResponse.link);

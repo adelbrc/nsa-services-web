@@ -51,7 +51,7 @@ include("../libs/php/isConnected.php");
 		<script>
 
 		function displayModalCollab(id, titre, debut, fin) {
-			alert('Service ' + id);
+			//alert('Service ' + id);
 			var resId;
 			let xhttp = new XMLHttpRequest();
 
@@ -88,17 +88,23 @@ include("../libs/php/isConnected.php");
 								<h2>Information sur le client</h2>
 								<h4> Prenom</h4>
 								<p> ${resId.dataUser.firstname}</p>
+								<h4> Nom </h4>
+								<p>${resId.dataUser.lastname} </p>
+								<h4> Adresse </h4>
+								<p>${resId.dataUser.address} </p>
+								<h4> N° de Téléphone </h4>
+								<p>${resId.dataUser.phone_number} </p>
 								<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" hidden>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="submit" name="cancelledOrder" class="btn btn-primary">Annuler le RDV</button>
 							</div>
 						</form>
 					</div>
 				</div>
 				</div>
-				</div>`
+				</div>`;
+				$("#myModal").modal('show');
 				}
 			};
 			xhttp.open("GET","../libs/php/controllers/ajax_mirrors.php"+"?form=searchUser&obj=" + JSON.stringify({"id":id}), true);

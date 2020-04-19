@@ -390,6 +390,9 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 		case 'searchUser':
 			searchUser($conn, $obj);
 			break;
+		case 'commandeService':
+			commandeService($conn, $obj);
+			break;
 
 		case 'askDevis':
 			askDevis($conn, $obj->nature, $obj);
