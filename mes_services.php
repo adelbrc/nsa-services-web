@@ -68,6 +68,14 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 
 }
 
+//Annulation du service commandé
+if(isset($_POST['cancelledOrder'])){
+	$req = $conn->prepare('UPDATE order_session SET orderStatus = ? WHERE session_id = ?');
+	$req->execute(array('Cancelled', $_POST['idOrder']));
+	header('location:mes_services.php?orderStatus=cancelled');
+ }
+
+
 
 ?>
 
@@ -77,7 +85,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -116,7 +124,19 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 							var tab_jour = new Array("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi");
 							return ""+tab_jour[date.getDay()]+"";
 					},
+					eventClick: function(info) {
+			      var eventObj = info.event;
 
+						//alert('Service ' + eventObj.title);
+						displayModal(eventObj.id, eventObj.title, eventObj.start, eventObj.end );
+
+							// alert('st ' + eventObj.start);
+
+							$(document).ready(function(){
+								$("#myModal").modal('show');
+							});
+
+			    },
 					plugins: [  'dayGrid', 'timeGrid', 'bootstrap' ],
 					defaultView: 'timeGridWeek',
 
@@ -134,18 +154,11 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 					},
 
 					firstDay: 1,
-
-					// cache mardi jeudi
-					// hiddenDays: [ 2, 4 ],
-
 					locale: "fr",
-
 					// l'interval de temps sur la colonne de gauche
 					slotDuration:'00:30:00',
-
 					// l'heure du debut du planning
 					minTime: "09:00:00",
-
 					// l'heure de fin
 					maxTime: "21:00:00",
 
@@ -153,7 +166,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 
 						{
 							title:"Meeting1",
-							start:"2020-03-18T10:00:00+00:00",
+							start:"2020-04-18T10:00:00+00:00",
 							end:"2020-03-18T11:00:00+00:00",
 							allDay : false // will make the time show
 						},
@@ -174,8 +187,12 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 								$rechercheOrderSession->execute([$resCommandes[0]]);
 								$resOrderSession = $rechercheOrderSession -> fetchAll();
 								foreach ($resOrderSession as $resOrderSessions) {
+									if ($resOrderSessions['orderStatus']  != 'Cancelled') {
 						?>
 								{
+
+
+									id: "<?php echo $resOrderSessions[0]; ?>",
 									title:"<?php echo  $resNomService['name'] ?>",
 									start:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[3];?>",
 									end:"<?php echo  $resOrderSessions[2]."T".$resOrderSessions[4];?>",
@@ -183,6 +200,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 								},
 
 						<?php
+									}
 								}
 							}
 						 	?>
@@ -192,14 +210,12 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 							end:"2020-03-18T14:30:00+00:00",
 							allDay : false // will make the time show
 						},
-
 						{
 							title:"Meeting3",
 							start:"2020-03-18T14:30:00+00:00",
 							end:"2020-03-18T16:30:00+00:00",
 							allDay : false // will make the time show
 						},
-
 					]
 				});
 
@@ -238,52 +254,8 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 					<h2 class="text-center">Planning - <?php echo $servicePrevu[$langue]; ?></h2>
 
 						<div id='calendar'></div>
-
-
-<!-- 						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Prestation</th>
-									<th scope="col">Lieu</th>
-									<th scope="col">Date</th>
-									<th scope="col">Prix</th>
-									<th scope="col">Prestataire</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>Mark</td>
-									<td>Otto</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@twitter</td>
-								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td>Jacob</td>
-									<td>Thornton</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@fat</td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td>Larry</td>
-									<td>the Bird</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@twitter</td>
-								</tr>
-							</tbody>
-						</table>
- -->
 				</div>
 			</section>
-
-
-
 
 
 			<section class="sizedSection">
@@ -303,9 +275,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 								</tr>
 							</thead>
 							<tbody>
-
 								<?php
-
 								// !!!! la table order est aussi un mot clé ORDER BY donc faut mettre les ``
 								$queryMyServices = $conn->prepare("SELECT * FROM `orders` WHERE customer_id = ?");
 								$queryMyServices->execute([$_SESSION["user"]["id"]]);
@@ -326,18 +296,8 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 
 							</tbody>
 						</table>
-
-
 				</div>
 			</section>
-
-
-
-
-
-
-
-
 
 
 			<section class="sizedSection">
@@ -393,7 +353,6 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 		<!-- jQuery -->
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
 
@@ -405,7 +364,50 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 		<script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js'></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+		<script>
+
+
+
+		function displayModal(id, titre, debut, fin) {
+
+			document.body.innerHTML+= `<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Description du service #${id}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" name="formCancelOrder" method="post">
+          <div class="form-group">
+            <h4>Service</h4>
+            <p>${titre}</p>
+          </div>
+          <div class="form-group">
+						<h4>Date de début</h4>
+						<p>${debut}</p>
+          </div>
+					<div class="form-group">
+						<h4>Date de fin</h4>
+						<p>${fin}</p>
+						<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" >
+          </div>
+					<div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <button type="submit" name="cancelledOrder" class="btn btn-primary">Annuler le RDV</button>
+		      </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>`
+			}
+		</script>
 
 		<!-- JS -->
 		<script src="libs/ajax/searchServices.js" charset="utf-8"></script>
