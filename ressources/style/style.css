@@ -256,3 +256,19 @@ div.scrollmenu a {
 	border-radius: 10px;
 	font-size: 25px;
 }
+
+
+
+/* PARTNERS */
+.duplicate-box {
+	padding: 5px 0px;
+}
+
+.duplicate-box .container {
+	padding: 0px;
+}
+
+.duplicate-box p {
+	margin: 0;
+	/*padding: 0;*/
+}

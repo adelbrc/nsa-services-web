@@ -364,7 +364,20 @@ function askDevis($conn, $nature, $booking) {
 
 
 
+function handleDoublon($conn, $obj) {
+	// var_dump($obj);
+	// echo $obj->id;
+	// echo $obj->email;
 
+	$queryRemoveDoublons = $conn->prepare("DELETE FROM partner WHERE email = ? AND partner_id != ?");
+	// $queryRemoveDoublons = $conn->prepare("SELECT email FROM partner WHERE email = ? AND partner_id != ?");
+	$queryRemoveDoublons->execute([$obj->email, $obj->id]);
+	// echo $queryRemoveDoublons->rowCount();
+
+	echo json_encode(['status' => "success", "action" => "show", "message" => $queryRemoveDoublons->rowCount() . " doublons effacés"]);
+
+	// exit;
+}
 
 
 
@@ -396,6 +409,10 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 
 		case 'askDevis':
 			askDevis($conn, $obj->nature, $obj);
+			break;
+
+		case 'doublon':
+			handleDoublon($conn, $obj);
 			break;
 
 		case 'stripe_service':

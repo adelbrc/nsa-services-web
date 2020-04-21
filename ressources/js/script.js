@@ -77,7 +77,13 @@ function doAjax(url, form, obj) {
 			if (jsonResponse.action === "redirect") {
 				window.location.replace("./"+jsonResponse.link);
 			}
-
+			
+			// ne fonctionne pas en raison de l'asynchronicite, c galere g passé 30min dessus
+			if (jsonResponse.action === "show") {
+				return jsonResponse.message;
+			} else {
+				console.log("ok");
+			}
 
 		}
 	};
