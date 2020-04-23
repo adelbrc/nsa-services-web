@@ -94,7 +94,6 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	} catch(Exception $e) {
 		header("Location: ./dashboard.php?error=link_expired");
 		// echo $e->getMessage();
-		// exit;
 	}
 
 	if ($queryInsertSubscription->rowCount() == 1) {

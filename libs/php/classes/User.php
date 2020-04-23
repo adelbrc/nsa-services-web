@@ -220,7 +220,7 @@ class User {
 	public function generateMemberShipInvoice(Membership $membership) {
 			$pdf = new Invoice();
 			$file_name = "invoice-" . $this->id . "-" . $membership->getIdPlan() . "-" . date("Y-m-d-H-i-s");
-			$destination = $_SERVER["DOCUMENT_ROOT"] . "admin/docs/invoices/" . $file_name . ".pdf";
+			$destination = "admin/docs/invoices/" . $file_name . ".pdf";
 
 
 			$pdf->AddPage();
@@ -261,7 +261,7 @@ class User {
 	public function generateServiceInvoice(Service $service) {
 		$pdf = new Invoice();
 		$file_name = "invoice-" . $service->getId() . "-" . date("Y-m-d-H-i-s");
-		$destination = $_SERVER["DOCUMENT_ROOT"] . "admin/docs/invoices/" . $file_name . ".pdf";
+		$destination = "admin/docs/invoices/" . $file_name . ".pdf";
 
 
 		$pdf->AddPage();

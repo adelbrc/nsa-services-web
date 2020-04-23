@@ -28,61 +28,61 @@ require_once('libs/stripe-php-master/init.php');
 
 
 	// babysitting
-$plan_ = "plan_H3gDiUCmHpTw4V";
+// $plan_ = "plan_H3gDiUCmHpTw4V";
 
-	// anglais
-// $plan_ = "plan_H3RcKDN3MIT23E";
-
-
-// on verifie si l'USER A DEJA un ABONNEMENT ACTIF a ce SERVICE
-$abonnement_a_ce_service_data = \Stripe\Subscription::all([
-	'customer' => "cus_H47YJ8qFDX2Esf",
-	'plan' => $plan_,
-]);
-
-$a_t_il_un_abonnement_a_ce_service = count($abonnement_a_ce_service_data["data"]);
-
-// echo $a_t_il_un_abonnement_a_ce_service;
+// 	// anglais
+// // $plan_ = "plan_H3RcKDN3MIT23E";
 
 
-if ($a_t_il_un_abonnement_a_ce_service == 0) {
-	// il n'a pas d'abonnement a ce service, il faut lui en creer un
+// // on verifie si l'USER A DEJA un ABONNEMENT ACTIF a ce SERVICE
+// $abonnement_a_ce_service_data = \Stripe\Subscription::all([
+// 	'customer' => "cus_H47YJ8qFDX2Esf",
+// 	'plan' => $plan_,
+// ]);
 
-	echo "on lui cree un abonnement";
+// $a_t_il_un_abonnement_a_ce_service = count($abonnement_a_ce_service_data["data"]);
 
-	// // CREER UNE SUBSCRIPTION
-	$sub_data = \Stripe\Subscription::create([
-		// 'customer' => $booking->stripe_cus_id,
-		'customer' => "cus_H47YJ8qFDX2Esf",
-		'items' => [
-			["plan" => $plan_]
-		],
-	]);
-} else {
-	echo "il a deja un abonnement a ce service, on le selectionne juste";
-	$sub_data = $abonnement_a_ce_service_data["data"][0];
-}
-
-// var_dump($sub_data);
-// var_dump(get_object_vars($))
-
-$sub_ = $sub_data["id"]; // sub_...
+// // echo $a_t_il_un_abonnement_a_ce_service;
 
 
-$si_ = $sub_data["items"]["data"][0]["id"]; // si_...
+// if ($a_t_il_un_abonnement_a_ce_service == 0) {
+// 	// il n'a pas d'abonnement a ce service, il faut lui en creer un
 
-// for (pour chaque session, creer un usage record)
-$a = \Stripe\SubscriptionItem::createUsageRecord(
-	$si_,
-	[
-		'quantity' => 3,
-		'timestamp' => strtotime("now"),
-		'action' => 'increment',
-	]
-);
+// 	echo "on lui cree un abonnement";
+
+// 	// // CREER UNE SUBSCRIPTION
+// 	$sub_data = \Stripe\Subscription::create([
+// 		// 'customer' => $booking->stripe_cus_id,
+// 		'customer' => "cus_H47YJ8qFDX2Esf",
+// 		'items' => [
+// 			["plan" => $plan_]
+// 		],
+// 	]);
+// } else {
+// 	echo "il a deja un abonnement a ce service, on le selectionne juste";
+// 	$sub_data = $abonnement_a_ce_service_data["data"][0];
+// }
+
+// // var_dump($sub_data);
+// // var_dump(get_object_vars($))
+
+// $sub_ = $sub_data["id"]; // sub_...
 
 
-echo "<br>3 Enregistrements ajoutés !";
+// $si_ = $sub_data["items"]["data"][0]["id"]; // si_...
+
+// // for (pour chaque session, creer un usage record)
+// $a = \Stripe\SubscriptionItem::createUsageRecord(
+// 	$si_,
+// 	[
+// 		'quantity' => 3,
+// 		'timestamp' => strtotime("now"),
+// 		'action' => 'increment',
+// 	]
+// );
+
+
+// echo "<br>3 Enregistrements ajoutés !";
 
 // // recuperer l'id de la subscription : 
 // echo $s["id"];
@@ -96,6 +96,58 @@ echo "<br>3 Enregistrements ajoutés !";
 // var_dump($a["data"]);
 
 
-// \Stripe\Invoice::upcoming(["customer" => "cus_H48whZXwlGNrGj"]);
+// FACTURING
+// $factures_a_venir = \Stripe\Invoice::upcoming(["customer" => "cus_H47YJ8qFDX2Esf"]);
+// var_dump($factures_a_venir);
+
+
+// $a = \Stripe\Invoice::all(['limit' => 3, 'customer' => 'cus_H47YJ8qFDX2Esf']);
+// var_dump($a["data"]);
+
+$a = \Stripe\SubscriptionItem::allUsageRecordSummaries(
+  'si_H98wS6teHshAOR',
+  ['limit' => 3]
+);
+var_dump($a["data"][0]["data"]);
+
+
+// $lines = $factures_a_venir->lines->all()["data"];
+// var_dump($lines);
+
+// echo $lines[0]["invoice"];
+// echo $lines[0]["quantity"] * $lines[0]["amount"] / 1000;
+
+// $invoice = \Stripe\Invoice:retrieve(
+// 		''
+// );
+
+// $invoice->pay();
+
+
+// $a = \Stripe\Invoice::create([
+//   'customer' => 'cus_H47YJ8qFDX2Esf',
+// ]);
+// var_dump($a);
+
+// $a = \Stripe\Invoice::create([
+//   'customer' => 'cus_H47YJ8qFDX2Esf',
+// ]);
+
+
+// var_dump($a);
+
+
+
+
+
+
+
+
+
+
+
 
 ?>
+
+
+

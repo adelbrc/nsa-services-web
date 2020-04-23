@@ -100,7 +100,7 @@ function commandeService($conn, $booking) {
 	*/
 
 	// echo $booking->stripe_cus_id;
-	$session_counter = 0;
+
 	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
 	$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
 	$querysearchPartner->execute([$booking->service_id]);
@@ -145,17 +145,20 @@ function commandeService($conn, $booking) {
 
 	// 3. On insert la/les sessions / horaires à intervenir
 
+	$total_hours = 0;
+
 	foreach ($booking->data as $session) {
-		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id) VALUES (?, ?, ?, ?, ?)");
+		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id, orderStatus) VALUES (?, ?, ?, ?, ?, ?)");
 		$queryInsertSession->execute([
 			$lastInsertId,
 			$session->jour,
 			$session->tdebut,
 			$session->tfin,
-			$resta['partner_id']
+			$resta['partner_id'],
+			"Prevu"
 		]);
 
-		$session_counter += 1;
+		$total_hours += intval(substr($session->tfin, 0, 2)) - intval(substr($session->tdebut, 0, 2));
 	}
 
 	// stripe
@@ -193,11 +196,23 @@ function commandeService($conn, $booking) {
 	$a = \Stripe\SubscriptionItem::createUsageRecord(
 		$si_,
 		[
-			'quantity' => $session_counter,
+			'quantity' => $total_hours,
 			'timestamp' => strtotime("now"),
 			'action' => 'increment',
 		]
 	);
+
+
+	// invoice
+	$queryInsertInvoice = $conn->prepare("INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (?, ?, ?, ?, ?, ?)");
+	$queryInsertInvoice->execute([
+		$booking->stripe_cus_id,
+		$booking->customer_id,
+		$booking->price * $total_hours,
+		date("Y-m-d", strtotime("+1 week")),
+		$booking->service_id,
+		""
+	]);
 
 
 	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
