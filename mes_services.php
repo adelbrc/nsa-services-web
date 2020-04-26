@@ -69,13 +69,11 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 }
 
 //Annulation du service commandé
-if(isset($_POST['cancelledOrder'])){
+if(isset($_POST['annulerService'])){
 	$req = $conn->prepare('UPDATE order_session SET orderStatus = ? WHERE session_id = ?');
 	$req->execute(array('Cancelled', $_POST['idOrder']));
 	header('location:mes_services.php?orderStatus=cancelled');
  }
-
-
 
 ?>
 
@@ -112,6 +110,7 @@ if(isset($_POST['cancelledOrder'])){
 		<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
 
 		<link rel="stylesheet" href="ressources/style/style.css">
+
 
 		<script>
 
@@ -230,7 +229,11 @@ if(isset($_POST['cancelledOrder'])){
 
 		</header>
 		<main>
-
+			<div class="form-group col-md-12">
+				<?php if (isset($_GET['orderStatus']) && $_GET['orderStatus'] == "cancelled") {
+					echo '<div class="alert alert-success col-md-9 mx-auto" role="alert" style="margin-top: 20px; text-align: center;">' ."Le service à bien été annuler". '</div>';
+				}?>
+			</div>
 
 			<section class="sizedSection">
 
@@ -395,6 +398,7 @@ if(isset($_POST['cancelledOrder'])){
 						<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" hidden>
           </div>
 					<div class="modal-footer">
+						<button type="submit" name="annulerService" class="btn btn-danger">Annuler le service</button>
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		      </div>
         </form>
