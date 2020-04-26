@@ -392,7 +392,7 @@ if(isset($_POST['cancelledOrder'])){
 					<div class="form-group">
 						<h4>Date de fin</h4>
 						<p>${fin}</p>
-						<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" >
+						<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" hidden>
           </div>
 					<div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
