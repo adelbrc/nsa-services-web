@@ -130,7 +130,8 @@ require_once('libs/stripe-php-master/init.php');
 
 // var_dump($a);
 
-
+session_start();
+var_dump($_SESSION["user"]);
 
 if (0) {
 	$a = \Stripe\InvoiceItem::create([

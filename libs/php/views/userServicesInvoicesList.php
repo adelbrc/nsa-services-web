@@ -8,7 +8,7 @@ $userOders = $queryOrders->fetchAll();
 foreach ($userOders as $order) {
 
 	// Recup les infos du service courant concerne
-	$queryServiceInfos = $GLOBALS["conn"]->prepare("SELECT name, price FROM service WHERE id = ?");
+	$queryServiceInfos = $GLOBALS["conn"]->prepare("SELECT name, price, id_service FROM service WHERE id = ?");
 	$queryServiceInfos->execute([$order["service_id"]]);
 	$serviceInfo = $queryServiceInfos->fetch();
 
@@ -33,10 +33,35 @@ foreach ($userOders as $order) {
 			<p><b><?= $serviceInfo["name"] ?></b><br>
 			<?= $hours ?> h (<?= $serviceInfo["price"] ?> € / h)</p>
 			<div class="float-right">
-				<a class="btn btn-success" href="#">Payer <?= $total_price ?> €</a>
+				<a class="btn btn-success" href="#" onclick="payServices(this, 'modal<?= $order['service_id'] . $order['order_id'] ?>')" 
+					data-service-id="<?= $serviceInfo["id_service"] ?>" 
+					data-service-name="<?= $serviceInfo['name'] ?>" 
+					data-total="<?= $total_price ?>" 
+					data-cus="<?= $_SESSION["user"]["cus_id"] ?>"
+					>Payer <?= $total_price ?> €</a>
 			</div>
 		</div>
-		<hr>
+
+		<!-- Modal -->
+		<div class="modal fade" id="modal<?= $order['service_id'] . $order['order_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						...
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 <?php } ?>
 

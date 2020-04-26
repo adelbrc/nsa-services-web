@@ -289,9 +289,6 @@ function askDevis($conn, $nature, $booking) {
 	// 2. On insert les sessions du devis demandées
 	// en fonction de la nature, le code de la query et les parametres donnés changent, on adapte donc le contexte
 
-
-
-
 	switch ($nature) {
 		// ce devis provient de services proposés
 		case 'service':
@@ -420,10 +417,51 @@ function handleDoublon($conn, $obj) {
 
 	echo json_encode(['status' => "success", "action" => "show", "message" => $queryRemoveDoublons->rowCount() . " doublons effacés"]);
 
-	// exit;
 }
 
 
+
+function payServices($conn, $obj) {
+	$total = $obj->total;
+	$cus = $obj->cus;
+	$name = $obj->name;
+	$plan = $obj->plan;
+
+	$invoice_item = \Stripe\InvoiceItem::create([
+		'customer' => $cus,
+		'amount' => $total * 100,
+		'currency' => 'EUR',
+		'description' => 'Paiement manuel pour : ' . $name,
+	]);
+
+
+	$createdInvoice = \Stripe\Invoice::create([
+	  'customer' => $cus,
+	  // 'auto_advance' => true, /* auto-finalize this draft after ~1 hour */
+	  'auto_advance' => false, // // //  auto-finalize this draft after ~1 hour 
+	]);
+
+	// // on paie en avance
+	$invoice = \Stripe\Invoice::retrieve($createdInvoice["id"]);
+	$invoice->finalizeInvoice();
+	$invoice->pay();
+
+	// on annule le prochain paiement automatique de stripe
+	$retrieveSub = \Stripe\Subscription::all([
+		"customer" => $cus,
+		"plan" => $plan,
+		"status" => "active"
+	]);
+
+	$subscription = \Stripe\Subscription::retrieve(
+		$retrieveSub["id"]
+	);
+
+	$subscription->delete();
+	
+	echo json_encode(['status' => "success", "message" => "Paiement effectué avec succès"]);
+
+}
 
 
 
@@ -459,8 +497,8 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 			handleDoublon($conn, $obj);
 			break;
 
-		case 'stripe_service':
-			// stripe_service($conn, $obj);
+		case 'payServices':
+			payServices($conn, $obj);
 			break;
 
 		default:
