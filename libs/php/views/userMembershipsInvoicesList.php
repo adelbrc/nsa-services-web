@@ -13,7 +13,7 @@ $row["file_path"] = str_replace("/var/www/nsa-services-web/", "", $row["file_pat
     <div class="row">
         <div class="container col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <p><?php echo "<b>Facture</b> : " . $row["invoice_id"]; ?></p>
-            <p><?php echo "<b>Date</b> : " . $row["date_issue"]; ?></p>
+            <p><?php echo "<b>Date</b> : " . date("d-m-Y H:i:s", strtotime($row["date_issue"])); ?></p>
             <p><?php echo "<b>Montant</b> : " . $row["amount_paid"] . "€"; ?></p>
         </div>
         <div class="container col-xs-12 col-sm-12 col-md-6 col-lg-6">
