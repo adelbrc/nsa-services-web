@@ -33,110 +33,154 @@ require_once('libs/stripe-php-master/init.php');
 
 		</header>
 		<main>
-
-			<!-- Recherche de services -->
-			<section class="sizedSection">
-				<div class="dataContainer">
-					<div class="row" id="error-message">
-					</div>
+	
+		<?php
 			
-					<h2 class="text-center"><?php echo $chercherService[$langue]; ?></h2>
-					<form class="text-center searchServicesForm">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-								<input class="customInput" autocomplete="off" type="search" placeholder="<?php echo $exPlacehorder[$langue]; ?>..." onkeyup="showResult(this.value)">
-								<div id="serviceSearch">
+			$queryHasMembership = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
+			$queryHasMembership->execute([$_SESSION["user"]["id"]]);
+			if ($queryHasMembership->fetch()):	
+			
+		?>	
 
+				<!-- Recherche de services -->
+				<section class="sizedSection">
+					<div class="dataContainer">
+						<div class="row" id="error-message">
+						</div>
+				
+						<h2 class="text-center"><?php echo $chercherService[$langue]; ?></h2>
+						<form class="text-center searchServicesForm">
+							<div class="form-row">
+								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									<input class="customInput" autocomplete="off" type="search" placeholder="<?php echo $exPlacehorder[$langue]; ?>..." onkeyup="showResult(this.value)">
+									<div id="serviceSearch">
+
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									<input class="customInput" type="search" name="search_location" placeholder="Paris, Marseille...">
 								</div>
 							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-								<input class="customInput" type="search" name="search_location" placeholder="Paris, Marseille...">
-							</div>
-						</div>
-					</form>
-				</div>
-			</section>
-
-
-			<!-- Nos services -->
-			<section class="sizedSection">
-				<div class="dataContainer">
-					<h2 class="text-center"><?php echo $nosServices[$langue]; ?></h2>
-					<div class="row">
-						<?php include("libs/php/views/servicesCardsList.php"); ?>
+						</form>
 					</div>
-				</div>
-			</section>
+				</section>
+
+				<?php
+				
+				$queryServiceTime = $conn->prepare("SELECT serviceHoursRemaining FROM memberships_history WHERE user_id = ? AND status = 'active'");
+				$queryServiceTime->execute([$_SESSION["user"]["id"]]);
+				$serviceTime = $queryServiceTime->fetch()[0];
+
+				if ($serviceTime) {
+
+				?>
+					<h3 id="serviceTimeText">
+						<a href="dashboard.php#abonnements" class="green">
+							<svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+							  <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+							  <circle cx="8" cy="4.5" r="1"/>
+							</svg>
+							Il vous reste <?= $serviceTime ?> h de services inclus
+						</a>
+					</h3>
+				<?php } else { ?>
+					<h3 id="serviceTimeText">
+						<a href="dashboard.php#abonnements" class="red">
+							<svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+							  <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+							  <circle cx="8" cy="4.5" r="1"/>
+							</svg>
+							Souscrivez à un de nos abonnements pour bénéficier de réductions
+						</a>
+					</h3>
+
+				<?php } ?>
 
 
-
-
-			<!-- Besoin d'un service non liste ? -->
-			<section class="sizedSection">
-				<div class="dataContainer">
-					<h2 class="text-center"><?php echo $serviceInconnu[$langue]; ?></h2>
-
-					<form action="mes_services.php" method="POST" class="w-50 mx-auto">
-						<p><?php echo $reseigneInfo[$langue]; ?></p>
-						
-						<div class="form-group">
-							<label><?php echo $titre[$langue]; ?></label>
-							<input type="text" id="service_title" class="form-control" placeholder="Titre de la demande">
+				<!-- Nos services -->
+				<section class="sizedSection">
+					<div class="dataContainer">
+						<h2 class="text-center"><?php echo $nosServices[$langue]; ?></h2>
+						<div class="row">
+							<?php include("libs/php/views/servicesCardsList.php"); ?>
 						</div>
+					</div>
+				</section>
 
-						<div class="form-group">
-							<label>Date</label>
-							<small>(Optionnel - Inclure une date nous permettra de vous donner un meilleur prix)</small>
-							<input type="date" placeholder="Date de l'intervention" id="service_date" class="form-control" value="<?= date('Y-m-d', time()); ?>">
+
+
+
+				<!-- Besoin d'un service non liste ? -->
+				<section class="sizedSection">
+					<div class="dataContainer">
+						<h2 class="text-center"><?php echo $serviceInconnu[$langue]; ?></h2>
+
+						<form action="mes_services.php" method="POST" class="w-50 mx-auto">
+							<p><?php echo $reseigneInfo[$langue]; ?></p>
+							
+							<div class="form-group">
+								<label><?php echo $titre[$langue]; ?></label>
+								<input type="text" id="service_title" class="form-control" placeholder="Titre de la demande">
+							</div>
+
+							<div class="form-group">
+								<label>Date</label>
+								<small>(Optionnel - Inclure une date nous permettra de vous donner un meilleur prix)</small>
+								<input type="date" placeholder="Date de l'intervention" id="service_date" class="form-control" value="<?= date('Y-m-d', time()); ?>">
+							</div>
+
+							<div class="form-group" id="service_time_box">
+								<label id="service_startTime_title">Heure</label>
+								<small>(Optionnel)</small>
+								<input type="time" id="service_startTime" class="form-control" value="09:00">
+								<small>Votre demande nécessite une heure de fin ? <input type="checkbox" id="more_time"></small>
+							</div>
+							
+
+							<div class="form-group" id="service_endTime_box" style="display: none;">
+								<label id="service_endTime_title">Heure de fin</label>
+								<input type="time" id="service_endTime" value="15:00" class="form-control">
+							</div>
+
+							<div class="form-group" id="">
+								<label><?php echo $lieuIntervention[$langue]; ?></label>
+								<input type="text" id="service_place" class="form-control" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
+							</div>
+
+							<div class="form-group">
+								<label>Description</label>
+								<textarea class="form-control" id="service_description" rows="3"></textarea>
+							</div>
+
+							<p>Nous reviendrons vers vous aussi vite que possible afin de donner suite à votre demande.</p>
+
+							<button type="button" name="submit_devis" id="submit_devis" class="btn btn-primary"><?php echo $envoyerDemande[$langue]; ?></button>
+						</form>
+					</div>
+				</section>
+
+
+		<?php
+			else:
+		?>
+				<!-- Message "prenez un abonnement" -->
+				<section class="sizedSection">
+					<div class="dataContainer">
+						<div class="row" id="locked">
+							<h2 class="text-center">Facilitez-vous la vie !</h2>
+							<div class="row" id="abonnement_background"></div>
+							<a href="dashboard.php#abonnements" id="abonnement_message">Souscrivez dès maintenant à un abonnement <br> pour découvrir tous nos services</a>
 						</div>
+					</div>
+				</section>
 
-						<div class="form-group" id="service_time_box">
-							<label id="service_startTime_title">Heure</label>
-							<small>(Optionnel)</small>
-							<input type="time" id="service_startTime" class="form-control" value="09:00">
-							<small>Votre demande nécessite une heure de fin ? <input type="checkbox" id="more_time"></small>
-						</div>
-						
-
-						<div class="form-group" id="service_endTime_box" style="display: none;">
-							<label id="service_endTime_title">Heure de fin</label>
-							<input type="time" id="service_endTime" value="15:00" class="form-control">
-						</div>
-
-						<div class="form-group" id="">
-							<label><?php echo $lieuIntervention[$langue]; ?></label>
-							<input type="text" id="service_place" class="form-control" placeholder="Lieu de l'intervention" value="<?= $_SESSION['user']['address'] . ', ' . $_SESSION['user']['city'] ?>">
-						</div>
-
-						<div class="form-group">
-							<label>Description</label>
-							<textarea class="form-control" id="service_description" rows="3"></textarea>
-						</div>
-
-						<p>Nous reviendrons vers vous aussi vite que possible afin de donner suite à votre demande.</p>
-
-						<button type="button" name="submit_devis" id="submit_devis" class="btn btn-primary"><?php echo $envoyerDemande[$langue]; ?></button>
-					</form>
-				</div>
-			</section>
+		<?php
+			endif;
+		?>
 
 
-
-			<!-- Obtenir un devis -->
-<!-- 			<section class="sizedSection">
-				<div class="dataContainer">
-					<h2 class="text-center">Obtenir un devis</h2>
-			
-					<form action="" method="POST" class="w-50 mx-auto">
-						<p>Obtenez un devis pour votre demande et sécurisez votre prix pour plus tard.</p>
-
-
-					</form>
-
-				</div>
-			</section>
-
- -->			
 		</main>
 
 		<!-- jQuery -->

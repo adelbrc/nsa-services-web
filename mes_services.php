@@ -250,7 +250,16 @@ if(isset($_POST['cancelledOrder'])){
 
 				<div class="dataContainer">
 					<h2 class="text-center">Planning - <?php echo $servicePrevu[$langue]; ?></h2>
-
+					
+					<?php
+						$queryUserHasMembership = $conn->prepare("SELECT user_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
+						$queryUserHasMembership->execute([$_SESSION["user"]["id"]]);
+						$hasMembership = $queryUserHasMembership->fetch();
+						if (!$hasMembership):
+					?>
+						<h4 class="text-center"><a href="dashboard.php?#abonnements" style="text-decoration: underline; color: red">Souscrivez à un abonnement pour commencer à réserver !</a></h2>
+					<?php endif; ?>
+					
 						<div id='calendar'></div>
 				</div>
 			</section>
@@ -296,55 +305,6 @@ if(isset($_POST['cancelledOrder'])){
 						</table>
 				</div>
 			</section>
-
-
-			<section class="sizedSection">
-				<div class="dataContainer">
-					<h2 class="text-center">Historique des demandes</h2>
-
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Service</th>
-									<th scope="col"><?php echo $lieu[$langue]; ?></th>
-									<th scope="col">Date</th>
-									<th scope="col"><?php echo $prix[$langue]; ?></th>
-									<th scope="col"><?php echo $prestataire[$langue]; ?></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>Mark</td>
-									<td>Otto</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@twitter</td>
-								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td>Jacob</td>
-									<td>Thornton</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@fat</td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td>Larry</td>
-									<td>the Bird</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@twitter</td>
-								</tr>
-							</tbody>
-						</table>
-
-
-				</div>
-			</section>
-
 
 		</main>
 

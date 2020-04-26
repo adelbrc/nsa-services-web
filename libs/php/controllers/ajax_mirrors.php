@@ -77,13 +77,29 @@ function commandeService($conn, $booking) {
 
 	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
+	// on recupere le nombre d'heures de services restantes
+	$queryServiceTime = $conn->prepare("SELECT serviceHoursRemaining FROM memberships_history WHERE user_id = ? AND status = 'active'");
+	$queryServiceTime->execute([$booking->customer_id]);
+	$serviceTime = $queryServiceTime->fetch()[0];
+
+	if ($serviceTime) {
+		$params = [
+			$booking->customer_id,
+			$booking->service_id,
+			$booking->address,
+			"included"
+		];
+	} else {
+		$params = [
+			$booking->customer_id,
+			$booking->service_id,
+			$booking->address,
+			'to_pay'
+		];
+	}
 	// 1. On insert la commande
-	$queryInsertOrder = $conn->prepare("INSERT INTO `orders`(`customer_id`, `order_date`, `service_id`, address) VALUES (?, NOW(), ?, ?)");
-	$res = $queryInsertOrder->execute([
-		$booking->customer_id,
-		$booking->service_id,
-		$booking->address
-	]);
+	$queryInsertOrder = $conn->prepare("INSERT INTO orders(customer_id, order_date, service_id, address, payment_status) VALUES (?, NOW(), ?, ?, ?)");
+	$res = $queryInsertOrder->execute($params);
 
 	if ($res) {
 		$message = "Order inserted";
@@ -160,6 +176,19 @@ function commandeService($conn, $booking) {
 
 		$total_hours += intval(substr($session->tfin, 0, 2)) - intval(substr($session->tdebut, 0, 2));
 	}
+
+
+	// on decremente son nombre d'heures de services incluses s'il en a
+	if ($serviceTime) {
+		$queryServiceTime = $conn->prepare("UPDATE memberships_history SET serviceHoursRemaining = ? WHERE user_id = ? AND status = 'active'");
+		$queryServiceTime->execute([$serviceTime - $total_hours, $booking->customer_id]);
+	}
+	// s'il n'en a pas, on le fait payer normalement 
+
+
+
+
+
 
 	// stripe
 	// on verifie si l'USER A DEJA un ABONNEMENT ACTIF a ce SERVICE

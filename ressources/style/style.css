@@ -10,8 +10,8 @@
 	max-width: 80%;
 	padding: 40px;
 	margin: auto;
-	margin-top: 60px;
-	margin-bottom: 40px;
+	margin-top: 30px;
+	margin-bottom: 20px;
 	border: 1px solid rgb(23, 133, 223);
 	box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
 }
@@ -28,6 +28,20 @@
 
 .coloredSection {
 	background-color: #00bcd4;
+}
+
+#serviceTimeText {
+	margin-top: 20px;
+	text-decoration: underline;
+	text-align: center;
+}
+
+.red {
+	color: red;
+}
+
+.green {
+	color: green;
 }
 
 
@@ -153,6 +167,7 @@ div.scrollmenu a {
 */
 	border: 1px solid rgb(23, 133, 223);
 	box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2);
+	margin-bottom: 20px;
 }
 
 .serviceCard:hover {
@@ -161,6 +176,69 @@ div.scrollmenu a {
 
 .serviceCard .card-link {
 	color: rgb(23, 133, 223);
+}
+
+#abonnement_background {
+	background-image: url('../img/service_bg.png');
+	background-size: cover;
+
+	width: auto;
+	width: 100%;
+    -webkit-filter: blur(2px); /* Safari 6.0 - 9.0 */
+    filter: blur(2px);
+
+  /* Add the blur effect */
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+
+  /* Full height */
+  height: 500px;
+  margin-top: 50px;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 1s;
+}
+
+#locked {
+	overflow: hidden;
+}
+
+#abonnement_message {
+	background-color: #007bff; /* Fallback color */
+	/*background-color: rgba(0,0,0, 1); /* Black w/opacity/see-through */
+	color: white;
+	font-weight: bold;
+	border: 3px solid #f1f1f1;
+	position: absolute;
+	font-size: 24px;
+	top: 60%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	width: 50%;
+	padding: 20px;
+	text-align: center;
+	transition: all 1s;
+	border-radius: 3px;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+#abonnement_message:hover {
+	color: #007bff;
+	background-color: white;
+	border: 3px solid #007bff;
+}
+
+#abonnement_message:hover #abonnement_background {
+	transform: scale(1.1);
+}
+
+#abonnement_background:hover {
+	transform: scale(1.1);
 }
 
 

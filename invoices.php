@@ -51,36 +51,26 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 										</div>
 								</div>
 								<div class="tab-content" id="myProfileContent">
-										<h2 style="text-align: center;">Services</h2>
+									<div class="tab-pane fade show" id="service" role="tabpanel" aria-labelledby="service">
+										<h2 style="text-align: center;">Service</h2>
 										<div class="dataContainer">
-											<div class="row">
-
-												<div class="container w-50 col-xs-12 col-sm-12 col-md-6 col-lg-6">
-													<!-- <p><?php echo "<b>Facture</b> : " . $row["invoice_id"]; ?></p> -->
-													<!-- <p><?php echo "<b>Date</b> : " . $row["date_issue"]; ?></p> -->
-													<!-- <p><?php echo "<b>Montant</b> : " . $row["amount_paid"] . "€"; ?></p> -->
-
-													<div class="float-right">
-														<a class="btn btn-success" href="<?php //echo $row["file_path"]; ?>">Payer</a>
-													</div>
-												</div>
-
+											<div class="row d-flex flex-wrap">
+											<?php include("libs/php/views/userServicesInvoicesList.php"); ?>
 											</div>
 										</div>
-
-
-										<div class="tab-pane fade show active" id="membership" role="tabpanel" aria-labelledby="membership">
-											<h2 style="text-align: center;">Abonnements</h2>
-											<div class="dataContainer">
-												<div class="row d-flex flex-wrap">
-												<?php include("libs/php/views/userMembershipsInvoicesList.php"); ?>
-												</div>
+									</div>
+									<div class="tab-pane fade show active" id="membership" role="tabpanel" aria-labelledby="membership">
+										<h2 style="text-align: center;">Abonnements</h2>
+										<div class="dataContainer">
+											<div class="row d-flex flex-wrap">
+											<?php include("libs/php/views/userMembershipsInvoicesList.php"); ?>
 											</div>
 										</div>
+									</div>
 
-										<div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service">
-											Service
-										</div>
+									<div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service">
+										Service
+									</div>
 								</div>
 						</div>
 				</main>

@@ -61,7 +61,7 @@ if (isset($_GET['lang'])) {
 
 
 
-	<div class="container d-flex justify-content-around">
+	<div class="container d-flex justify-content-around" id="abonnements">
 
 	<?php
 
@@ -76,7 +76,7 @@ if (isset($_GET['lang'])) {
 	?>
 
 			<div class="card text-center" style="width: 18rem;">
-				<img class="card-img-top" src="https://via.placeholder.com/300x250.png" alt="Card image cap">
+				<img class="card-img-top" src="https://via.placeholder.com/300x150.png" alt="Card image cap">
 				<div class="card-body">
 				<h5 class="card-title"><?= $membership["name"] ?></h5>
 				<p class="card-text"><?= $membership["description"] ?></p>

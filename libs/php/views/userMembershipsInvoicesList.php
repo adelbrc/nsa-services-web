@@ -1,12 +1,12 @@
 <?php
 
-$sql = "SELECT * FROM invoice WHERE customer_id = :uid";
+$sql = "SELECT * FROM invoice WHERE customer_id = :uid and membership_id != ''";
 $req = $GLOBALS["conn"]->prepare($sql);
 $req->execute(array("uid" => $user->getUID()));
 
 while ($row = $req->fetch()) {
 
-$row["file_path"] = str_replace("/var/www/nsa-services-web/", "", $row["file_path"]);
+	$row["file_path"] = str_replace("/var/www/nsa-services-web/", "", $row["file_path"]);
 ?>
 
 

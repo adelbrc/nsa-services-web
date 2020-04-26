@@ -36,9 +36,11 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	$payment_interval = $session["display_items"][0]["plan"]["interval"];
 	$duration = $session["display_items"][0]["plan"]["metadata"]["duration"];
 
-	$queryPlan_index = $conn->prepare("SELECT id FROM membership WHERE id_plan = ?");
+	$queryPlan_index = $conn->prepare("SELECT id, timeQuota FROM membership WHERE id_plan = ?");
 	$queryPlan_index->execute([$subscribed_plan_id]);
-	$plan_index = $queryPlan_index->fetch()[0];
+	$res = $queryPlan_index->fetch();
+	$plan_index = $res[0];
+	$serviceTime = $res[1];
 	// echo $plan_index; // 20
 
 
@@ -69,9 +71,10 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 		session_id,
 		beginning,
 		ending,
-		status
+		status,
+		serviceHoursRemaining
 
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 	);
 
 	$date_now = date_create(date("Y-m-d"));
@@ -89,7 +92,8 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 			$session_id,
 			$date_now->format("Y-m-d"),
 			$date_expire->format("Y-m-d"),
-			"active"
+			"active",
+			$serviceTime
 		]);
 	} catch(Exception $e) {
 		header("Location: ./dashboard.php?error=link_expired");
