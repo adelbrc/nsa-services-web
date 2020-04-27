@@ -136,12 +136,19 @@ function commandeService($conn, $booking) {
 
 			//Je recupere le panier en cours pour le comparer avec les services deja commandé
 			foreach ($booking->data as $sess) {
+				$hourDebutInDBB = $compareDate['beginning'];
+				$hourDebutInPanier = $sess->tdebut;
+				$hourFinInBDD = $compareDate['end'];
+				$hourFinInPanier = $sess->tFin;
 				$dateInBDD = $compareDate[2];
 				$dateUnPanier = $sess->jour;
 
 				//Si le prestataire est deja occuper ce jour alors on en cherche un autre
 				if ($dateInBDD == $dateUnPanier) {
-					$response = 0;
+					if ($hourDebutInDBB == $hourDebutInPanier || $hourFinInBDD == $hourFinInPanier) {
+							$response = 0;
+					}
+
 					//echo json_encode(['dateBDD' => $dateInBDD, "DatePanier" => $dateUnPanier]);
 				} else {
 					$response =1;
