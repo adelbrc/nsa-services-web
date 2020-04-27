@@ -82,7 +82,7 @@ function commandeService($conn, $booking) {
 	$queryServiceTime->execute([$booking->customer_id]);
 	$serviceTime = $queryServiceTime->fetch()[0];
 
-	if ($serviceTime) {
+	if ($serviceTime < 0) {
 		$params = [
 			$booking->customer_id,
 			$booking->service_id,
@@ -195,6 +195,7 @@ function commandeService($conn, $booking) {
 	$abonnement_a_ce_service_data = \Stripe\Subscription::all([
 		'customer' => $booking->stripe_cus_id,
 		'plan' => $booking->plan_id,
+		'status' => 'active'
 	]);
 
 	$a_t_il_un_abonnement_a_ce_service = count($abonnement_a_ce_service_data["data"]);
@@ -481,8 +482,8 @@ function payServices($conn, $obj) {
 		// Recup les infos du service courant concerne
 	$querySetPaid = $GLOBALS["conn"]->prepare("UPDATE orders SET payment_status = 'Paid' WHERE order_id = ?");
 	$resQuerySetPaid = $querySetPaid->execute([$oid]);
-	if (!$resQuerySetPaid->rowCount()) {
-		echo json_encode(['status' => "error", "message" => "Erreur"]);
+	if (!$querySetPaid->rowCount()) {
+		echo json_encode(['status' => "error", "message" => "Erreur lors de la modification du statut du paiement"]);
 	}
 
 	echo json_encode(['status' => "success", "message" => "Service payé avec succès"]);
