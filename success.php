@@ -41,25 +41,16 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	$res = $queryPlan_index->fetch();
 	$plan_index = $res[0];
 	$serviceTime = $res[1];
-	// echo $plan_index; // 20
 
 
 	// on retrouve l'email du client pour interroger la bdd et inserer son id de bdd
 	$db_customer_email = \Stripe\Customer::retrieve($customer_id);
 	$db_customer_email = $db_customer_email["email"];
-	// echo $db_customer_email; // test@ok.com
 
 	$queryUser_index = $conn->prepare("SELECT id FROM user WHERE email = ?");
 	$queryUser_index->execute([$db_customer_email]);
 	$user_index = $queryUser_index->fetch()[0];
-	// echo $user_index; // 1
-
-//	plus necessaire car email auto-rentrée
-//	if ($user_index == NULL) {
-//		header("Location: dashboard.php?error=subscribedSomeoneElse");
-//		exit;
-//	}
-
+	
 
 	$queryInsertSubscription = $conn->prepare("INSERT INTO memberships_history (
 		user_id,

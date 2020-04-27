@@ -94,7 +94,7 @@ function commandeService($conn, $booking) {
 			$booking->customer_id,
 			$booking->service_id,
 			$booking->address,
-			'to_pay'
+			'En attente'
 		];
 	}
 	// 1. On insert la commande
@@ -421,14 +421,45 @@ function handleDoublon($conn, $obj) {
 
 
 
+
+
 function payServices($conn, $obj) {
 	$total = $obj->total;
 	$cus = $obj->cus;
 	$name = $obj->name;
 	$plan = $obj->plan;
+	$uid = $obj->uid;
+	$oid = $obj->oid;
+
+	// on annule le prochain paiement automatique de stripe
+	$retrieveSub = \Stripe\Subscription::all([
+		"customer" => $cus,
+		"plan" => $plan,
+		"status" => "active"
+	]);
+
+	if (isset($retrieveSub["data"][0])) {
+		$subscription = \Stripe\Subscription::retrieve(
+			$retrieveSub["data"][0]["id"]
+		);
+
+
+		$subscription->delete();
+		
+	} else {
+		echo json_encode(['status' => "error", "message" => "Réservation déjà payée"]);
+		exit;
+	}
+
+
+
+	$queryRightCus = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? and status = 'active'");
+	$queryRightCus->execute([$uid]);
+	$rightCus = $queryRightCus->fetch()[0];
+
 
 	$invoice_item = \Stripe\InvoiceItem::create([
-		'customer' => $cus,
+		'customer' => $rightCus,
 		'amount' => $total * 100,
 		'currency' => 'EUR',
 		'description' => 'Paiement manuel pour : ' . $name,
@@ -436,7 +467,7 @@ function payServices($conn, $obj) {
 
 
 	$createdInvoice = \Stripe\Invoice::create([
-	  'customer' => $cus,
+	  'customer' => $rightCus,
 	  // 'auto_advance' => true, /* auto-finalize this draft after ~1 hour */
 	  'auto_advance' => false, // // //  auto-finalize this draft after ~1 hour 
 	]);
@@ -446,20 +477,16 @@ function payServices($conn, $obj) {
 	$invoice->finalizeInvoice();
 	$invoice->pay();
 
-	// on annule le prochain paiement automatique de stripe
-	$retrieveSub = \Stripe\Subscription::all([
-		"customer" => $cus,
-		"plan" => $plan,
-		"status" => "active"
-	]);
+	// on met la ligne en bdd table orders comme Paid
+		// Recup les infos du service courant concerne
+	$querySetPaid = $GLOBALS["conn"]->prepare("UPDATE orders SET payment_status = 'Paid' WHERE order_id = ?");
+	$resQuerySetPaid = $querySetPaid->execute([$oid]);
+	if (!$resQuerySetPaid->rowCount()) {
+		echo json_encode(['status' => "error", "message" => "Erreur"]);
+	}
 
-	$subscription = \Stripe\Subscription::retrieve(
-		$retrieveSub["id"]
-	);
+	echo json_encode(['status' => "success", "message" => "Service payé avec succès"]);
 
-	$subscription->delete();
-	
-	echo json_encode(['status' => "success", "message" => "Paiement effectué avec succès"]);
 
 }
 

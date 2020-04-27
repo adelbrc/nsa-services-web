@@ -130,8 +130,6 @@ require_once('libs/stripe-php-master/init.php');
 
 // var_dump($a);
 
-session_start();
-var_dump($_SESSION["user"]);
 
 if (0) {
 	$a = \Stripe\InvoiceItem::create([
@@ -178,10 +176,26 @@ if (0) {
 
 
 // ===== TEST UPCOMING INVOICE ======
-var_dump(\Stripe\Invoice::upcoming(["customer" => "cus_HAFAOdaTgPy3k4"]));
-
+// var_dump(\Stripe\Invoice::upcoming(["customer" => "cus_HAFAOdaTgPy3k4"]));
 // ===== [OK] =====
 
+// ===== TEST ATTACH PaymentMethod ======
+$mainPm = \Stripe\PaymentMethod::all([
+  'customer' => 'cus_HAakMCVY3mAevo',
+  'type' => 'card',
+]);
+
+
+$payment_method = \Stripe\PaymentMethod::retrieve(
+	$mainPm["data"][0]["id"]
+);
+
+$payment_method->attach([
+	'customer' => 'cus_HAajMXFCRiZJyp',
+]);
+
+
+// ===== [OK] =====
 
 
 
