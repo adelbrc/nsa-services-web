@@ -4,7 +4,7 @@
 	<footer class="page-footer font-small blue pt-4">
 		<div class="container-fluid text-center text-md-left">
 			<div class="row">
-				<div class="col-md-6 mt-md-0 mt-3 mx-auto" style=" padding-left: 110px;">
+				<div class="col-md-6 mt-md-0 mt-3 mx-auto" style="padding-left: 110px;">
 					<img src="ressources/img/nsa-services.png" style="width: 200px;" alt="">
 				</div>
 				<hr class="clearfix w-100 d-md-none pb-3">

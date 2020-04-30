@@ -349,13 +349,16 @@ require_once('libs/stripe-php-master/init.php');
 					var jours = document.querySelectorAll(".jour_"+service_id);
 					var tdebuts = document.querySelectorAll(".tdebut_"+service_id);
 					var tfins = document.querySelectorAll(".tfin_"+service_id);
+					
+					var err_msg = document.createElement("p");
+					err_msg.setAttribute("style", "color:red");
+					err_msg.setAttribute("id", "err_msg_"+service_id);
+
+
 
 					if (bookings_length === 0) {
 						if (!document.querySelector("#err_msg_"+service_id)) {
-							var err_msg = document.createElement("p");
 							err_msg.innerHTML = "Veuillez ajouter au moins une réservation pour commande ce service";
-							err_msg.setAttribute("style", "color:red");
-							err_msg.setAttribute("id", "err_msg_"+service_id);
 							document.querySelector("#form_"+service_id).appendChild(err_msg);
 						} else {
 							document.querySelector("#err_msg_"+service_id).style.display = "block";
@@ -365,15 +368,32 @@ require_once('libs/stripe-php-master/init.php');
 
 					for (var i = 0; i < bookings_length; i++) {
 						if (tdebuts[i].value > tfins[i].value) {
-							console.log("L'heure de fin ne peut pas etre avant celle du debut " + (i+1) + "e jour)");
+							// affichage du message d'erreur
+							if (!document.querySelector("#err_msg_"+service_id)) {
+								err_msg.innerHTML = "L'heure de fin ne peut pas etre avant celle du debut (" + (i+1) + "e jour)";
+								document.querySelector("#form_"+service_id).appendChild(err_msg);
+							} else {
+								document.querySelector("#err_msg_"+service_id).style.display = "block";
+							}
+
 							return;
 						}
 
 						if (tdebuts[i].value == tfins[i].value) {
-							console.log("Les heures ne peuvent pas etre egales (" + (i+1) + "e jour)");
+							// affichage du message d'erreur
+							if (!document.querySelector("#err_msg_"+service_id)) {
+								err_msg.innerHTML = "Les heures ne peuvent pas etre egales (" + (i+1) + "e jour)";
+								document.querySelector("#form_"+service_id).appendChild(err_msg);
+							} else {
+								document.querySelector("#err_msg_"+service_id).style.display = "block";
+							}
+							
 							return;
 						}
 					}
+					
+					document.querySelector("#err_msg_"+service_id).style.display = "none";
+
 
 					for (var i = 0; i < bookings_length; i++) {
 						panier[service_name].data.push({

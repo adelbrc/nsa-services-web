@@ -117,13 +117,6 @@ $list = Service::getAllServices();
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 							<button 
 								type="button" 
-								class="btn btn-success"
-								>
-								<!-- onclick="redirectToCheckout('<?php echo $service->getStripeID(); ?>', '<?php echo $service->getId(); ?>', '<?= $_SESSION["user"]["email"] ?>')" -->
-								Paiement Direct
-							</button>
-							<button 
-								type="button" 
 								class="btn btn-primary"
 								id="addPanier_button"
 								data-service-name="<?= $service->getName() ?>"
