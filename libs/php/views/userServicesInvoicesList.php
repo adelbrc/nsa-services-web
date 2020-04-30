@@ -116,8 +116,8 @@ foreach ($userOders as $order) {
 	<div class="container w-25 col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<p><b><?= $serviceInfo["name"] ?></b><br>
 		<?= $hours ?> h (<?= $serviceInfo["price"] ?> € / h)</p>
-		<div class="float-right">
-			<a class="btn btn-success" href="#" 
+		<div class="float-right">                   <!-- \|/ onclick="genererFacture()" -->
+			<a class="btn btn-success" href="#" onclick=""
 				data-service-id="<?= $serviceInfo["id_service"] ?>" 
 				data-service-name="<?= $serviceInfo['name'] ?>" 
 				data-total="<?= $total_price ?>" 
