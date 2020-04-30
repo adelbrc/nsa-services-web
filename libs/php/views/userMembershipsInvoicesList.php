@@ -11,7 +11,7 @@ while ($row = $req->fetch()) {
 
 		<div class="container w-50 col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<p><?php echo "<b>Facture</b> : " . $row["invoice_id"]; ?></p>
-			<p><?php echo "<b>Date</b> : " . $row["date_issue"]; ?></p>
+			<p><?php $thedate = new DateTime($row["date_issue"]); echo "<b>Date</b> : " . $thedate->format("d-m-Y H:i:s"); ?></p>
 			<p><?php echo "<b>Montant</b> : " . $row["amount_paid"] . "€"; ?></p>
 
 			<div class="float-right">

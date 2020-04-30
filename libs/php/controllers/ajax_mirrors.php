@@ -442,11 +442,14 @@ function payServices($conn, $obj) {
 	// on annule le prochain paiement automatique de stripe
 	$retrieveSub = \Stripe\Subscription::all([
 		"customer" => $cus,
-		"plan" => $plan,
-		"status" => "active"
+		"plan" => $plan
 	]);
 
-	if (isset($retrieveSub["data"][0])) {
+	var_dump($cus, $plan, $retrieveSub);
+		exit;
+
+	try {
+
 		$subscription = \Stripe\Subscription::retrieve(
 			$retrieveSub["data"][0]["id"]
 		);
@@ -454,8 +457,8 @@ function payServices($conn, $obj) {
 
 		$subscription->delete();
 		
-	} else {
-		echo json_encode(['status' => "error", "message" => "Réservation déjà payée"]);
+	} catch(Exception $e) {
+		echo json_encode(['status' => "error", "message" => "Reservation deja payee : " . $e->getMessage()]);
 		exit;
 	}
 

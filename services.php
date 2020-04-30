@@ -387,12 +387,13 @@ require_once('libs/stripe-php-master/init.php');
 							} else {
 								document.querySelector("#err_msg_"+service_id).style.display = "block";
 							}
-							
+
 							return;
 						}
 					}
 					
-					document.querySelector("#err_msg_"+service_id).style.display = "none";
+					if (document.querySelector("#err_msg_"+service_id))
+						document.querySelector("#err_msg_"+service_id).style.display = "none";
 
 
 					for (var i = 0; i < bookings_length; i++) {
