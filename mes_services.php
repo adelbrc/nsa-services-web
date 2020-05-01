@@ -269,17 +269,15 @@ if(isset($_POST['annulerService'])){
 
 
 			<section class="sizedSection">
-				<div class="dataContainer">
+				<div class="dataContainer" style="max-height : 3500px; overflow-y: scroll; scrollbar-width: thin;">
 					<h2 class="text-center">Liste - <?php echo $servicePrevu[$langue]; ?></h2>
 
-						<table class="table">
+						<table class="table"  >
 							<thead>
 								<tr>
 									<th scope="col">#</th>
 									<th scope="col">Service</th>
-									<th scope="col"><?php echo $lieu[$langue]; ?></th>
 									<th scope="col">Date</th>
-									<th scope="col"><?php echo $prix[$langue]; ?></th>
 									<th scope="col"><?php echo $prestataire[$langue]; ?></th>
 									<th scope="col">Status</th>
 								</tr>
@@ -290,15 +288,25 @@ if(isset($_POST['annulerService'])){
 								$queryMyServices = $conn->prepare("SELECT * FROM `orders` WHERE customer_id = ?");
 								$queryMyServices->execute([$_SESSION["user"]["id"]]);
 
-								while (($row = $queryMyServices->fetch())): ?>
+								while (($row = $queryMyServices->fetch())):
+									$queryNameService = $conn->prepare("SELECT name FROM service WHERE id = ?");
+									$queryNameService->execute([$row["service_id"]]);
+									$queryNameServiced = $queryNameService->fetch();
+
+									$queryIdPresta = $conn->prepare("SELECT partner_id FROM order_session WHERE order_id = ?");
+									$queryIdPresta->execute([$row["order_id"]]);
+									$queryIdPrestaa = $queryIdPresta->fetch();
+
+									$queryNamePresta = $conn->prepare("SELECT firstname FROM partner WHERE partner_id = ?");
+									$queryNamePresta->execute([$queryIdPrestaa[0]]);
+									$queryNamePrestaa = $queryNamePresta->fetch();
+									?>
 
 									<tr>
 										<th scope="row"><?= $row["order_id"] ?></th>
-										<td>Mark</td>
-										<td>Otto</td>
-										<td>@mdo</td>
-										<td>@fat</td>
-										<td>@twitter</td>
+										<td><?= $queryNameServiced[0] ?></td>
+										<td><?= $row['order_date'] ?></td>
+										<td><?= $queryNamePrestaa[0] ?></td>
 										<td>OK</td>
 									</tr>
 
