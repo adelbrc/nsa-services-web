@@ -2,7 +2,6 @@
 $list = Partner::getAllPartners();
 $roles = Partner::getAllRoles();
 ?>
-
 <div class="dataContainer">
   <h3 class="text-center"><?php echo $listPartner[$langue]; ?></h3>
   <div class="row">
