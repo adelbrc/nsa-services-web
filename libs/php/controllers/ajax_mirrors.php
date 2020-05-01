@@ -80,7 +80,7 @@ function commandeService($conn, $booking) {
 	$queryServiceTime->execute([$booking->customer_id]);
 	$serviceTime = $queryServiceTime->fetch()[0];
 
-	if ($serviceTime < 0) {
+	if ($serviceTime > 0) {
 		$params = [
 			$booking->customer_id,
 			$booking->service_id,
@@ -263,7 +263,7 @@ function searchUser($conn, $obj){
 	$quesryService = $conn->prepare("SELECT order_id FROM order_session WHERE session_id = ? ");
 	$quesryService->execute([$idOrder]);
 	$resService = $quesryService->fetch();
-	//var_dump($resService);
+
 
 	$queryOrders = $conn->prepare("SELECT customer_id FROM orders WHERE order_id = ? ");
 	$queryOrders->execute([$resService[0]]);
@@ -412,7 +412,7 @@ function askDevis($conn, $nature, $booking) {
 
 
 function handleDoublon($conn, $obj) {
-	// var_dump($obj);
+
 	// echo $obj->id;
 	// echo $obj->email;
 
@@ -442,9 +442,6 @@ function payServices($conn, $obj) {
 		"customer" => $cus,
 		"plan" => $plan
 	]);
-
-	var_dump($cus, $plan, $retrieveSub);
-		exit;
 
 	try {
 
