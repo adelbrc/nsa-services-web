@@ -1,6 +1,6 @@
 <div class="dataContainer">
   <div class="row">
-    <img class="profilePicture" src="<?php echo $user->getProfilePic(); ?>">
+    <img class="profilePicture" src="<?php echo str_replace("../../../", "", $user->getProfilePic()); ?>">
   </div>
   <div class="row">
     <div class="col-6">
