@@ -175,7 +175,7 @@ if (isset($_GET['lang'])) {
 
 
 		// var DOMAIN = "http://nsaservices.local";
-		var DOMAIN = "http://localhost/nsa-services-web";
+		var DOMAIN = "http://192.168.10.20";
 
 		var stripe = Stripe(PUBLISHABLE_KEY);
 
