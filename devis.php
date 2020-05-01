@@ -132,10 +132,12 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 									$queryGetDevis = $conn->prepare("SELECT * FROM devis WHERE customer_id = ?");
 									$queryGetDevis->execute([$_SESSION["user"]["id"]]);
 
-									foreach ($queryGetDevis->fetchAll() as $devisArray): ?>
+									foreach ($queryGetDevis->fetchAll() as $devisArray):
+										$thedate = new DateTime($devisArray["ordered_date"]);
+									 ?>
 										<tr>
 											<td><?= $devisArray["title"] ?></td>
-											<td><?= $devisArray["ordered_date"] ?></td>
+											<td><?= "Le " . $thedate->format('d/m/Y à H:i:s') ?></td>
 											<td><?= !$devisArray["devis_cost"] ? "/" : $devisArray["devis_cost"];  ?></td>
 											<td><?= $devisArray["status"] ?></td>
 											<!-- <td><?= $devisArray["answer"] ?></td> -->
@@ -158,7 +160,10 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 															<p><?= !$devisArray["answer"] ? "<i>En attente de réponse</i>" : $devisArray["answer"];  ?></p>
 															
 															<h5>Date réponse : </h5>
-															<p><?= !$devisArray["answer_date"] ? "<i>En attente de réponse</i>" : $devisArray["answer_date"];  ?></p>
+															<?php if ($devisArray["answer_date"]) {
+																$answerDate = new DateTime($devisArray["answer_date"]);
+															} ?>
+															<p><?= !$devisArray["answer_date"] ? "<i>En attente de réponse</i>" : $answerDate->format("d/m/Y H:i:s");  ?></p>
 															
 															<h5>Adresse du devis : </h5>
 															<p><?= !$devisArray["address"] ? "/" : $devisArray["address"];  ?></p>

@@ -69,13 +69,11 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 }
 
 //Annulation du service commandé
-if(isset($_POST['cancelledOrder'])){
+if(isset($_POST['annulerService'])){
 	$req = $conn->prepare('UPDATE order_session SET orderStatus = ? WHERE session_id = ?');
 	$req->execute(array('Cancelled', $_POST['idOrder']));
 	header('location:mes_services.php?orderStatus=cancelled');
  }
-
-
 
 ?>
 
@@ -112,6 +110,7 @@ if(isset($_POST['cancelledOrder'])){
 		<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
 
 		<link rel="stylesheet" href="ressources/style/style.css">
+
 
 		<script>
 
@@ -230,7 +229,11 @@ if(isset($_POST['cancelledOrder'])){
 
 		</header>
 		<main>
-
+			<div class="form-group col-md-12">
+				<?php if (isset($_GET['orderStatus']) && $_GET['orderStatus'] == "cancelled") {
+					echo '<div class="alert alert-success col-md-9 mx-auto" role="alert" style="margin-top: 20px; text-align: center;">' ."Le service à bien été annuler". '</div>';
+				}?>
+			</div>
 
 			<section class="sizedSection">
 
@@ -250,7 +253,16 @@ if(isset($_POST['cancelledOrder'])){
 
 				<div class="dataContainer">
 					<h2 class="text-center">Planning - <?php echo $servicePrevu[$langue]; ?></h2>
-
+					
+					<?php
+						$queryUserHasMembership = $conn->prepare("SELECT user_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
+						$queryUserHasMembership->execute([$_SESSION["user"]["id"]]);
+						$hasMembership = $queryUserHasMembership->fetch();
+						if (!$hasMembership):
+					?>
+						<h4 class="text-center"><a href="dashboard.php?#abonnements" style="text-decoration: underline; color: red">Souscrivez à un abonnement pour commencer à réserver !</a></h2>
+					<?php endif; ?>
+					
 						<div id='calendar'></div>
 				</div>
 			</section>
@@ -305,55 +317,6 @@ if(isset($_POST['cancelledOrder'])){
 				</div>
 			</section>
 
-
-			<section class="sizedSection">
-				<div class="dataContainer">
-					<h2 class="text-center">Historique des demandes</h2>
-
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Service</th>
-									<th scope="col"><?php echo $lieu[$langue]; ?></th>
-									<th scope="col">Date</th>
-									<th scope="col"><?php echo $prix[$langue]; ?></th>
-									<th scope="col"><?php echo $prestataire[$langue]; ?></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>Mark</td>
-									<td>Otto</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@twitter</td>
-								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td>Jacob</td>
-									<td>Thornton</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@fat</td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td>Larry</td>
-									<td>the Bird</td>
-									<td>@mdo</td>
-									<td>@fat</td>
-									<td>@twitter</td>
-								</tr>
-							</tbody>
-						</table>
-
-
-				</div>
-			</section>
-
-
 		</main>
 
 		<!-- jQuery -->
@@ -403,6 +366,7 @@ if(isset($_POST['cancelledOrder'])){
 						<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" hidden>
           </div>
 					<div class="modal-footer">
+						<button type="submit" name="annulerService" class="btn btn-danger">Annuler le service</button>
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		      </div>
         </form>

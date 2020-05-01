@@ -242,12 +242,12 @@ class Partner {
 	public function generateContract($partner_id, $beginning_date, $end_date, $clauses) {
 			$pdf = new Contract();
 			$file_name = "contract-" . $partner_id . "-" . date("Y-m-d-H-i-s");
-			$destination = $_SERVER["DOCUMENT_ROOT"] . "collaborateur/contracts/" . $file_name . ".pdf";
+			$destination = $_SERVER["DOCUMENT_ROOT"] . "nsa-services-web/collaborateur/contracts/" . $file_name . ".pdf";
 
 			$pdf->AddPage();
 			$pdf->Ln(10);
 			$pdf->SetFont('Arial','B',16);
-			$pdf->Cell(40,10,'Hello World!');
+			$pdf->Cell(40,10,'Informations');
 			$pdf->Ln(10);
 			$pdf->SetFont('Arial','',12);
 			$pdf->Cell(40,10, 'Partner ID : ' . $partner_id);

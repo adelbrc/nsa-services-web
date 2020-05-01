@@ -77,13 +77,29 @@ function commandeService($conn, $booking) {
 
 	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
+	// on recupere le nombre d'heures de services restantes
+	$queryServiceTime = $conn->prepare("SELECT serviceHoursRemaining FROM memberships_history WHERE user_id = ? AND status = 'active'");
+	$queryServiceTime->execute([$booking->customer_id]);
+	$serviceTime = $queryServiceTime->fetch()[0];
+
+	if ($serviceTime < 0) {
+		$params = [
+			$booking->customer_id,
+			$booking->service_id,
+			$booking->address,
+			"included"
+		];
+	} else {
+		$params = [
+			$booking->customer_id,
+			$booking->service_id,
+			$booking->address,
+			'En attente'
+		];
+	}
 	// 1. On insert la commande
-	$queryInsertOrder = $conn->prepare("INSERT INTO `orders`(`customer_id`, `order_date`, `service_id`, address) VALUES (?, NOW(), ?, ?)");
-	$res = $queryInsertOrder->execute([
-		$booking->customer_id,
-		$booking->service_id,
-		$booking->address
-	]);
+	$queryInsertOrder = $conn->prepare("INSERT INTO orders(customer_id, order_date, service_id, address, payment_status) VALUES (?, NOW(), ?, ?, ?)");
+	$res = $queryInsertOrder->execute($params);
 
 	if ($res) {
 		$message = "Order inserted";
@@ -100,7 +116,7 @@ function commandeService($conn, $booking) {
 	*/
 
 	// echo $booking->stripe_cus_id;
-	$session_counter = 0;
+
 	// 2. On recupere un prestataire aléatoirement en fonction de son role_id
 	$querysearchPartner = $conn->prepare("SELECT * FROM partner WHERE role_id = ? ORDER BY RAND ( ) LIMIT 1 ");
 	$querysearchPartner->execute([$booking->service_id]);
@@ -120,12 +136,19 @@ function commandeService($conn, $booking) {
 
 			//Je recupere le panier en cours pour le comparer avec les services deja commandé
 			foreach ($booking->data as $sess) {
+				$hourDebutInDBB = $compareDate['beginning'];
+				$hourDebutInPanier = $sess->tdebut;
+				$hourFinInBDD = $compareDate['end'];
+				$hourFinInPanier = $sess->tFin;
 				$dateInBDD = $compareDate[2];
 				$dateUnPanier = $sess->jour;
 
 				//Si le prestataire est deja occuper ce jour alors on en cherche un autre
 				if ($dateInBDD == $dateUnPanier) {
-					$response = 0;
+					if ($hourDebutInDBB == $hourDebutInPanier || $hourFinInBDD == $hourFinInPanier) {
+							$response = 0;
+					}
+
 					//echo json_encode(['dateBDD' => $dateInBDD, "DatePanier" => $dateUnPanier]);
 				} else {
 					$response =1;
@@ -145,24 +168,41 @@ function commandeService($conn, $booking) {
 
 	// 3. On insert la/les sessions / horaires à intervenir
 
+	$total_hours = 0;
+
 	foreach ($booking->data as $session) {
-		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id) VALUES (?, ?, ?, ?, ?)");
+		$queryInsertSession = $conn->prepare("INSERT INTO order_session(order_id, day, beginning, `end`, partner_id, orderStatus) VALUES (?, ?, ?, ?, ?, ?)");
 		$queryInsertSession->execute([
 			$lastInsertId,
 			$session->jour,
 			$session->tdebut,
 			$session->tfin,
-			$resta['partner_id']
+			$resta['partner_id'],
+			"Prevu"
 		]);
 
-		$session_counter += 1;
+		$total_hours += intval(substr($session->tfin, 0, 2)) - intval(substr($session->tdebut, 0, 2));
 	}
+
+
+	// on decremente son nombre d'heures de services incluses s'il en a
+	if ($serviceTime) {
+		$queryServiceTime = $conn->prepare("UPDATE memberships_history SET serviceHoursRemaining = ? WHERE user_id = ? AND status = 'active'");
+		$queryServiceTime->execute([$serviceTime - $total_hours, $booking->customer_id]);
+	}
+	// s'il n'en a pas, on le fait payer normalement 
+
+
+
+
+
 
 	// stripe
 	// on verifie si l'USER A DEJA un ABONNEMENT ACTIF a ce SERVICE
 	$abonnement_a_ce_service_data = \Stripe\Subscription::all([
 		'customer' => $booking->stripe_cus_id,
 		'plan' => $booking->plan_id,
+		'status' => 'active'
 	]);
 
 	$a_t_il_un_abonnement_a_ce_service = count($abonnement_a_ce_service_data["data"]);
@@ -193,11 +233,23 @@ function commandeService($conn, $booking) {
 	$a = \Stripe\SubscriptionItem::createUsageRecord(
 		$si_,
 		[
-			'quantity' => $session_counter,
+			'quantity' => $total_hours,
 			'timestamp' => strtotime("now"),
 			'action' => 'increment',
 		]
 	);
+
+
+	// invoice
+	$queryInsertInvoice = $conn->prepare("INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (?, ?, ?, ?, ?, ?)");
+	$queryInsertInvoice->execute([
+		$booking->stripe_cus_id,
+		$booking->customer_id,
+		$booking->price * $total_hours,
+		date("Y-m-d", strtotime("+1 week")),
+		$booking->service_id,
+		""
+	]);
 
 
 	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
@@ -244,9 +296,6 @@ function askDevis($conn, $nature, $booking) {
 	// 1. On insert le devis general
 	// 2. On insert les sessions du devis demandées
 	// en fonction de la nature, le code de la query et les parametres donnés changent, on adapte donc le contexte
-
-
-
 
 	switch ($nature) {
 		// ce devis provient de services proposés
@@ -376,10 +425,81 @@ function handleDoublon($conn, $obj) {
 
 	echo json_encode(['status' => "success", "action" => "show", "message" => $queryRemoveDoublons->rowCount() . " doublons effacés"]);
 
-	// exit;
 }
 
 
+
+
+
+function payServices($conn, $obj) {
+	$total = $obj->total;
+	$cus = $obj->cus;
+	$name = $obj->name;
+	$plan = $obj->plan;
+	$uid = $obj->uid;
+	$oid = $obj->oid;
+
+	// on annule le prochain paiement automatique de stripe
+	$retrieveSub = \Stripe\Subscription::all([
+		"customer" => $cus,
+		"plan" => $plan
+	]);
+
+	var_dump($cus, $plan, $retrieveSub);
+		exit;
+
+	try {
+
+		$subscription = \Stripe\Subscription::retrieve(
+			$retrieveSub["data"][0]["id"]
+		);
+
+
+		$subscription->delete();
+		
+	} catch(Exception $e) {
+		echo json_encode(['status' => "error", "message" => "Reservation deja payee : " . $e->getMessage()]);
+		exit;
+	}
+
+
+
+	$queryRightCus = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? and status = 'active'");
+	$queryRightCus->execute([$uid]);
+	$rightCus = $queryRightCus->fetch()[0];
+
+
+	$invoice_item = \Stripe\InvoiceItem::create([
+		'customer' => $rightCus,
+		'amount' => $total * 100,
+		'currency' => 'EUR',
+		'description' => 'Paiement manuel pour : ' . $name,
+	]);
+
+
+	$createdInvoice = \Stripe\Invoice::create([
+	  'customer' => $rightCus,
+	  // 'auto_advance' => true, /* auto-finalize this draft after ~1 hour */
+	  'auto_advance' => false, // // //  auto-finalize this draft after ~1 hour 
+	]);
+
+	// // on paie en avance
+	$invoice = \Stripe\Invoice::retrieve($createdInvoice["id"]);
+	$invoice->finalizeInvoice();
+	$invoice->pay();
+
+	// on met la ligne en bdd table orders comme Paid
+		// Recup les infos du service courant concerne
+	$querySetPaid = $GLOBALS["conn"]->prepare("UPDATE orders SET payment_status = 'Paid' WHERE order_id = ?");
+	$resQuerySetPaid = $querySetPaid->execute([$oid]);
+	if (!$querySetPaid->rowCount()) {
+		echo json_encode(['status' => "error", "message" => "Erreur lors de la modification du statut du paiement"]);
+	}
+
+	echo json_encode(['status' => "success", "message" => "Service payé avec succès"]);
+
+
+}
 
 
 
@@ -415,8 +535,8 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 			handleDoublon($conn, $obj);
 			break;
 
-		case 'stripe_service':
-			// stripe_service($conn, $obj);
+		case 'payServices':
+			payServices($conn, $obj);
 			break;
 
 		default:
