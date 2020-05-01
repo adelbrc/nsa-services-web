@@ -21,7 +21,7 @@ if (!isset($_GET["obj"]) || empty($_GET["obj"])) {
 
 function resilier($conn, $obj) {
 
-	$querySubscriptionId = $conn->prepare("SELECT sub_id FROM memberships_history WHERE user_id = ?");
+	$querySubscriptionId = $conn->prepare("SELECT sub_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
 	$querySubscriptionId->execute([$obj->user_id]);
 	$res = $querySubscriptionId->fetch();
 
@@ -38,13 +38,11 @@ function resilier($conn, $obj) {
 		// Suppression de l'abonnement dans stripe
 		if ($status) {
 			$subscription = \Stripe\Subscription::retrieve($res["sub_id"]);
-
-
 			try {
 				$subscription->delete();
 				echo json_encode(['status' => "success", "action" => "redirect", "link" => "dashboard.php", "Subscription canceled"]);
 			} catch (Exception $e) {
-				echo json_encode(['status' => "error", "data" => "This subscription ID has currently no subscription"]);
+				echo json_encode(['status' => "error", "data" => "This subscription ID has currently no subscription : " . $e->getMessage()]);
 			}
 
 		} else {

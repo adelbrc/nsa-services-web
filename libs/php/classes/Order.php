@@ -76,7 +76,7 @@ class Order {
 	}
 
 	// Get user's orders
-	public function getUserOrders($uid) {
+	public static function getUserOrders($uid) {
 
 		$sql = "SELECT * FROM nsaservices_db.orders WHERE customer_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
