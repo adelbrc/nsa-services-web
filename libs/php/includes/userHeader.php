@@ -9,7 +9,7 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="index.php">Accueil <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="dashboard.php">Abonnements</a>
@@ -29,23 +29,22 @@
 
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Account
+					Mon compte
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="profile.php">Profile</a>
+					<a class="dropdown-item" href="profile.php">Profil</a>
 					<a class="dropdown-item" href="orders.php"><?php echo $commande[$langue]; ?></a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="invoices.php">Factures</a>
-					<a class="dropdown-item" href="#">Interventions</a>
 				</div>
 			</li>
 			<?php if ($_SESSION["user"]["rank"] == "3"): ?>
 				<li class="nav-item">
-					<a class="nav-link" href="admin/dashboard.php">Admin Panel</a>
+					<a class="nav-link" href="admin/dashboard.php">Administration</a>
 				</li>
 			<?php endif; ?>
 			<li class="nav-item">
-				<a class="nav-link" href="libs/php/deconnexion.php">Logout</a>
+				<a class="nav-link" href="libs/php/deconnexion.php">Déconnexion</a>
 			</li>
 
 			<li class="nav-item dropdown">

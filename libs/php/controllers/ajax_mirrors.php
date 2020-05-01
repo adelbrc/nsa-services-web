@@ -21,7 +21,7 @@ if (!isset($_GET["obj"]) || empty($_GET["obj"])) {
 
 function resilier($conn, $obj) {
 
-	$querySubscriptionId = $conn->prepare("SELECT sub_id FROM memberships_history WHERE user_id = ?");
+	$querySubscriptionId = $conn->prepare("SELECT sub_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
 	$querySubscriptionId->execute([$obj->user_id]);
 	$res = $querySubscriptionId->fetch();
 
@@ -38,13 +38,11 @@ function resilier($conn, $obj) {
 		// Suppression de l'abonnement dans stripe
 		if ($status) {
 			$subscription = \Stripe\Subscription::retrieve($res["sub_id"]);
-
-
 			try {
 				$subscription->delete();
 				echo json_encode(['status' => "success", "action" => "redirect", "link" => "dashboard.php", "Subscription canceled"]);
 			} catch (Exception $e) {
-				echo json_encode(['status' => "error", "data" => "This subscription ID has currently no subscription"]);
+				echo json_encode(['status' => "error", "data" => "This subscription ID has currently no subscription : " . $e->getMessage()]);
 			}
 
 		} else {
@@ -82,7 +80,7 @@ function commandeService($conn, $booking) {
 	$queryServiceTime->execute([$booking->customer_id]);
 	$serviceTime = $queryServiceTime->fetch()[0];
 
-	if ($serviceTime < 0) {
+	if ($serviceTime > 0) {
 		$params = [
 			$booking->customer_id,
 			$booking->service_id,
@@ -265,7 +263,7 @@ function searchUser($conn, $obj){
 	$quesryService = $conn->prepare("SELECT order_id FROM order_session WHERE session_id = ? ");
 	$quesryService->execute([$idOrder]);
 	$resService = $quesryService->fetch();
-	//var_dump($resService);
+
 
 	$queryOrders = $conn->prepare("SELECT customer_id FROM orders WHERE order_id = ? ");
 	$queryOrders->execute([$resService[0]]);
@@ -414,7 +412,7 @@ function askDevis($conn, $nature, $booking) {
 
 
 function handleDoublon($conn, $obj) {
-	// var_dump($obj);
+
 	// echo $obj->id;
 	// echo $obj->email;
 
@@ -444,9 +442,6 @@ function payServices($conn, $obj) {
 		"customer" => $cus,
 		"plan" => $plan
 	]);
-
-	var_dump($cus, $plan, $retrieveSub);
-		exit;
 
 	try {
 

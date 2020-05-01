@@ -26,7 +26,7 @@ if ($user->getRank() != "3") {
 if (isset($_POST['buttonAnswerDeviss'])) {
 	if (isset($_POST['price']) AND isset($_POST['answer']) AND !empty($_POST['answer']) AND !empty($_POST['price'])) {
 		date_default_timezone_set('Europe/Paris');
-		$date = date('y-m-d h:i:s');
+		$date = date('d-m-Y H:i:s');
 		$price = htmlspecialchars($_POST['price']);
 		$answer = htmlspecialchars($_POST['answer']);
 		$idDevis = $_POST['idDevis'];
@@ -38,7 +38,8 @@ if (isset($_POST['buttonAnswerDeviss'])) {
 				$date,
 				$idDevis
 			));
-	}else {
+
+	} else {
 		echo 'ERROR';
 	}
 }
@@ -153,12 +154,12 @@ if (isset($_POST['buttonAnswerDeviss'])) {
 																			<p><?= $devisArray["description"] ?></p>
 
 																			<h3>Chiffrage</h3>
-																			<form class="formAnswerDevis"  method="post">
+																			<form class="formAnswerDevis" method="post">
 																				<h5>Prix €</h5>
-																				<input type="number" name="price">
+																				<input type="number" name="price" value="<?= isset($devisArray['devis_cost']) ? $devisArray['devis_cost'] : '' ;  ?>">
 																				<input type="text" name="idDevis" value="<?= $devisArray["devis_id"] ?>" hidden>
 																				<h5>Description </h5>
-																				<textarea name="answer" rows="8" cols="50"></textarea><br>
+																				<textarea name="answer" rows="8" cols="50"><?= isset($devisArray['answer']) ? $devisArray['answer'] : '' ;  ?></textarea><br>
 																				<button type="submit" name="buttonAnswerDeviss" class="btn btn-primary">Soumettre</button>
 
 																			</form>
