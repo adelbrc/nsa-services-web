@@ -85,11 +85,13 @@ $langue = 0;
 						<p id="quiSommeNousTexte"><?php echo $quiSommeNoustexte[$langue]; ?></p>
 					</div>
 				</div>
+				<div id="canvas">
 
+				</div>
 				<br>
-				
+
 				<h1 id="abonTitle" class="h3qui" style="text-align:center;"><?php echo $aboIndiv[$langue] ?></h1>
-	
+
 				<hr class="my-4">
 
 				<div id="abon"class="scrollmenu">
@@ -119,7 +121,149 @@ $langue = 0;
 				</div>
 				<?php include('libs/php/footer.php'); ?>
 				<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+				<script type="module">
 
+												import * as THREE from './libs/js/webGL/build/three.module.js';
+												//import Stats from './libs/js/webGL/jsm/libs/stats.module.js';
+												import { GUI } from './libs/js/webGL/jsm/libs/dat.gui.module.js';
+												import { FBXLoader } from './libs/js/webGL/jsm/loaders/FBXLoader.js';
+												import { OrbitControls } from './libs/js/webGL/jsm/controls/OrbitControls.js';
+
+												var container, controls;
+												var camera, scene, renderer, light;
+
+												var clock = new THREE.Clock();
+
+												var mixer;
+
+												init();
+												animate();
+
+												function init() {
+													container = document.createElement( 'div' );
+													var canvas = document.getElementById( 'canvas' );
+													canvas.appendChild( container );
+													camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 15000 );
+													camera.position.set( 50, 300, 220 );
+
+													scene = new THREE.Scene();
+													scene.background = new THREE.Color( 0x000000 );
+													// scene.fog = new THREE.Fog( 0xa0a0a0, 200, 1000 );
+
+													light = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+													light.position.set( 0, 200, 0 );
+													scene.add( light );
+
+													light = new THREE.DirectionalLight( 0xffffff );
+													light.position.set( 0, 200, 100 );
+													light.castShadow = true;
+													light.shadow.camera.top = 180;
+													light.shadow.camera.bottom = - 100;
+													light.shadow.camera.left = - 120;
+													light.shadow.camera.right = 120;
+													scene.add( light );
+
+													// scene.add( new CameraHelper( light.shadow.camera ) );
+
+													// ground
+													var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x000000, depthWrite: false } ) );
+													mesh.rotation.x = - Math.PI / 2;
+													mesh.receiveShadow = true;
+													scene.add( mesh );
+
+													var grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
+													grid.material.opacity = 0.2;
+													grid.material.transparent = true;
+													scene.add( grid );
+
+													// model
+													var loader = new FBXLoader();
+													loader.load( 'libs/js/webGL/3Dobjects/plombier/Dropping.fbx', function ( plombier ) {
+
+													mixer = new THREE.AnimationMixer( plombier );
+
+													var action = mixer.clipAction( plombier.animations[ 0 ] );
+													action.play();
+
+													plombier.traverse( function ( child ) {
+
+														if ( child.isMesh ) {
+
+															child.castShadow = true;
+															child.receiveShadow = true;
+
+														}
+
+													} );
+																plombier.rotation.y = 2.3;
+															plombier.position.z = -205;
+															plombier.position.x = 85;
+													plombier.rotation.y = 4.5;
+
+													scene.add( plombier );
+
+													} );
+															// Kitchen
+															var loader = new FBXLoader();
+															loader.load( 'libs/js/webGL/3Dobjects/kitchen2/source/test9.fbx', function ( cuisine ) {
+
+																	cuisine.traverse( function ( child ) {
+
+																		if ( child.isMesh ) {
+
+																			child.castShadow = true;
+																			child.receiveShadow = true;
+
+																		}
+																} );
+														cuisine.position.x = 300;
+														cuisine.position.z = 700;
+														cuisine.position.y = 10;
+														cuisine.rotation.y = 1.6;
+
+														cuisine.scale.set(90,90,90);
+														scene.add( cuisine );
+
+															} );
+
+													renderer = new THREE.WebGLRenderer( { antialias: true } );
+													renderer.setPixelRatio( window.devicePixelRatio );
+													renderer.setSize( window.innerWidth, window.innerHeight );
+													renderer.shadowMap.enabled = true;
+													container.appendChild( renderer.domElement );
+
+													controls = new OrbitControls( camera, renderer.domElement );
+													controls.target.set( 0, 150, -150 );
+													controls.update();
+
+													window.addEventListener( 'resize', onWindowResize, false );
+												}
+
+												function onWindowResize() {
+
+													camera.aspect = window.innerWidth / window.innerHeight;
+													camera.updateProjectionMatrix();
+
+													renderer.setSize( window.innerWidth, window.innerHeight );
+
+												}
+
+												//
+
+												function animate() {
+
+													requestAnimationFrame( animate );
+
+													var delta = clock.getDelta();
+
+													if ( mixer ) mixer.update( delta );
+
+													renderer.render( scene, camera );
+
+
+												}
+
+											</script>
 				<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 				<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	</body>
