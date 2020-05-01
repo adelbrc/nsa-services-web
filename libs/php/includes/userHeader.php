@@ -12,7 +12,7 @@
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="dashboard.php">Dashboard</a>
+				<a class="nav-link" href="dashboard.php">Abonnements</a>
 			</li>
 
 			<li class="nav-item dropdown">
