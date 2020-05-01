@@ -8,7 +8,7 @@ if (!isConnected()) {
 require_once('../libs/php/classes/Partner.php');
 
 $partnerId = Partner::getPartnerById($_SESSION["user"]["partner_id"]);
-$contract_path = str_replace("/var/www/nsa-services-web/collaborateur/", "", $partnerId->getContract());
+$contract_path = str_replace("/var/www/nsa-services-web/collaborateur/", " ", $partnerId->getContract());
 ?>
 
 <!DOCTYPE html>
