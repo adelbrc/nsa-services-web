@@ -20,7 +20,7 @@ class Invoice extends FPDF
         // Move to the right
         $this->Cell(45);
         // Title
-        $this->Cell(100,10,'Facture',1,0,'C');
+        $this->Cell(100,10,'Invoice',1,0,'C');
         // Line break
         $this->Ln(20);
     }
