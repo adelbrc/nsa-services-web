@@ -124,12 +124,12 @@ $langue = 0;
 				<script type="module">
 
 												import * as THREE from './libs/js/webGL/build/three.module.js';
-												import Stats from './libs/js/webGL/jsm/libs/stats.module.js';
+												//import Stats from './libs/js/webGL/jsm/libs/stats.module.js';
 												import { GUI } from './libs/js/webGL/jsm/libs/dat.gui.module.js';
 												import { FBXLoader } from './libs/js/webGL/jsm/loaders/FBXLoader.js';
 												import { OrbitControls } from './libs/js/webGL/jsm/controls/OrbitControls.js';
 
-												var container, stats, controls;
+												var container, controls;
 												var camera, scene, renderer, light;
 
 												var clock = new THREE.Clock();
@@ -237,11 +237,6 @@ $langue = 0;
 													controls.update();
 
 													window.addEventListener( 'resize', onWindowResize, false );
-
-													// stats
-													stats = new Stats();
-													container.appendChild( stats.dom );
-
 												}
 
 												function onWindowResize() {
@@ -265,7 +260,6 @@ $langue = 0;
 
 													renderer.render( scene, camera );
 
-													stats.update();
 
 												}
 
