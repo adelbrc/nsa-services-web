@@ -42,9 +42,11 @@ $contract_path = str_replace("/var/www/nsa-services-web/collaborateur/", " ", $p
 											<li class="nav-item">
 												<a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Settings</button></a>
 											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="<?php echo $contract_path; ?>"><button type="button" class="btn btn-sm btn-outline-primary">Contrat</button></a>
-											</li>
+											<?php if ($contract_path != NULL): ?>
+												<li class="nav-item">
+													<a class="nav-link" href="<?php echo $contract_path; ?>"><button type="button" class="btn btn-sm btn-outline-primary">Contrat</button></a>
+												</li>
+											<?php endif; ?>
 										</ul>
 									</div>
 								</div>

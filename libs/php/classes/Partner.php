@@ -310,7 +310,9 @@ class Partner {
 
 			$result = $req->fetch();
 
-			return $result["file_path"];
+			if ($result != NULL) {
+				return $result["file_path"];
+			}
 	}
 
 

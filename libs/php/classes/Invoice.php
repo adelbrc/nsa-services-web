@@ -1,9 +1,6 @@
 <?php
 
 require('fpdf/fpdf.php');
-require_once("DBManager.php");
-
-$conn = DBManager::getConn();
 
 /**
  *
@@ -13,8 +10,7 @@ class Invoice extends FPDF
     // Page header
     function Header()
     {
-        // Logo
-        $this->Image('ressources/img/nsa-services.png',10,6,30);
+
         // Arial bold 15
         $this->SetFont('Arial','B',15);
         // Move to the right
