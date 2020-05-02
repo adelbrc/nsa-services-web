@@ -9,7 +9,6 @@ $.ajax({
        data.forEach( (val) => {
            orderDate.unshift(val.order_date);
            nb.unshift(val.nb);
-           console.log(val);
        });
 
        var chartData = {

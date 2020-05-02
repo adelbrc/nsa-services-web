@@ -1,20 +1,20 @@
 $.ajax({
-   url : '../libs/php/controllers/partnerStats.php', // my php file
-   type : 'GET', // type of the HTTP request
+   url : '../libs/php/controllers/userStats.php',
+   type : 'GET',
    success : (data) => {
 
        data = JSON.parse(data);
-       var addDate = [];
+       var signupDate = [];
        var nb = [];
        data.forEach( (val) => {
-           addDate.unshift(val.add_date);
+           signupDate.unshift(val.signup_date);
            nb.unshift(val.nb);
        });
 
        var chartData = {
-           labels: addDate,
+           labels: signupDate,
            datasets: [{
-               label: 'Nombre de nouveaux partenaires',
+               label: 'Nombre de nouveaux clients',
                backgroundColor: 'rgba(73,226,255,0.25)',
                borderColor: '#46d5f1',
                hoverBackgroundColor: '#CCCCCC',
@@ -23,15 +23,13 @@ $.ajax({
            }]
        };
 
-       var ctx = document.getElementById('partnerStatsChart').getContext('2d');
+       var ctx = document.getElementById('userStatsChart').getContext('2d');
        var chart = new Chart(ctx, {
-           // The type of chart we want to create
+
            type: 'line',
 
-           // The data for our dataset
            data: chartData,
 
-           // Configuration options go here
            options: {
                scales: {
                  xAxes: [ {
