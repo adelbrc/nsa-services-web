@@ -1,6 +1,5 @@
 <?php
-  if(!empty($_POST['category_name'])){
-
+  if(!empty($_POST['category_name']) AND !empty($_POST['inputReduc'])){
     $name = htmlspecialchars($_POST['category_name']);
     $reduc = htmlspecialchars($_POST['inputReduc']);
 
