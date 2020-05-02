@@ -253,7 +253,7 @@ if(isset($_POST['annulerService'])){
 
 				<div class="dataContainer">
 					<h2 class="text-center">Planning - <?php echo $servicePrevu[$langue]; ?></h2>
-					
+
 					<?php
 						$queryUserHasMembership = $conn->prepare("SELECT user_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
 						$queryUserHasMembership->execute([$_SESSION["user"]["id"]]);
@@ -262,7 +262,7 @@ if(isset($_POST['annulerService'])){
 					?>
 						<h4 class="text-center"><a href="dashboard.php?#abonnements" style="text-decoration: underline; color: red">Souscrivez à un abonnement pour commencer à réserver !</a></h2>
 					<?php endif; ?>
-					
+
 						<div id='calendar'></div>
 				</div>
 			</section>
@@ -341,6 +341,16 @@ if(isset($_POST['annulerService'])){
 
 		function displayModal(id, titre, debut, fin) {
 
+			var joursDebut = debut.getDate();
+			var moisDebut = debut.getMonth();
+			var anneesDebut=debut.getFullYear();
+			var heureDebut = debut.getHours();
+
+			var joursFin = fin.getDate();
+			var moisFin = fin.getMonth();
+			var anneesFin=fin.getFullYear();
+			var heureFin = fin.getHours();
+
 			document.body.innerHTML+= `<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -358,11 +368,11 @@ if(isset($_POST['annulerService'])){
           </div>
           <div class="form-group">
 						<h4>Date de début</h4>
-						<p>${debut}</p>
+						<p>${joursDebut}-0${moisDebut}-${anneesDebut} </br> De : ${heureDebut}:00 heure</p>
           </div>
 					<div class="form-group">
 						<h4>Date de fin</h4>
-						<p>${fin}</p>
+						<p>${joursFin}-0${moisFin}-${anneesFin} </br> A : ${heureFin}:00 heure</p>
 						<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" hidden>
           </div>
 					<div class="modal-footer">

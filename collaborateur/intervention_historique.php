@@ -64,7 +64,7 @@ include("../libs/php/isConnected.php");
 
                 <tr>
                   <th scope="row"><?= $row["session_id"] ?></th>
-                  <td><?= $row['day'] ?></td>
+                  <td><?= date('d-m-Y', strtotime($row['day'])); ?></td>
                   <td><?= $row['beginning'] ?></td>
                   <td><?= $row['end'] ?></td>
                 </tr>
