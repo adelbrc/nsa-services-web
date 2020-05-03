@@ -3,9 +3,9 @@
 include("libs/php/isConnected.php");
 include('libs/php/functions/translation.php');
 
-// if (!isset($_POST['panier']) OR !isset($_GET["hiddenpanier"])) {
-// 	header("Location: mes_services.php?no");
-// }
+if (!isset($_GET['panier']) OR !isset($_GET['hiddenpanier'])) {
+	header("Location: mes_services.php");
+}
 
 require_once("libs/php/classes/DBManager.php");
 $conn = DBManager::getConn();
@@ -19,65 +19,54 @@ if (isset($_GET['lang']))
 else
 	$langue = 0;
 
-// cette variable va declencher les requetes d'insertion de la commande sans abonnement
-$faireDoAjax = 0;
 
 // STRIPE 
 if (isset($_GET['stripeToken'])) {
 	$token = $_GET['stripeToken'];
 
-	// retrouver le token
-	$retrieveToken = \Stripe\Token::retrieve($token);
+	// // retrouver le token
+	// $retrieveToken = \Stripe\Token::retrieve($token);
 
-	// 
-	var_dump($retrieveToken["card"]["id"]);
-	$card_id = $retrieveToken["card"]["id"];
+	// // 
+	// var_dump($retrieveToken["card"]["id"]);
+	// $card_id = $retrieveToken["card"]["id"];
 
 
-	$src = \Stripe\Source::create(
-		[
-			"type" => "ach_credit_transfer",
-			"currency" => "usd",
-			"owner" => [
-				"email" => $_SESSION["user"]["email"]
-			]
-		]
-	);
+	// $src = \Stripe\Source::create(
+	// 	[
+	// 		"type" => "ach_credit_transfer",
+	// 		"currency" => "usd",
+	// 		"owner" => [
+	// 			"email" => $_SESSION["user"]["email"]
+	// 		]
+	// 	]
+	// );
 	
-	$cus_src = \Stripe\Customer::createSource(
-		$_SESSION["user"]["cus_id"],
-		[
-			'source' => $src["id"],
-		]
-	);
+	// $cus_src = \Stripe\Customer::createSource(
+	// 	$_SESSION["user"]["cus_id"],
+	// 	[
+	// 		'source' => $src["id"],
+	// 	]
+	// );
 
 
-	\Stripe\Customer::update(
-		$_SESSION["user"]["cus_id"],
-		[
-			'default_source' => $src
-		]
-	);
+	// \Stripe\Customer::update(
+	// 	$_SESSION["user"]["cus_id"],
+	// 	[
+	// 		'default_source' => $src
+	// 	]
+	// );
 
-
-	// exit;
 	
 	$charge = \Stripe\Charge::create([
-		'amount' => $_GET['total'] * 200,
-		'currency' => 'usd',
-		'customer' => $_SESSION['user']['cus_id'],
+		'amount' => $_GET['total'] * 100,
+		'currency' => 'eur',
+
+		// 'customer' => $_SESSION['user']['cus_id'],
 		'description' => 'Commande de service sans abonnement',
-		'source' => $cus_src["id"],
+		'source' => $token,
 	]);
 
-	// var_dump($charge);
-	echo "ok";
-
-	// $faireDoAjax = 0;
-	
-	// var_dump(json_decode($_GET["hiddepanier"]));
-
-	// header("Location: mes_services.php?status=serviceBooked");
 }
 
 ?>
@@ -125,10 +114,10 @@ if (isset($_GET['stripeToken'])) {
 							<div id="card-errors" role="alert"></div>
 						</div>
 
-						<input type="hidden" id="hiddepanier" name="hiddepanier">
+						<input type="hidden" id="hiddenpanier" name="hiddenpanier">
 						<input type="hidden" id="total" name="total">
 
-						<button class="btn btn-success">Submit Payment</button>
+						<button class="btn btn-success">Payer</button>
 					</form>
 
 				</div>
@@ -141,17 +130,6 @@ if (isset($_GET['stripeToken'])) {
 		<script src="ressources/js/script.js"></script>
 
 		<script>
-
-			<?php if ($faireDoAjax): ?>
-				// get url panier
-				const queryString = window.location.search;
-				const urlParams = new URLSearchParams(queryString);
-				var panier = JSON.parse(urlParams.get('panier'));
-				for (order of panier) {
-					doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', order);				
-				}
-			<?php endif; ?>
-
 
 			// stripe
 			var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
@@ -222,8 +200,18 @@ if (isset($_GET['stripeToken'])) {
 				document.getElementById("total_text").innerText = panier[panier.length-1];
 				console.log(panier);
 
-				document.getElementById("hiddepanier").value = JSON.stringify(panier);
+				document.getElementById("hiddenpanier").value = JSON.stringify(panier);
 				document.getElementById("total").value = panier[panier.length-1];
+			}
+
+			var hiddenpanier = JSON.parse(urlParams.get('hiddenpanier'));
+			if (hiddenpanier) {
+				console.log(hiddenpanier);
+
+				for (var i = 0; i < hiddenpanier.length - 1; i++) {
+					hiddenpanier[i].special_status = 1;
+					doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(hiddenpanier[i]));
+				}
 			}
 
 

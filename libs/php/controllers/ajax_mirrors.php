@@ -73,6 +73,7 @@ function commandeService($conn, $booking) {
 	// 2Bis. On compare la date du service avec tout les autres services deja affecter au meme prestataire
 	// 3. On insert la/les sessions / horaires à intervenir
 
+
 	\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
 	// on recupere le nombre d'heures de services restantes
@@ -86,6 +87,13 @@ function commandeService($conn, $booking) {
 			$booking->service_id,
 			$booking->address,
 			"included"
+		];
+	} else if ($booking->special_status == 1) {
+		$params = [
+			$booking->customer_id,
+			$booking->service_id,
+			$booking->address,
+			'Paid'
 		];
 	} else {
 		$params = [
@@ -183,6 +191,30 @@ function commandeService($conn, $booking) {
 	}
 
 
+
+	// invoice
+	$queryInsertInvoice = $conn->prepare("INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (?, ?, ?, ?, ?, ?)");
+	$queryInsertInvoice->execute([
+		$booking->stripe_cus_id,
+		$booking->customer_id,
+		$booking->price * $total_hours,
+		date("Y-m-d", strtotime("+1 week")),
+		$booking->service_id,
+		""
+	]);
+
+
+
+	// si on est en train d'enregistrer un service sans abonnement,
+	// pas besoin de prendre un abonnement,
+	// on affiche le message et on quitte
+	if ($booking->special_status) {
+		echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
+		exit;
+	}
+
+
+
 	// on decremente son nombre d'heures de services incluses s'il en a
 	if ($serviceTime) {
 		$queryServiceTime = $conn->prepare("UPDATE memberships_history SET serviceHoursRemaining = ? WHERE user_id = ? AND status = 'active'");
@@ -236,18 +268,6 @@ function commandeService($conn, $booking) {
 			'action' => 'increment',
 		]
 	);
-
-
-	// invoice
-	$queryInsertInvoice = $conn->prepare("INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (?, ?, ?, ?, ?, ?)");
-	$queryInsertInvoice->execute([
-		$booking->stripe_cus_id,
-		$booking->customer_id,
-		$booking->price * $total_hours,
-		date("Y-m-d", strtotime("+1 week")),
-		$booking->service_id,
-		""
-	]);
 
 
 	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
@@ -486,7 +506,7 @@ function payServices($conn, $obj) {
 	$invoice_item = \Stripe\InvoiceItem::create([
 		'customer' => $rightCus,
 		'amount' => $total * 100,
-		'currency' => 'EUR',
+		'currency' => 'eur',
 		'description' => 'Paiement manuel pour : ' . $name,
 	]);
 
@@ -580,7 +600,7 @@ function confirmDevis($conn, $obj) {
 	]);
 
 	// 5 achat du devis - stripe
-	
+
 
 
 

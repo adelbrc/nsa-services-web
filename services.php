@@ -38,12 +38,7 @@ require_once('libs/stripe-php-master/init.php');
 		<main>
 	
 		<?php
-
 			if (isset($_COOKIE['skipSub']) && $_COOKIE['skipSub'] == '1'):
-			// $queryHasMembership = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
-			// $queryHasMembership->execute([$_SESSION["user"]["id"]]);
-			// if ($queryHasMembership->fetch()):	
-			
 		?>	
 
 				<!-- Recherche de services -->
@@ -524,11 +519,9 @@ require_once('libs/stripe-php-master/init.php');
 					// on affiche le total total
 					document.getElementById("panier_total").innerText = total_montant;
 
-					console.log("EN TOUT j'AI "+ total_hours + " h, au montant de " + total_montant + " €");
+					console.log("En tout, j'ai "+ total_hours + " h, au montant de " + total_montant + " €");
 
 					console.log(panier);
-
-
 
 				});
 
@@ -580,11 +573,7 @@ require_once('libs/stripe-php-master/init.php');
 						total_montant += local_montant;
 
 					}
-					console.log("EN TOUT j'AI "+ total_hours + " h, au montant de " + total_montant + " €");
-
-
-					// return;
-
+					console.log("En tout j'ai "+ total_hours + " h, au montant de " + total_montant + " €");
 
 					var cookies = document.cookie.split(';');
 
@@ -603,7 +592,7 @@ require_once('libs/stripe-php-master/init.php');
 								// on push le total
 								urlpanier.push(total_montant);
 
-
+								// on envoie le panier dans payment, on l'inserera en bdd UNE FOIS qu'on aura paye
 								document.location.href = "payment.php?panier=" + JSON.stringify(urlpanier);
 
 								console.log(urlpanier);
