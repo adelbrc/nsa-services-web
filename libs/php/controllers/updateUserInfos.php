@@ -146,6 +146,22 @@ if (isset($phone) && !empty($phone)) {
     exit;
   }
 
+  // Check si numéro tel déjà utilisé
+  $q = "SELECT phone_number FROM user WHERE phone_number = ? AND NOT phone_number = ?";
+  $req = $GLOBALS["conn"]->prepare($q);
+  $req->execute(array($phone, $user->getPhoneNumber()));
+
+  $answers = [];
+
+  while ($row = $req->fetch()) {
+    $answers[] = $row;
+  }
+
+  if (count($answers) != 0) {
+    header('Location: ../../../profile.php?error=phone_number_taken');
+    exit;
+  }
+
 }else {
   $phone = $user->getPhoneNumber();
 }

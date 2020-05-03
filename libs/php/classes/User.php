@@ -298,16 +298,25 @@ class User {
 	}
 
 	// --------------------------------
-	// Get Customer's membership starting date
+	// Methode pour savoir si le user est abonné ou pas
 
-	public function getUserMembershipStartingDate($membership_id) {
-		$sql = "SELECT beginning FROM memberships_history WHERE user_id = :uid AND membership_id = :mid AND status = :st";
+	public function hasMembership() {
+		$sql = "SELECT * FROM memberships_history WHERE user_id = :uid AND ending > :now AND status = :st";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute(array(
-			"uid" => $this->id,
-			"mid" => $membership_id,
-			"st" => "active",
+			"uid" => $this->getUID(),
+			"now" => date("Y-m-d"),
+			"st" => 'active'
 		));
+
+		$res = $req->fetch();
+
+		if ($res) {
+			return True;
+		}else {
+			return False;
+		}
+
 	}
 
 }
