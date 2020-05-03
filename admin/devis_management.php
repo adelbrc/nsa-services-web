@@ -26,7 +26,7 @@ if ($user->getRank() != "3") {
 if (isset($_POST['buttonAnswerDeviss'])) {
 	if (isset($_POST['price']) AND isset($_POST['answer']) AND !empty($_POST['answer']) AND !empty($_POST['price'])) {
 		date_default_timezone_set('Europe/Paris');
-		$date = date('d-m-Y H:i:s');
+		$date = date('Y-m-d H:i:s');
 		$price = htmlspecialchars($_POST['price']);
 		$answer = htmlspecialchars($_POST['answer']);
 		$idDevis = $_POST['idDevis'];
