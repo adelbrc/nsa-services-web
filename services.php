@@ -5,11 +5,12 @@ require_once("libs/php/classes/Service.php");
 include("libs/php/isConnected.php");
 include('libs/php/functions/translation.php');
 
-if (isset($_GET['lang'])) {
+if (isset($_GET['lang']))
 	$langue = $_GET["lang"];
-}else {
-$langue = 0;
-}
+else
+	$langue = 0;
+
+
 require_once('libs/stripe-php-master/init.php');
 \Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 
@@ -20,12 +21,14 @@ require_once('libs/stripe-php-master/init.php');
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<script src="https://js.stripe.com/v3/"></script>
 
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="ressources/style/style.css">
 
 		<title>Home Services | Offers</title>
+
 	</head>
 	<body>
 		<header>
@@ -35,10 +38,11 @@ require_once('libs/stripe-php-master/init.php');
 		<main>
 	
 		<?php
-			
-			$queryHasMembership = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
-			$queryHasMembership->execute([$_SESSION["user"]["id"]]);
-			if ($queryHasMembership->fetch()):	
+
+			if (isset($_COOKIE['skipSub']) && $_COOKIE['skipSub'] == '1'):
+			// $queryHasMembership = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
+			// $queryHasMembership->execute([$_SESSION["user"]["id"]]);
+			// if ($queryHasMembership->fetch()):	
 			
 		?>	
 
@@ -84,7 +88,19 @@ require_once('libs/stripe-php-master/init.php');
 							Il vous reste <?= $serviceTime ?> h de services inclus
 						</p>
 					</h3>
-				<?php } else { ?>
+				<?php } else if ($_COOKIE['skipSub'] == '1') { ?>
+					<h3 id="serviceTimeText">
+						<a href="dashboard.php#abonnements" class="red">
+							<svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+							  <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+							  <circle cx="8" cy="4.5" r="1"/>
+							</svg>
+							Profitez de packs de services avec un abonnement,<br> faites le pas dès aujourd'hui !
+						</a>
+					</h3>
+
+				<?php } else if ($serviceTime <= 0) { ?>
 					<h3 id="serviceTimeText">
 						<a href="dashboard.php#abonnements" class="red">
 							<svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -95,7 +111,6 @@ require_once('libs/stripe-php-master/init.php');
 							Vous avez dépassé votre nombre d'heures de service proposé, <br>optez pour un forfait qui correspond à vos besoins ou <br>attendez le mois prochain 
 						</a>
 					</h3>
-
 				<?php } ?>
 
 
@@ -107,9 +122,8 @@ require_once('libs/stripe-php-master/init.php');
 							<?php include("libs/php/views/servicesCardsList.php"); ?>
 						</div>
 					</div>
+
 				</section>
-
-
 
 
 				<!-- Besoin d'un service non liste ? -->
@@ -173,12 +187,14 @@ require_once('libs/stripe-php-master/init.php');
 							<div class="row" id="abonnement_background"></div>
 							<a href="dashboard.php#abonnements" id="abonnement_message">Souscrivez dès maintenant à un abonnement <br> pour découvrir tous nos services</a>
 						</div>
+						<small id="skip_subscription">Non merci, je ne vais commander que quelques heures...</small>
 					</div>
 				</section>
 
 		<?php
 			endif;
 		?>
+
 
 
 		</main>
@@ -193,18 +209,36 @@ require_once('libs/stripe-php-master/init.php');
 
 		<!-- JS -->
 		<script src="libs/ajax/searchServices.js" charset="utf-8"></script>
-		<script src="https://js.stripe.com/v3/"></script>
 		<script src="libs/js/checkout.js" charset="utf-8"></script>
 		<!-- le js ci-dessous (script.js) contient doAjax() -->
 		<script src="ressources/js/script.js"></script>
 
 
-
-
-
-
-
 		<script>
+
+
+			var skipSub = document.getElementById("skip_subscription");
+		
+			if (skipSub) {
+
+				skipSub.addEventListener('click', function() {
+					var today = new Date();
+
+					// enregistrer son choix dans les cookies
+					document.cookie = "skipSub=1;";
+
+					console.log(document.cookie);
+
+					// on refresh
+					document.location.reload(true);
+				});
+			}
+
+
+
+
+
+
 			var panier = [];
 
 			// $(function () {
@@ -467,6 +501,36 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
+				// ce bloc permet d'afficher le prix total du panier a l'ouverture du panier
+				$("#panier_button").click(function() {
+					var panier_keys = Object.keys(panier);
+					// var stripe_items = [];
+					var total_hours = 0;
+					var total_montant = 0;
+
+					for (key of panier_keys) {
+						var local_hours = 0;
+						var local_montant = 0;
+					
+						for (session of panier[key].data) {
+							local_hours += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
+						}
+						local_montant = local_hours * panier[key].price;
+						// stripe_items.push({"plan": panier[key].plan_id, quantity: 1});
+						total_hours += local_hours;
+						total_montant += local_montant;
+					}
+
+					// on affiche le total total
+					document.getElementById("panier_total").innerText = total_montant;
+
+					console.log("EN TOUT j'AI "+ total_hours + " h, au montant de " + total_montant + " €");
+
+					console.log(panier);
+
+
+
+				});
 
 
 
@@ -485,79 +549,77 @@ require_once('libs/stripe-php-master/init.php');
 					// on recupere les index associatifs qu'on avait mis en place avant
 					var panier_keys = Object.keys(panier);
 
-					// var stripe_items = [];
 
-					// for (key of panier_keys) {
-					// 	console.log(key);
-					// 	console.log("Pour " + key + ", j'ai " + panier[key].data.length + " jours");
-					// 	var total_heures = 0;
-					// 	for (session of panier[key].data) {
-					// 		// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
-					// 		// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
-					// 		total_heures += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
-					// 		// console.log(session);
-					// 	}
-					// 	console.log("En tout, pour " + key + ", j'ai " + total_heures + " h");
+					var stripe_items = [];
 
-					// 	// stripe_items.push({"plan": panier[key].plan_id, quantity: total_heures});
-					// 	stripe_items.push({"plan": panier[key].plan_id, quantity: 1});
-					// 	break;
-					// }
+					var total_hours = 0;
+					var total_montant = 0;
 
-					// console.log(stripe_items);
+					for (key of panier_keys) {
+						var local_hours = 0;
+						var local_montant = 0;
+					
+						// console.log("Pour " + key + ", j'ai " + panier[key].data.length + " jours");
+						for (session of panier[key].data) {
+							// on a tdebut et tfin (temps debut temps fin) des String comme ca "10:00",
+							// on va slice "10" et le convertir en int puis soustraire pour avoir la difference
+							local_hours += parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
+						}
+						// local_montant += panier[key].price * parseInt(session.tfin.slice(0, 2)) - parseInt(session.tdebut.slice(0, 2));
+						
+						local_montant = local_hours * panier[key].price;
+						// console.log("Pour " + key + ", je vais payer " + local_montant + " ("+panier[key].price+" € l'heure, "+ local_hours+" h)");
 
+						stripe_items.push({"plan": panier[key].plan_id, quantity: 1});
+						// console.log(stripe_items);
 
-					// let xhttp = new XMLHttpRequest();
+						// on ajoute le montant total des heures pour ce service au total global
+						total_hours += local_hours;
 
-					// xhttp.onreadystatechange = function() {
-					// 	if (xhttp.readyState === 4 && xhttp.status === 200) {
-					// 		console.log("here");
-					// 		console.log(xhttp.responseText);
-					// 	}
-					// };
+						// on ajoute le montant total pour ce service au total global
+						total_montant += local_montant;
 
-					// xhttp.open("GET", "libs/php/controllers/ajax_mirrors.php?form=stripe_service");
-
-					// xhttp.send();
-
-					// on envoie chaque categorie en json
-					// BDD
-
-					for (service of panier_keys) {
-						doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
 					}
-					// console.log(service_plan_id); // plan_...
+					console.log("EN TOUT j'AI "+ total_hours + " h, au montant de " + total_montant + " €");
 
-					// var stripe = Stripe('pk_test_ez95S8pacKWv7L234McLkmLE00qanCpC2B');
 
-					// stripe.redirectToCheckout({
-					// 	items: stripe_items,
+					// return;
 
-					// 	// Do not rely on the redirect to the successUrl for fulfilling
-					// 	// purchases, customers may not always reach the success_url after
-					// 	// a successful payment.
-					// 	// Instead use one of the strategies described in
-					// 	// https://stripe.com/docs/payments/checkout/fulfillment
-					// 	successUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=serviceBooked',
-					// 	cancelUrl: 'http://localhost/ESGI/PA2020/nsa-services-web/mes_services.php?status=cancel'
-					// })
-					// .then(function (result) {
-					// 	if (result.error) {
-					// 		// If `redirectToCheckout` fails due to a browser or network
-					// 		// error, display the localized error message to your customer.
-					// 		var displayError = document.getElementById('error-message');
-					// 		displayError.textContent = result.error.message;
-					// 	}
-					// });
+
+					var cookies = document.cookie.split(';');
+
+					// on verifie s'il commande avec ou sans abonnement
+					for (c of cookies) {
+						splitted = c.split("=");
+						if (splitted[0] === "skipSub")
+							if (splitted[1] == 1) {
+								// on laisse payment.php faire le taff
+								var urlpanier = [];
+
+								for (service of panier_keys) {
+									urlpanier.push(panier[service])
+								}
+
+								// on push le total
+								urlpanier.push(total_montant);
+
+
+								document.location.href = "payment.php?panier=" + JSON.stringify(urlpanier);
+
+								console.log(urlpanier);
+							} else {
+								// on envoie chaque categorie en json
+								// BDD
+								for (service of panier_keys) {
+									doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
+								}							
+							}
+					}
+
+
+
 
 				});
-
-
-
-
-
-
-
 
 
 
@@ -642,6 +704,10 @@ require_once('libs/stripe-php-master/init.php');
 
 
 				$("#firstBookingBox").attr("value", (new Date()).toISOString().substr(0,10));
+
+
+
+
 
 			// });
 

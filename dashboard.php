@@ -197,8 +197,8 @@ if (isset($_GET['lang'])) {
 					// payment_method: {card: cardElement}
 
 
-				})
-				.then(handleResult);
+			})
+			.then(handleResult);
 		};
 
 

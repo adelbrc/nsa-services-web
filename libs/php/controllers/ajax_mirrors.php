@@ -580,6 +580,12 @@ function confirmDevis($conn, $obj) {
 	]);
 
 	// 5 achat du devis - stripe
+	
+
+
+
+
+
 
 
 	// 6

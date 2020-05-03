@@ -77,7 +77,7 @@ $langue = 0;
 					<label for="passwd"><?php echo $confimPasswd[$langue]; ?></label>
 					<input type="password" class="form-control" id="passwd" aria-describedby="passwdHelp" placeholder="<?php echo $reSaisir[$langue] .' '. $passwd[$langue]; ?>" name="passwd2">
 				</div>
-				<button type="submit" name="forminscription" class="btn btn-primary"><?php echo $seConnecter[$langue]; ?></button>
+				<button type="submit" name="forminscription" class="btn btn-primary"><?php echo $sInscrire[$langue]; ?></button>
 			</form>
 		</div>
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

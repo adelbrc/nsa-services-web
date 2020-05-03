@@ -26,6 +26,7 @@ $telNumber = array('Numéro de telephone', 'Phone number');
 $passwd = array('Mot de passe', 'Password');
 $confimPasswd = array('confirmer le mot de passe', 'Confirm your Password');
 $seConnecter = array('Se connecter', 'Login');
+$sInscrire = array('S\'inscire', 'Login');
 $saisir = array('Saisir', 'Enter');
 $reSaisir = array('Retappez', 'Re-type');
 
