@@ -40,7 +40,7 @@ if (isset($_POST['forminscription'])) {
 						require_once('../stripe-php-master/init.php');
 						\Stripe\Stripe::setApiKey('sk_test_UDEhJY5WRNQMQUmjcA20BPne00XeEQBuUc');
 						$stripe_customer = \Stripe\Customer::create([
-							'email' => $mail,
+							'email' => $mail
 						]);
 
 						// inscription d'un mec en bdd avec le customer id stripe

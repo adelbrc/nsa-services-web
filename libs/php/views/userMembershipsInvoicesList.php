@@ -1,5 +1,8 @@
 <?php
 
+// la condition c'est select les abonnements de X utilisateur où la colonne membership id contient quelque chose, 
+// parce que si elle est vide ca veut dire que la row c'est une facture de service, et comme un service n'a pas d'id de membership, 
+// on le met vide
 $sql = "SELECT * FROM invoice WHERE customer_id = :uid and membership_id != ''";
 $req = $GLOBALS["conn"]->prepare($sql);
 $req->execute(array("uid" => $user->getUID()));

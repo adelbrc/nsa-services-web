@@ -180,22 +180,67 @@ if (0) {
 // ===== [OK] =====
 
 // ===== TEST ATTACH PaymentMethod ======
-$mainPm = \Stripe\PaymentMethod::all([
-  'customer' => 'cus_HAakMCVY3mAevo',
-  'type' => 'card',
-]);
+// $mainPm = \Stripe\PaymentMethod::all([
+//   'customer' => 'cus_HAakMCVY3mAevo',
+//   'type' => 'card',
+// ]);
 
 
-$payment_method = \Stripe\PaymentMethod::retrieve(
-	$mainPm["data"][0]["id"]
-);
+// $payment_method = \Stripe\PaymentMethod::retrieve(
+// 	$mainPm["data"][0]["id"]
+// );
 
-$payment_method->attach([
-	'customer' => 'cus_HAajMXFCRiZJyp',
-]);
+// $payment_method->attach([
+// 	'customer' => 'cus_HAajMXFCRiZJyp',
+// ]);
 
 
 // ===== [OK] =====
+
+
+
+// ===== TEST fix achats ======
+// $res = \Stripe\Customer::retrieve(
+// 	'cus_HCQbn075tcoOnr'
+// );
+
+
+// var_dump($res["invoice_settings"]["default_payment_method"]);
+// var_dump($res);
+// ===== [OK] =====
+
+
+$a = \Stripe\Customer::allSources(
+	  'cus_HCQbn075tcoOnr',
+	  ['object' => 'card', 'limit' => 3]
+);
+var_dump($a["data"]);
+var_dump($a["data"][0]["id"]);
+
+
+$res = \Stripe\Customer::update('cus_HCQbn075tcoOnr', [
+    'default_source' => $a["data"][0]["id"]
+]);
+
+var_dump($res);
+
+// $payment_method = \Stripe\PaymentMethod::retrieve(
+//   $res["invoice_settings"]["default_payment_method"]
+// );
+
+// $payment_method->attach([
+//   'customer' => 'cus_HCQbn075tcoOnr',
+// ]);
+
+// ===== TEST Retrouver le id card_ d'un user ======
+// $a = \Stripe\Customer::allSources(
+// 	  'cus_HCOsLXiefRbQWx',
+// 	  ['object' => 'card', 'limit' => 3]
+// );
+// var_dump($a["data"][0]["id"]);
+// ===== [OK] =====
+
+
 
 
 

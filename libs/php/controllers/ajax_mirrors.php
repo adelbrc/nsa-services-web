@@ -437,33 +437,52 @@ function payServices($conn, $obj) {
 	$uid = $obj->uid;
 	$oid = $obj->oid;
 
+	// echo $uid . " (" . $cus . ") " . " veut payer " . $name . " (" . $plan . ") sans carte (cus id de creation)<br>";
+
+
+	$queryRightCus = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
+	$queryRightCus->execute([$uid]);
+	$rightCus = $queryRightCus->fetch()[0];
+
+	// echo "Le cus id de ". $uid . " avec lequel il a l'abonnement familiale donc la carte est : " . $rightCus . "<br>";
+
+
+	// echo "Je demande le sub id composé de " . $cus . " avec " . $plan . "<br>";
 	// on annule le prochain paiement automatique de stripe
 	$retrieveSub = \Stripe\Subscription::all([
 		"customer" => $cus,
 		"plan" => $plan
 	]);
 
-	try {
 
-		$subscription = \Stripe\Subscription::retrieve(
-			$retrieveSub["data"][0]["id"]
-		);
-
-
-		$subscription->delete();
-		
-	} catch(Exception $e) {
-		echo json_encode(['status' => "error", "message" => "Reservation deja payee : " . $e->getMessage()]);
+	if (count($retrieveSub["data"]) == 0) {
+		var_dump($retrieveSub["data"]);
+		// on rentre ici si on avait deja annule cet abonnement et qu'on essaie d'annuler un truc deja annule
+		echo json_encode(['status' => "error", "message" => "Reservation deja annulee, on vous facture pas 2 fois"]);
 		exit;
+	} else {
+		// SI ON A UN ABONNEMENT ACTIF et bien on l'annule
+		try {
+			$subscription = \Stripe\Subscription::retrieve(
+				$retrieveSub["data"][0]["id"]
+			);
+			$subscription->delete();
+			
+		} catch(Exception $e) {
+			echo json_encode(['status' => "error", "message" => "Reservation deja payee : " . $e->getMessage()]);
+			exit;
+		}		
 	}
 
 
-
-	$queryRightCus = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? and status = 'active'");
-	$queryRightCus->execute([$uid]);
-	$rightCus = $queryRightCus->fetch()[0];
+	// on met la methode par de paiement par defaut du mec 
+	$res = \Stripe\Customer::retrieve($rightCus);
 
 
+	$pm = $res["invoice_settings"]["default_payment_method"];
+ 
+
+	// on passe au paiement
 	$invoice_item = \Stripe\InvoiceItem::create([
 		'customer' => $rightCus,
 		'amount' => $total * 100,
@@ -474,6 +493,7 @@ function payServices($conn, $obj) {
 
 	$createdInvoice = \Stripe\Invoice::create([
 	  'customer' => $rightCus,
+	  'default_payment_method' => $pm,
 	  // 'auto_advance' => true, /* auto-finalize this draft after ~1 hour */
 	  'auto_advance' => false, // // //  auto-finalize this draft after ~1 hour 
 	]);
