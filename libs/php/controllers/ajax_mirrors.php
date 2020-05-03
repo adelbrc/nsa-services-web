@@ -521,7 +521,7 @@ function payServices($conn, $obj) {
 		echo json_encode(['status' => "error", "message" => "Erreur lors de la modification du statut du paiement"]);
 	}
 
-	echo json_encode(['status' => "success", "message" => "Service payé avec succès"]);
+	echo json_encode(['status' => "success", "message" => "Service payé avec succès", "total" => $total]);
 
 
 }

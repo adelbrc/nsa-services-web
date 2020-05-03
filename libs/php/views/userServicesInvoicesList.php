@@ -1,5 +1,4 @@
 <?php
-
 // Recuperer les commandes non prises charge par l'abonnement en faites par cet user
 $queryOrders = $GLOBALS["conn"]->prepare("SELECT order_id, order_date, service_id FROM orders WHERE customer_id = ? AND payment_status = 'En attente'");
 $queryOrders->execute([$user->getUID()]);
@@ -28,7 +27,7 @@ foreach ($userOders as $order) {
 	$total_price = $serviceInfo["price"] * $hours;
 
 	?>
-	
+
 		<div class="container w-25 col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<p><b><?= $serviceInfo["name"] ?></b><br>
 			<?= $hours ?> h (<?= $serviceInfo["price"] ?> € / h)</p>
@@ -84,7 +83,7 @@ foreach ($userOders as $order) {
 <?php
 
 // Recuperer les commandes faites par cet user
-$queryOrders = $GLOBALS["conn"]->prepare("SELECT order_id, order_date, service_id FROM orders WHERE customer_id = ? AND payment_status = 'Paid' OR payment_status = 'included'");
+$queryOrders = $GLOBALS["conn"]->prepare("SELECT order_id, order_date, service_id FROM orders WHERE customer_id = ? AND (payment_status = 'Paid' OR payment_status = 'included')");
 $queryOrders->execute([$user->getUID()]);
 $userOders = $queryOrders->fetchAll();
 
