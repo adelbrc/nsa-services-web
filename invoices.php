@@ -49,6 +49,9 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 								<li class="nav-item">
 									<a class="nav-link" id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Services</button></a>
 								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><button type="button" class="btn btn-sm btn-outline-primary">Commandes</button></a>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -72,8 +75,8 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 						<?php include("libs/php/views/userMembershipsInvoicesList.php"); ?>
 					</div>
 
-					<div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service">
-						Service
+					<div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders">
+						<?php include("libs/php/views/userOrdersInvoicesList.php"); ?>
 					</div>
 				</div>
 			</div>
@@ -107,6 +110,8 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 				</div>
 			</div>
 		</div>
+
+
 		
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

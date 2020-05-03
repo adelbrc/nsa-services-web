@@ -85,7 +85,7 @@ class Order {
 	// Get user's orders
 	public static function getUserOrders($uid) {
 
-		$sql = "SELECT * FROM nsaservices_db.orders WHERE customer_id = ?";
+		$sql = "SELECT nsaservices_db.orders.*, service.name AS 'service_id' FROM nsaservices_db.orders INNER JOIN service ON orders.service_id = service.id WHERE customer_id = ?";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute([$uid]);
 

@@ -12,10 +12,8 @@ $list = Order::getUserOrders($user->getUID());
 						<th scope="col">ID</th>
 						<th scope="col">Date</th>
 						<th scope="col"><?php echo $quantite[$langue]; ?></th>
-						<th scope="col">Service ID</th>
+						<th scope="col">Service</th>
 						<th scope="col"><?php echo $etatPaiement[$langue]; ?></th>
-						<th scope="col"><?php echo $dateReservation[$langue]; ?></th>
-						<th scope="col"><?php echo $etatCommande[$langue]; ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -23,21 +21,9 @@ $list = Order::getUserOrders($user->getUID());
 						<tr>
 							<th scope="row"><?php echo $order->getOrderId(); ?></th>
 							<td><?php $thedate = new DateTime($order->getOrderDate()); echo $thedate->format('d/m/Y H:i:s'); ?></td>
-							<!-- <td><?php echo $order->getNbHours() . "h"; ?></td> -->
+							<td></td>
 							<td><?php echo $order->getServiceId(); ?></td>
 							<td><?php echo $order->getPaymentStatus(); ?></td>
-							<td><?php $thedate = new DateTime($order->getReservationDate()); echo $thedate->format('d/m/Y H:i:s'); ?></td>
-							<td>
-								<?php if ($order->getOrderStatus() == 0): ?>
-									<?php echo "Pending"; ?>
-								<?php endif; ?>
-								<?php if ($order->getOrderStatus() == 1): ?>
-									<?php echo "Confirmed"; ?>
-								<?php endif; ?>
-								<?php if ($order->getOrderStatus() == 2): ?>
-									<?php echo "Canceled"; ?>
-								<?php endif; ?>
-							</td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>

@@ -258,16 +258,16 @@ class User {
 
 	}
 
-	public function generateServiceInvoice(Service $service, $totalPrice) {
+	public function generateServiceInvoice(Service $service, $stripe_id, $totalPrice) {
 		$pdf = new Invoice();
 		$file_name = "invoice-" . $service->getId() . "-" . date("Y-m-d-H-i-s");
-		$destination = "admin/docs/invoices/" . $file_name . ".pdf";
+		$destination = "../../../admin/docs/invoices/" . $file_name . ".pdf";
 
 
 		$pdf->AddPage();
 		$pdf->Ln(10);
 		$pdf->SetFont('Arial','B',16);
-		$pdf->Cell(40,10,'Hello World!');
+		$pdf->Cell(40,10,'Thank you for your purchase !');
 		$pdf->Ln(10);
 		$pdf->SetFont('Arial','',12);
 		$pdf->Cell(40,10, 'Date of issue : ' . date("d-m-Y"));
@@ -285,12 +285,13 @@ class User {
 		$pdf->MultiCell(0,5,$service->getDescription());
 		$pdf->Output('F', $destination, true);
 
-		$sql = "INSERT INTO invoice(customer_id, amount_paid, date_issue, service_id, file_path) VALUES (:cid, :pr, :di, :sid, :fp)";
+		$sql = "INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (:stid, :cid, :pr, :di, :sid, :fp)";
 		$req = $GLOBALS["conn"]->prepare($sql);
 		$req->execute(array(
+			"stid" => $stripe_id,
 			"cid" => $this->id,
 			"pr" => $totalPrice,
-			"di" => date("d-m-Y H:i:s"),
+			"di" => date("Y-m-d H:i:s"),
 			"sid" => $service->getId(),
 			"fp" => $destination,
 		));
