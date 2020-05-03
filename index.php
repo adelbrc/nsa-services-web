@@ -27,6 +27,16 @@ $langue = 0;
 			<div class="alert text-center alert-danger" role="alert">
 				Vous n'avez pas le droit d'accéder à cette page.
 			</div>
+		<?php }
+		if (isset($_GET['error']) && $_GET['error'] == 'field_blank') { ?>
+			<div class="alert text-center alert-danger" role="alert">
+				Tous les champs doivent être complétés !
+			</div>
+		<?php }
+		if (isset($_GET['status']) && $_GET['status'] == 'traduction_request_done') { ?>
+			<div class="alert text-center alert-success" role="alert">
+				La demande de traduction a bien été envoyée !
+			</div>
 		<?php } ?>
 			<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
