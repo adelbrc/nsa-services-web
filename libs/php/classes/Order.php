@@ -9,13 +9,15 @@ class Order {
 	private $customer_id;
 	private $order_date;
 	private $service_id;
+	private $address;
 	private $payment_status;
 
-	function __construct($order_id, $customer_id, $order_date, $service_id, $payment_status) {
+	function __construct($order_id, $customer_id, $order_date, $service_id, $address, $payment_status) {
 		$this->order_id = $order_id;
 		$this->customer_id = $customer_id;
 		$this->order_date = $order_date;
 		$this->service_id = $service_id;
+		$this->address = $address;
 		$this->payment_status = $payment_status;
 	}
 
@@ -38,6 +40,10 @@ class Order {
 		return $this->service_id;
 	}
 
+	public function getAddress() {
+		return $this->address;
+	}
+
 	public function getPaymentStatus(){
 		return $this->payment_status;
 	}
@@ -49,14 +55,15 @@ class Order {
 	public static function addOrder() {
 
 			$sql = "INSERT INTO nsaservices_db.orders(customer_id, order_date, service_id,
-					payment_status) VALUES(:cid, :odate, :sid,
-					:paystatus)";
+					address, payment_status) VALUES(:cid, :odate, :sid,
+					:addr, :paystatus)";
 
 			$req = $GLOBALS["conn"]->prepare($sql);
 			$req->execute(array(
 				"cid" => $this->customer_id,
 				"odate" => $this->order_date,
 				"sid" => $this->service_id,
+				"addr" => $this->address,
 				"paystatus" => $this->payment_status
 			));
 	}
@@ -69,7 +76,7 @@ class Order {
 		$req->execute([$id]);
 
 		if ($row = $req->fetch()) {
-			return new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["payment_status"]);
+			return new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["address"], $row["payment_status"]);
 		}else {
 			return NULL;
 		}
@@ -85,7 +92,7 @@ class Order {
 		$result = array();
 
 		while ($row = $req->fetch()) {
-			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["payment_status"]);
+			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["address"], $row["payment_status"]);
 		}
 
 		return $result;
@@ -101,7 +108,7 @@ class Order {
 		$result = array();
 
 		while ($row = $req->fetch()) {
-			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["payment_status"]);
+			$result[] = new Order($row["order_id"], $row["customer_id"], $row["order_date"], $row["service_id"], $row["address"], $row["payment_status"]);
 		}
 
 		return $result;
@@ -111,18 +118,9 @@ class Order {
 	// Cancel an order
 	public function cancel(){
 
-		if ($this->order_status != 2) {
-
-			$this->order_status = 2;
-
-			$sql = "UPDATE nsaservices_db.orders SET order_status = ? WHERE order_id = ?";
-			$req = $GLOBALS["conn"]->prepare($sql);
-			$req->execute([2, $this->order_id]);
-
-			return true;
-		}else {
-			return false;
-		}
+		$sql = "UPDATE nsaservices_db.orders SET payment_status = ? WHERE order_id = ?";
+		$req = $GLOBALS["conn"]->prepare($sql);
+		$req->execute(["Canceled", $this->order_id]);
 	}
 }
 

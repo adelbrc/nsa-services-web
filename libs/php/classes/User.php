@@ -217,9 +217,9 @@ class User {
 
 	}
 
-	public function generateMemberShipInvoice(Membership $membership) {
+	public function generateMemberShipInvoice(Membership $membership, $begin_date, $end_date) {
 			$pdf = new Invoice();
-			$file_name = "invoice-" . $this->id . "-" . $membership->getIdPlan() . "-" . date("Y-m-d-H-i-s");
+			$file_name = "invoice-membership-" . $this->id . "-" . $membership->getIdPlan() . "-" . date("Y-m-d-H-i-s");
 			$destination = "admin/docs/invoices/" . $file_name . ".pdf";
 
 
@@ -235,9 +235,9 @@ class User {
 			$pdf->Ln(10);
 			$pdf->Cell(40,10, 'Customer Email : ' . $this->email);
 			$pdf->Ln(10);
-			$pdf->Cell(40,10, 'Starting Date : ' . $this->getUserMembershipStartingDate($membership->getId()));
+			$pdf->Cell(40,10, 'Starting Date : ' . $begin_date->format("d-m-Y"));
 			$pdf->Ln(10);
-			$pdf->Cell(40,10, 'Ending Date : ' . $this->getUserMembershipStartingDate($membership->getId()));
+			$pdf->Cell(40,10, 'Ending Date : ' . $end_date->format("d-m-Y"));
 			$pdf->Ln(10);
 			$pdf->Cell(40,10, 'Price : ' . $membership->getPrice());
 			$pdf->Ln(10);
@@ -258,7 +258,7 @@ class User {
 
 	}
 
-	public function generateServiceInvoice(Service $service) {
+	public function generateServiceInvoice(Service $service, $totalPrice) {
 		$pdf = new Invoice();
 		$file_name = "invoice-" . $service->getId() . "-" . date("Y-m-d-H-i-s");
 		$destination = "admin/docs/invoices/" . $file_name . ".pdf";
@@ -278,12 +278,22 @@ class User {
 		$pdf->Ln(10);
 		$pdf->Cell(40,10, 'Prestation : ' . $service->getName());
 		$pdf->Ln(10);
-		$pdf->Cell(40,10, 'Price : ' . $service->getPrice());
+		$pdf->Cell(40,10, 'Price : ' . $totalPrice);
 		$pdf->Ln(10);
 		$pdf->Cell(40,10, 'Description :');
 		$pdf->Ln(10);
 		$pdf->MultiCell(0,5,$service->getDescription());
 		$pdf->Output('F', $destination, true);
+
+		$sql = "INSERT INTO invoice(customer_id, amount_paid, date_issue, service_id, file_path) VALUES (:cid, :pr, :di, :sid, :fp)";
+		$req = $GLOBALS["conn"]->prepare($sql);
+		$req->execute(array(
+			"cid" => $this->id,
+			"pr" => $totalPrice,
+			"di" => date("d-m-Y H:i:s"),
+			"sid" => $service->getId(),
+			"fp" => $destination,
+		));
 
 	}
 

@@ -2,3 +2,4 @@ libs/php/db/db_connect.php
 libs/php/classes/DBManager.php
 admin/docs/invoices
 collaborateur/contracts/
+ressources/img/profile_pics

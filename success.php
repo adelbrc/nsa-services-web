@@ -50,7 +50,7 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
 	$queryUser_index = $conn->prepare("SELECT id FROM user WHERE email = ?");
 	$queryUser_index->execute([$db_customer_email]);
 	$user_index = $queryUser_index->fetch()[0];
-	
+
 
 	$queryInsertSubscription = $conn->prepare("INSERT INTO memberships_history (
 		user_id,
@@ -105,9 +105,9 @@ if (isset($_GET["session_id"]) && !empty($_GET["session_id"])) {
     $membership = Membership::getMembershipById($plan_index);
 
     // Génération de la facture de l'abonnement choisi
-    $user->generateMemberShipInvoice($membership);
+    $user->generateMemberShipInvoice($membership, $date_now, $date_expire);
 
-	
+
 }
 
 ?>

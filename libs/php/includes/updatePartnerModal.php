@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="../libs/php/controllers/updatePartnerInfos.php" method="post">
+        <form action="../libs/php/controllers/admin_updatePartnerInfos.php" method="post">
           <div class="form-row">
             <input type="hidden" name="pid" value="<?php echo $partner->getPID(); ?>">
             <div class="form-group col-md-6">

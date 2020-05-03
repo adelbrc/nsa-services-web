@@ -56,6 +56,18 @@ include("../libs/php/isConnected.php");
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         console.log(this.responseText);
         resId = JSON.parse(this.responseText);
+
+
+        var joursDebut = debut.getDate();
+        var moisDebut = debut.getMonth();
+        var anneesDebut = debut.getFullYear();
+        var heureDebut = debut.getHours();
+
+        var joursFin = fin.getDate();
+        var moisFin = fin.getMonth();
+        var anneesFin=fin.getFullYear();
+        var heureFin = fin.getHours();
+
         document.body.innerHTML+= `<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -73,11 +85,11 @@ include("../libs/php/isConnected.php");
             </div>
             <div class="form-group">
               <h4>Date de début</h4>
-              <p>${debut}</p>
+              <p>${joursDebut}-0${moisDebut}-${anneesDebut} </br> De : ${heureDebut}:00 heure</p>
             </div>
             <div class="form-group">
               <h4>Date de fin</h4>
-              <p>${fin}</p>
+              <p>${joursFin}-0${moisFin}-${anneesFin} </br> A : ${heureFin}:00 heure</p>
               <input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" name="idOrder" value="${id}" hidden>
             </div>
             <div class="form-group">

@@ -2,7 +2,7 @@
   <h1 class="text-center">Informations</h1>
   <form action="libs/php/controllers/updateUserInfos.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrf-token" value="">
-    <img class="profilePicture" src="<?php echo $user->getProfilePic(); ?>">
+    <img class="profilePicture" src="<?php echo str_replace("../../../", "", $user->getProfilePic()); ?>">
     <div class="form-group">
       <input type="file" style="display:block;margin:auto;margin-bottom:60px" name="profile_pic" />
     </div>

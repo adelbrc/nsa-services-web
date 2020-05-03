@@ -21,7 +21,7 @@
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<a class="dropdown-item" href="profile.php">Profile</a>
 				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="#">Interventions</a>
+				<a class="dropdown-item" href="intervention_historique.php">Interventions</a>
 			</div>
     </li>
       <li class="nav-item">

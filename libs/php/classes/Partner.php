@@ -112,6 +112,22 @@ class Partner {
 		$this->corp_id = $id;
 	}
 
+	public function setEmail($email) {
+		$this->email = $email;
+	}
+
+	public function setAddress($address) {
+		$this->address = $address;
+	}
+
+	public function setPhoneNumber($phone) {
+		$this->phone = $phone;
+	}
+
+	public function setCity($city) {
+		$this->city = $city;
+	}
+
 	public function setRoleId($id){
 	 $this->role_id = $id;
 	}
@@ -211,6 +227,25 @@ class Partner {
 		));
 	}
 
+	public function adminUpdatePartnerInfos(){
+
+		$sql = "UPDATE partner SET corporation_name = :corpname, corporation_id = :corpid, address = :addr, city = :ct, email = :mail, phone = :phonenumb, pricing = :prix,
+		disponibility_begin = :dispobeg, disponibility_end = :dispoend WHERE partner_id = :pid";
+		$req = $GLOBALS["conn"]->prepare($sql);
+		$req->execute(array(
+			"corpname" => $this->corp_name,
+			"corpid" => $this->corp_id,
+			"addr" => $this->address,
+			"ct" => $this->city,
+			"mail" => $this->email,
+			"phonenumb" => $this->phone,
+			"prix" => $this->pricing,
+			"dispobeg" => $this->disponibility_begin,
+			"dispoend" => $this->disponibility_end,
+			"pid" => $this->partner_id,
+		));
+	}
+
 	// -----------------------
 	// Delete Partner
 	public function delete(){
@@ -275,7 +310,9 @@ class Partner {
 
 			$result = $req->fetch();
 
-			return $result["file_path"];
+			if ($result != NULL) {
+				return $result["file_path"];
+			}
 	}
 
 

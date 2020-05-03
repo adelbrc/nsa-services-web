@@ -2,7 +2,6 @@
 $list = Partner::getAllPartners();
 $roles = Partner::getAllRoles();
 ?>
-
 <div class="dataContainer">
   <h3 class="text-center"><?php echo $listPartner[$langue]; ?></h3>
   <div class="row">
@@ -21,6 +20,7 @@ $roles = Partner::getAllRoles();
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
             <th scope="col">Générer Contrat</th>
+            <th scope="col">Voir Contrat</th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +50,11 @@ $roles = Partner::getAllRoles();
                   <i class="fa fa-clone"></i>
                 </button>
               </td>
+              <?php if ($partner->getContract() != NULL): ?>
+                  <td>
+                      <a class="btn btn-primary" href="<?php echo str_replace("/var/www/nsa-services-web/", "../", $partner->getContract()); ?>"><i class="fa fa-cog"></i></a>
+                  </td>
+              <?php endif; ?>
             </tr>
 
             <!-- Modal Update Partner -->
