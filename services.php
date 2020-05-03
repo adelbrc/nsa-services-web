@@ -113,7 +113,7 @@ require_once('libs/stripe-php-master/init.php');
 
 
 				<!-- Besoin d'un service non liste ? -->
-				<section class="sizedSection">
+				<section class="sizedSection" id="devis_section">
 					<div class="dataContainer">
 						<h2 class="text-center"><?php echo $serviceInconnu[$langue]; ?></h2>
 

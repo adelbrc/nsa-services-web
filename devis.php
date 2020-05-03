@@ -131,6 +131,7 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 								<?php
 									$queryGetDevis = $conn->prepare("SELECT * FROM devis WHERE customer_id = ?");
 									$queryGetDevis->execute([$_SESSION["user"]["id"]]);
+									$nbDevis = $queryGetDevis->rowCount();
 
 									foreach ($queryGetDevis->fetchAll() as $devisArray):
 										$thedate = new DateTime($devisArray["ordered_date"]);
@@ -148,32 +149,49 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 											<!-- Modal -->
 											<div class="modal fade" id="modal_devis_<?= $devisArray['devis_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 												<div class="modal-dialog" role="document">
-													<div class="modal-content">
+													<div class="modal-content devis_modal">
 														<div class="modal-header">
 															<h5 class="modal-title">Votre devis n°<?= $devisArray["devis_id"] ?></h5>
 															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 																<span aria-hidden="true">&times;</span>
 															</button>
 														</div>
-														<div class="modal-body">
+														<div class="modal-body devis_modal_body">
 															<h5>Réponse : </h5>
 															<p><?= !$devisArray["answer"] ? "<i>En attente de réponse</i>" : $devisArray["answer"];  ?></p>
 															
+															<hr>
+
 															<h5>Date réponse : </h5>
 															<?php if ($devisArray["answer_date"]) {
 																$answerDate = new DateTime($devisArray["answer_date"]);
 															} ?>
 															<p><?= !$devisArray["answer_date"] ? "<i>En attente de réponse</i>" : $answerDate->format("d/m/Y H:i:s");  ?></p>
 															
+															<hr>
+
 															<h5>Adresse du devis : </h5>
 															<p><?= !$devisArray["address"] ? "/" : $devisArray["address"];  ?></p>
 															
+															<hr>
 
+															<h5>Montant du devis : </h5>
+															<p><?= $devisArray["devis_cost"] ?></p>
+															
+															<hr>
 
+															<h5>Description faite du devis : </h5>
+															<p><?= $devisArray["title"] ?></p>
+															
 														</div>
 														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-															<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+															<!-- Si son devis a ete accepte, on lui affiche le bouton pour payer -->
+															<?php if ($devisArray["status"] == "Valide"): ?>
+																<button type="button" class="btn btn-primary" onclick="confirmDevis(<?= $devisArray["devis_id"] ?>, '<?= $devisArray["customer_id"] ?>')">Confirmer le devis de <?= $devisArray["devis_cost"] ?> €</button>
+															<?php elseif ($devisArray["status"] == "Confirme"): ?>
+																<button type="button" class="btn btn-success">Devis payé</button>
+															<?php endif; ?>
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 														</div>
 													</div>
 												</div>
@@ -183,7 +201,13 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 							</tbody>
 						</table>
 
-
+						<?php
+							// s'il n'y a pas de devis !0 = 1
+							if (!$nbDevis): ?>
+								<a href="services.php#devis_section"><button class="btn btn-primary">Réaliser un devis</button></a>
+						<?php else: ?>
+								<a href="services.php#devis_section"><button class="btn btn-primary">Demander un autre devis</button></a>
+						<?php endif; ?>
 				</div>
 			</section>
 
@@ -202,6 +226,32 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 		<script src="libs/js/checkout.js" charset="utf-8"></script>
 
 		<script>
+			function confirmDevis(devis_id, customer_id) {
+
+				let xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (xhttp.readyState == 4 && xhttp.status == 200) {
+						var jsonResponse = JSON.parse(this.responseText);
+						console.log(jsonResponse);
+						if (jsonResponse.status === "success") {
+							// si tout s'est bien passe on redirige vers son planning avec un msg vert
+							document.location.href = "mes_services.php?status=devisBooked";
+						} else if (jsonResponse.status === "error") {
+							// $('#modalError').modal('show');
+						}
+					}
+				};
+				var url = "libs/php/controllers/ajax_mirrors.php";
+				var form = "confirmDevis";
+				var obj = JSON.stringify({"devis_id": devis_id, "customer_id": customer_id});
+
+				xhttp.open("GET", url+"?form=" + form + "&obj=" + obj, true);
+				xhttp.send();
+
+
+			}
+
 			$(function () {
 
 			});

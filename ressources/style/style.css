@@ -652,3 +652,15 @@ p {
 }
 
 
+.devis_modal {
+  width: 75%;
+  margin: 0px auto;
+}
+
+.devis_modal_body h5 {
+
+}
+
+.devis_modal_body p {
+  margin: 0;
+}

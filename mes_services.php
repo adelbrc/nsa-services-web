@@ -61,6 +61,11 @@ if (isset($_GET["status"]) && !empty($_GET["status"])) {
 			$message = "Devis reçu avec succès, nous reviendrons vers vous au plus vite";
 			break;
 
+		case 'devisBooked':
+			$success = 1;
+			$message = "Devis enregistré avec succès !";
+			break;
+
 		default:
 			# code...
 			break;

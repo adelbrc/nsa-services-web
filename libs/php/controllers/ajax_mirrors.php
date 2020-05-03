@@ -517,6 +517,81 @@ function payServices($conn, $obj) {
 }
 
 
+function confirmDevis($conn, $obj) {
+	$devis_id = $obj->devis_id;
+	$customer_id = $obj->customer_id;
+	
+
+
+	/* on va deplacer la reservation du devis de la table devis/devis_session à orders/order_session
+	* 1. On selectionne le devis
+	* 2. On selectionne sa session
+	* 3. On insert into orders les infos du devis
+	* 4. On insert into order session les infos de l'order avec l'id de l'order
+	* 5. On fait l'achat par stripe
+	* 6. On update ce devis comme "Confirmé"
+	*/
+
+	// 1
+	$queryGetDevis = $conn->prepare("SELECT * FROM devis WHERE devis_id = ? AND customer_id = ?");
+	$queryGetDevis->execute([$devis_id, $customer_id]);
+	$queryGetDevisRes = $queryGetDevis->fetch();
+
+	$service_id = $queryGetDevisRes["service_id"] != 0 ? $queryGetDevisRes["service_id"] : NULL;
+
+	// 2
+	$queryGetDevisSession = $conn->prepare("SELECT * FROM devis_session WHERE devis_id_fk = ?");
+	$queryGetDevisSession->execute([$devis_id]);
+	$queryGetDevisSessionRes = $queryGetDevisSession->fetch();
+
+
+	// 3
+	$queryTransformDevis = $conn->prepare("INSERT INTO orders(
+		customer_id, 
+		order_date, 
+		service_id, 
+		address, 
+		payment_status) VALUES (?, NOW(), ?, ?, ?)");
+	$queryTransformDevis->execute([
+		$customer_id,
+		$service_id,
+		$queryGetDevisRes["address"],
+		"En attente"
+	]);
+
+
+	// 4
+	$lastInsertId = $conn->lastInsertId();
+
+	$queryTransformDevisSession = $conn->prepare("INSERT INTO order_session(
+		order_id, 
+		day, 
+		beginning, 
+		`end`, 
+		partner_id, 
+		orderStatus) VALUES (?, ?, ?, ?, ?, ?)");
+	$queryTransformDevisSession->execute([
+		$lastInsertId,
+		$queryGetDevisSessionRes["devis_day"],
+		$queryGetDevisSessionRes["devis_begin_time"],
+		$queryGetDevisSessionRes["devis_end_time"],
+		NULL,
+		"Paid"
+	]);
+
+	// 5 achat du devis - stripe
+
+
+	// 6
+	$queryUpdateDevis = $conn->prepare("UPDATE devis SET status = 'Confirme' WHERE devis_id = ?");
+	$queryUpdateDevis->execute([$devis_id]);
+
+	echo json_encode(['status' => "success", "message" => "Devis transforme en order"]);
+
+
+
+}
+
 
 
 
@@ -552,6 +627,10 @@ if (isset($_GET["form"]) && !empty($_GET["form"])) {
 
 		case 'payServices':
 			payServices($conn, $obj);
+			break;
+
+		case 'confirmDevis':
+			confirmDevis($conn, $obj);
 			break;
 
 		default:
