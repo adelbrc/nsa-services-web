@@ -20,7 +20,7 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
-	
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,7 +35,7 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 		<header>
 			<?php include("libs/php/includes/userHeader.php"); ?>
 		</header>
-	
+
 		<main>
 			<div class="container-fluid">
 				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -64,11 +64,12 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 					</div>
 					<div class="tab-pane fade show active" id="membership" role="tabpanel" aria-labelledby="membership">
 						<h2 style="text-align: center;">Abonnements</h2>
-						<div class="dataContainer">
+						<!-- <div class="dataContainer">
 							<div class="row d-flex flex-wrap">
-							<?php include("libs/php/views/userMembershipsInvoicesList.php"); ?>
+
 							</div>
-						</div>
+						</div> -->
+						<?php include("libs/php/views/userMembershipsInvoicesList.php"); ?>
 					</div>
 
 					<div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service">
@@ -145,6 +146,6 @@ $user = User::getUserByID($_SESSION["user"]["id"]);
 
 			}
 		</script>
-			
+
 	</body>
 </html>

@@ -217,7 +217,7 @@ class User {
 
 	}
 
-	public function generateMemberShipInvoice(Membership $membership) {
+	public function generateMemberShipInvoice(Membership $membership, $begin_date, $end_date) {
 			$pdf = new Invoice();
 			$file_name = "invoice-membership-" . $this->id . "-" . $membership->getIdPlan() . "-" . date("Y-m-d-H-i-s");
 			$destination = "admin/docs/invoices/" . $file_name . ".pdf";
@@ -235,9 +235,9 @@ class User {
 			$pdf->Ln(10);
 			$pdf->Cell(40,10, 'Customer Email : ' . $this->email);
 			$pdf->Ln(10);
-			$pdf->Cell(40,10, 'Starting Date : ' . $this->getUserMembershipStartingDate($membership->getId()));
+			$pdf->Cell(40,10, 'Starting Date : ' . $begin_date->format("d-m-Y"));
 			$pdf->Ln(10);
-			$pdf->Cell(40,10, 'Ending Date : ' . $this->getUserMembershipStartingDate($membership->getId()));
+			$pdf->Cell(40,10, 'Ending Date : ' . $end_date->format("d-m-Y"));
 			$pdf->Ln(10);
 			$pdf->Cell(40,10, 'Price : ' . $membership->getPrice());
 			$pdf->Ln(10);
