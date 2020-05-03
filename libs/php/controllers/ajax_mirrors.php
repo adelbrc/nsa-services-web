@@ -1,6 +1,9 @@
 <?php
 
-
+require_once("../classes/User.php");
+require_once("../classes/Service.php");
+require_once("../classes/Invoice.php");
+include("../isConnected.php");
 
 // obj est un parametre de la requete ajax, on verifie qu'on execute ce code legitimement
 if (!isset($_GET["obj"]) || empty($_GET["obj"])) {
@@ -188,7 +191,7 @@ function commandeService($conn, $booking) {
 		$queryServiceTime = $conn->prepare("UPDATE memberships_history SET serviceHoursRemaining = ? WHERE user_id = ? AND status = 'active'");
 		$queryServiceTime->execute([$serviceTime - $total_hours, $booking->customer_id]);
 	}
-	// s'il n'en a pas, on le fait payer normalement 
+	// s'il n'en a pas, on le fait payer normalement
 
 
 
@@ -239,16 +242,23 @@ function commandeService($conn, $booking) {
 
 
 	// invoice
-	$queryInsertInvoice = $conn->prepare("INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (?, ?, ?, ?, ?, ?)");
-	$queryInsertInvoice->execute([
-		$booking->stripe_cus_id,
-		$booking->customer_id,
-		$booking->price * $total_hours,
-		date("Y-m-d", strtotime("+1 week")),
-		$booking->service_id,
-		""
-	]);
+	// $queryInsertInvoice = $conn->prepare("INSERT INTO invoice(stripe_id, customer_id, amount_paid, date_issue, service_id, file_path) VALUES (?, ?, ?, ?, ?, ?)");
+	// $queryInsertInvoice->execute([
+	// 	$booking->stripe_cus_id,
+	// 	$booking->customer_id,
+	// 	$booking->price * $total_hours,
+	// 	date("Y-m-d", strtotime("+1 week")),
+	// 	$booking->service_id,
+	// 	""
+	// ]);
 
+
+	$user = User::getUserById($_SESSION["user"]["id"]);
+
+	$service = Service::getServiceById($booking->service_id);
+	$totalPrice = $booking->price * $total_hours;
+
+	$user->generateServiceInvoice($service, $booking->stripe_cus_id, $totalPrice);
 
 	echo json_encode(['status' => "success", "action" => "redirect", "link" => "mes_services.php?status=serviceBooked", "message" => $message . " and sessions added"]);
 }
@@ -467,20 +477,20 @@ function payServices($conn, $obj) {
 				$retrieveSub["data"][0]["id"]
 			);
 			$subscription->delete();
-			
+
 		} catch(Exception $e) {
 			echo json_encode(['status' => "error", "message" => "Reservation deja payee : " . $e->getMessage()]);
 			exit;
-		}		
+		}
 	}
 
 
-	// on met la methode par de paiement par defaut du mec 
+	// on met la methode par de paiement par defaut du mec
 	$res = \Stripe\Customer::retrieve($rightCus);
 
 
 	$pm = $res["invoice_settings"]["default_payment_method"];
- 
+
 
 	// on passe au paiement
 	$invoice_item = \Stripe\InvoiceItem::create([
@@ -495,7 +505,7 @@ function payServices($conn, $obj) {
 	  'customer' => $rightCus,
 	  'default_payment_method' => $pm,
 	  // 'auto_advance' => true, /* auto-finalize this draft after ~1 hour */
-	  'auto_advance' => false, // // //  auto-finalize this draft after ~1 hour 
+	  'auto_advance' => false, // // //  auto-finalize this draft after ~1 hour
 	]);
 
 	// // on paie en avance
@@ -520,7 +530,7 @@ function payServices($conn, $obj) {
 function confirmDevis($conn, $obj) {
 	$devis_id = $obj->devis_id;
 	$customer_id = $obj->customer_id;
-	
+
 
 
 	/* on va deplacer la reservation du devis de la table devis/devis_session à orders/order_session
@@ -547,10 +557,10 @@ function confirmDevis($conn, $obj) {
 
 	// 3
 	$queryTransformDevis = $conn->prepare("INSERT INTO orders(
-		customer_id, 
-		order_date, 
-		service_id, 
-		address, 
+		customer_id,
+		order_date,
+		service_id,
+		address,
 		payment_status) VALUES (?, NOW(), ?, ?, ?)");
 	$queryTransformDevis->execute([
 		$customer_id,
@@ -564,11 +574,11 @@ function confirmDevis($conn, $obj) {
 	$lastInsertId = $conn->lastInsertId();
 
 	$queryTransformDevisSession = $conn->prepare("INSERT INTO order_session(
-		order_id, 
-		day, 
-		beginning, 
-		`end`, 
-		partner_id, 
+		order_id,
+		day,
+		beginning,
+		`end`,
+		partner_id,
 		orderStatus) VALUES (?, ?, ?, ?, ?, ?)");
 	$queryTransformDevisSession->execute([
 		$lastInsertId,
