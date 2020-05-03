@@ -4,7 +4,7 @@
 // parce que si elle est vide ca veut dire que la row c'est une facture de service, et comme un service n'a pas d'id de membership,
 // on le met vide
 
-$sql = "SELECT * FROM invoice WHERE customer_id = :uid AND service_id != '' ORDER BY date_issue DESC";
+$sql = "SELECT * FROM invoice WHERE customer_id = :uid AND service_id != '' ORDER BY invoice_id DESC";
 
 $req = $GLOBALS["conn"]->prepare($sql);
 $req->execute(array("uid" => $user->getUID()));
