@@ -304,7 +304,7 @@ class Partner {
 
 	public function getContract() {
 
-			$sql = "SELECT file_path FROM contract WHERE partner_id = ?";
+			$sql = "SELECT id, file_path FROM contract WHERE partner_id = ? ORDER BY id DESC";
 			$req = $GLOBALS["conn"]->prepare($sql);
 			$req->execute([$this->partner_id]);
 
