@@ -267,7 +267,7 @@ class User {
 		$pdf->AddPage();
 		$pdf->Ln(10);
 		$pdf->SetFont('Arial','B',16);
-		$pdf->Cell(40,10,'Hello World!');
+		$pdf->Cell(40,10,'Thank you for your purchase !');
 		$pdf->Ln(10);
 		$pdf->SetFont('Arial','',12);
 		$pdf->Cell(40,10, 'Date of issue : ' . date("d-m-Y"));
