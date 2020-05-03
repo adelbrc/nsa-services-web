@@ -54,11 +54,37 @@
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 		          <a class="dropdown-item" href="?lang=0"><img src="https://img.icons8.com/color/64/000000/france.png"/></a>
 		          <a class="dropdown-item" href="?lang=1"><img src="https://img.icons8.com/color/64/000000/usa.png"/></a>
-		          <a class="dropdown-item" href="index.php?langue=0">Demande de traduction</a>
+		          <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal">Demande de traduction</a>
 		        </div>
 		      </li>
 		</ul>
-
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Demande de traduction</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <p><b>Ici vous pouvez effectuer une demande de traduction</b></p>
+						<p>Cette demande est généralement traité dans un délais d'une semaine</p>
+						<form class="formTrad" action="libs/php/newTraduction.php" method="post">
+							<div class="form-group">
+								<label for="exampleInputEmail1">Langue</label>
+								<input type="text" class="form-control" id="exampleInputNom" aria-describedby="NomHelp" placeholder="Entrez la langue que vous souhaitez" name="langue">
+							</div>
+							<button type="submit" name="formTraduction" class="btn btn-primary">Soumettre</button>
+						</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
 		<?php
 			// on check que l'abonnement du mec arrive a echeance 1 semaine avant
