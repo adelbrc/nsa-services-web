@@ -87,7 +87,7 @@ require_once('libs/stripe-php-master/init.php');
 							Il vous reste <?= $serviceTime ?> h de services inclus
 						</p>
 					</h3>
-				<?php } else if ($_COOKIE['skipSub'] == '1') { ?>
+				<?php } else if (isset($_COOKIE["skipSub"]) && $_COOKIE['skipSub'] == '1') { ?>
 					<h3 id="serviceTimeText">
 						<a href="dashboard.php#abonnements" class="red">
 							<svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -580,11 +580,20 @@ require_once('libs/stripe-php-master/init.php');
 
 					var cookies = document.cookie.split(';');
 
-					// on verifie s'il commande avec ou sans abonnement
+					// // on verifie s'il commande avec ou sans abonnement
+					// if (document.cookie.indexOf("skipSub") == -1) {
+					// 	console.log("je doAjax");
+					// } else {
+					// 	console.log("je payment.php");
+					// }
+
+					// return;
+
+
 
 
 					// s'il n'a pas de cookie skipSub, c'est qu'il a pris un abonnement, on commande normalement
-					if (cookies.indexOf("skipSub") == -1) {
+					if (document.cookie.indexOf("skipSub") == -1) {
 						for (service of panier_keys) {
 							doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
 						}

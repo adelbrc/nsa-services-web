@@ -3,9 +3,10 @@
 include("libs/php/isConnected.php");
 include('libs/php/functions/translation.php');
 
-if (!isset($_GET['panier']) OR !isset($_GET['hiddenpanier'])) {
-	header("Location: mes_services.php");
-}
+// if (!isset($_GET['panier']) OR !isset($_GET['hiddenpanier']) OR !isset($_POST['panier']) OR !isset($_POST['hiddenpanier'])) {
+	// exit;
+	// header("Location: mes_services.php?status=noPanier");
+// }
 
 require_once("libs/php/classes/DBManager.php");
 $conn = DBManager::getConn();
