@@ -580,23 +580,25 @@ require_once('libs/stripe-php-master/init.php');
 
 					var cookies = document.cookie.split(';');
 
-					// // on verifie s'il commande avec ou sans abonnement
-					// if (document.cookie.indexOf("skipSub") == -1) {
-					// 	console.log("je doAjax");
-					// } else {
-					// 	console.log("je payment.php");
-					// }
+		
+					<?php
+						$queryServiceTime = $conn->prepare("SELECT serviceHoursRemaining FROM memberships_history WHERE user_id = ? AND status = 'active'");
+						$queryServiceTime->execute([$_SESSION["user"]["id"]]);
+						$doAjax = 0;
+						if ($queryServiceTime->fetch()) {
+							$doAjax = 1;
+						} else {
+							$doAjax = 0;
+						}
 
-					// return;
-
-
-
+					?>
 
 					// s'il n'a pas de cookie skipSub, c'est qu'il a pris un abonnement, on commande normalement
-					if (document.cookie.indexOf("skipSub") == -1) {
+					if (<?= $doAjax; ?>) {
 						for (service of panier_keys) {
 							doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
 						}
+						return;
 					}
 
 
@@ -604,10 +606,10 @@ require_once('libs/stripe-php-master/init.php');
 					for (c of cookies) {
 						splitted = c.split("=");
 						// console.log(splitted[0]);
-						if (splitted[0] === "skipSub") {
+						if (splitted[0] === " skipSub") {
 							// console.log(splitted[1]);
 							// console.log(typeof splitted[1]);
-							if (splitted[1] == 1) {
+							if (splitted[1] == "1") {
 								// on laisse payment.php faire le taff
 								var urlpanier = [];
 
