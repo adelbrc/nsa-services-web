@@ -38,7 +38,11 @@ require_once('libs/stripe-php-master/init.php');
 		<main>
 	
 		<?php
-			if (isset($_COOKIE['skipSub']) && $_COOKIE['skipSub'] == '1'):
+
+			$queryHasMembership = $conn->prepare("SELECT customer_id FROM memberships_history WHERE user_id = ? AND status = 'active'");
+			$queryHasMembership->execute([$_SESSION["user"]["id"]]);
+
+			if ((isset($_COOKIE['skipSub']) && $_COOKIE['skipSub'] == '1') OR $queryHasMembership->fetch()):
 		?>	
 
 				<!-- Recherche de services -->
@@ -519,7 +523,7 @@ require_once('libs/stripe-php-master/init.php');
 					// on affiche le total total
 					document.getElementById("panier_total").innerText = total_montant;
 
-					console.log("En tout, j'ai "+ total_hours + " h, au montant de " + total_montant + " €");
+					// console.log("En tout, j'ai "+ total_hours + " h, au montant de " + total_montant + " €");
 
 					console.log(panier);
 
@@ -531,8 +535,7 @@ require_once('libs/stripe-php-master/init.php');
 
 
 
-
-
+				var cookies = document.cookie;
 
 				/* * * * * * * * 
 				* ValidateOrder
@@ -578,9 +581,23 @@ require_once('libs/stripe-php-master/init.php');
 					var cookies = document.cookie.split(';');
 
 					// on verifie s'il commande avec ou sans abonnement
+
+
+					// s'il n'a pas de cookie skipSub, c'est qu'il a pris un abonnement, on commande normalement
+					if (cookies.indexOf("skipSub") == -1) {
+						for (service of panier_keys) {
+							doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
+						}
+					}
+
+
+					// console.log(cookies);
 					for (c of cookies) {
 						splitted = c.split("=");
-						if (splitted[0] === "skipSub")
+						// console.log(splitted[0]);
+						if (splitted[0] === "skipSub") {
+							// console.log(splitted[1]);
+							// console.log(typeof splitted[1]);
 							if (splitted[1] == 1) {
 								// on laisse payment.php faire le taff
 								var urlpanier = [];
@@ -596,13 +613,8 @@ require_once('libs/stripe-php-master/init.php');
 								document.location.href = "payment.php?panier=" + JSON.stringify(urlpanier);
 
 								console.log(urlpanier);
-							} else {
-								// on envoie chaque categorie en json
-								// BDD
-								for (service of panier_keys) {
-									doAjax('libs/php/controllers/ajax_mirrors.php', 'commandeService', JSON.stringify(panier[service]));
-								}							
 							}
+						}
 					}
 
 

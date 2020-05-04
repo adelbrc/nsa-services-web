@@ -84,6 +84,9 @@ function commandeService($conn, $booking) {
 	$queryServiceTime->execute([$booking->customer_id]);
 	$serviceTime = $queryServiceTime->fetch()[0];
 
+	if (!isset($booking->special_status))
+		$booking->special_status = 0;
+
 	if ($serviceTime > 0) {
 		$params = [
 			$booking->customer_id,
