@@ -51,7 +51,7 @@ $passerPaiement = array('Passer au paiement', 'Proceed to payment');
 $mesServices = array('Mes services', 'My services');
 $chercherServices = array('Chercher un service', 'Search for a service');
 $obtenirDevis = array('Obtenir un devis', 'Provide quote');
-$commande = array('Commander', 'Order');
+$commande = array('Commande', 'Order');
 $headerDevis = ["Mes devis", "My quotes"];
 
 
